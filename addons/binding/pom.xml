@@ -16,6 +16,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>org.eclipse.smarthome.binding.tinkerforge</module>
   </modules>
 
 </project>
