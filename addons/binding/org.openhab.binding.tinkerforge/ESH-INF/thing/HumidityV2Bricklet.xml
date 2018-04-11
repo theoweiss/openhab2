@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="humidityV2">
+		<label>BrickletHumidityV2</label>
+		<description>Tinkerforge BrickletHumidityV2</description>
+
+		<channels>
+		
+			<channel id="humidity" typeId="humidity"/>
+		
+			<channel id="temperature" typeId="temperature"/>
+		
+			<channel id="heater" typeId="heater"/>
+		
+		</channels>
+
+
+		<config-description>
+	
+			<parameter name="movingAverageLengthHumidity" type="Integer" required="false">
+				<label>movingAverageLengthHumidity</label>
+				<description>movingAverageLengthHumidity.</description>
+			</parameter>
+	
+			<parameter name="movingAverageLengthTemperature" type="Integer" required="false">
+				<label>movingAverageLengthTemperature</label>
+				<description>movingAverageLengthTemperature.</description>
+			</parameter>
+	
+		</config-description>
+
+	</thing-type>
+
+
+	<channel-type id="humidity">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Humidity</label>
+		<description>Humidity</description>
+	</channel-type>
+
+	<channel-type id="temperature">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Temperature</label>
+		<description>Temperature</description>
+	</channel-type>
+
+	<channel-type id="heater">
+	  
+		<item-type>tfTODO</item-type>
+		
+		<label>Heater</label>
+		<description>Heater</description>
+	</channel-type>
+
+</thing:thing-descriptions>

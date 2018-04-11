@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="ambientlightV2">
+		<label>BrickletAmbientLightV2</label>
+		<description>Tinkerforge BrickletAmbientLightV2</description>
+
+		<channels>
+		
+			<channel id="illuminance" typeId="illuminance"/>
+		
+		</channels>
+
+
+		<config-description>
+	
+			<parameter name="illuminanceRange" type="Short" required="false">
+				<label>illuminanceRange</label>
+				<description>illuminanceRange.</description>
+			</parameter>
+	
+			<parameter name="integrationTime" type="Short" required="false">
+				<label>integrationTime</label>
+				<description>integrationTime.</description>
+			</parameter>
+	
+		</config-description>
+
+	</thing-type>
+
+
+	<channel-type id="illuminance">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Illuminance</label>
+		<description>Illuminance</description>
+	</channel-type>
+
+</thing:thing-descriptions>
