@@ -22,6 +22,8 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.annotations.Component;
+import org.eclipse.smarthome.core.thing.Bridge;
+import org.openhab.binding.tinkerforge.handler.BrickdBridgeHandler;
 
 import org.openhab.binding.tinkerforge.handler.OutdoorWeatherBrickletHandler;
 
@@ -56,6 +58,9 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     @Override
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
+        if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
+            return new BrickdBridgeHandler((Bridge) thing);
+        }
     
     
         if (thingTypeUID.equals(THING_TYPE_OUTDOORWEATHER)) {

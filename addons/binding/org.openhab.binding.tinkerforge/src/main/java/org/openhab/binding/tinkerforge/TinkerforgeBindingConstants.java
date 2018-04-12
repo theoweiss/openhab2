@@ -31,6 +31,7 @@ public class TinkerforgeBindingConstants {
     private static final String BINDING_ID = "tinkerforge";
 
     // List of all Thing Type UIDs
+    public static final ThingTypeUID THING_TYPE_BRICKD = new ThingTypeUID(BINDING_ID, "brickd");
     
     
     public static final ThingTypeUID THING_TYPE_OUTDOORWEATHER = new ThingTypeUID(BINDING_ID, "outdoorweather");
@@ -54,6 +55,7 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_REALTIMECLOCK = new ThingTypeUID(BINDING_ID, "realtimeclock");
     
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
+      THING_TYPE_BRICKD,
     
     
       THING_TYPE_OUTDOORWEATHER, 
