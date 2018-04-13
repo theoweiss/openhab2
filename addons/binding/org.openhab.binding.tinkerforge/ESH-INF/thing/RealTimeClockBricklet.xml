@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="realtimeclock">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
 		<label>BrickletRealTimeClock</label>
 		<description>Tinkerforge BrickletRealTimeClock</description>
 
@@ -13,7 +17,14 @@
 		
 		</channels>
 
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
 
+		</config-description>
 	</thing-type>
 
 

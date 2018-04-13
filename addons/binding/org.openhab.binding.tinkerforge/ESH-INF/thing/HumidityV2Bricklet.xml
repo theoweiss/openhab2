@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="humidityV2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
 		<label>BrickletHumidityV2</label>
 		<description>Tinkerforge BrickletHumidityV2</description>
 
@@ -17,21 +21,24 @@
 		
 		</channels>
 
-
 		<config-description>
-	
-			<parameter name="movingAverageLengthHumidity" type="Integer" required="false">
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="movingAverageLengthHumidity" type="integer" multiple="false" required="false">
 				<label>movingAverageLengthHumidity</label>
 				<description>movingAverageLengthHumidity.</description>
 			</parameter>
-	
-			<parameter name="movingAverageLengthTemperature" type="Integer" required="false">
+
+			<parameter name="movingAverageLengthTemperature" type="integer" multiple="false" required="false">
 				<label>movingAverageLengthTemperature</label>
 				<description>movingAverageLengthTemperature.</description>
 			</parameter>
-	
-		</config-description>
 
+		</config-description>
 	</thing-type>
 
 

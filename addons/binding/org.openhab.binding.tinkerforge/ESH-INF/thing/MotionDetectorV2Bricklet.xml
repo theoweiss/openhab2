@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="motiondetectorV2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
 		<label>BrickletMotionDetectorV2</label>
 		<description>Tinkerforge BrickletMotionDetectorV2</description>
 
@@ -19,16 +23,19 @@
 		
 		</channels>
 
-
 		<config-description>
-	
-			<parameter name="sensitivity" type="Integer" required="false">
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="sensitivity" type="integer" multiple="false" required="false">
 				<label>sensitivity</label>
 				<description>sensitivity.</description>
 			</parameter>
-	
-		</config-description>
 
+		</config-description>
 	</thing-type>
 
 

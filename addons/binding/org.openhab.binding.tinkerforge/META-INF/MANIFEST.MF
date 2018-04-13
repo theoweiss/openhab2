@@ -23,5 +23,6 @@ Import-Package:
  org.eclipse.smarthome.core.types,
  org.openhab.binding.tinkerforge,
  org.openhab.binding.tinkerforge.handler,
+ org.osgi.framework;version="1.8.0",
  org.slf4j
 Service-Component: OSGI-INF/*.xml

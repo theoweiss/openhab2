@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="outdoorweather">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
 		<label>BrickletOutdoorWeather</label>
 		<description>Tinkerforge BrickletOutdoorWeather</description>
 
@@ -33,21 +37,24 @@
 		
 		</channels>
 
-
 		<config-description>
-	
-			<parameter name="stationDevices" type="List<String>" required="false">
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="stationDevices" type="text" multiple="true" required="false">
 				<label>stationDevices</label>
 				<description>stationDevices.</description>
 			</parameter>
-	
-			<parameter name="sensorDevices" type="List<String>" required="false">
+
+			<parameter name="sensorDevices" type="text" multiple="true" required="false">
 				<label>sensorDevices</label>
 				<description>sensorDevices.</description>
 			</parameter>
-	
-		</config-description>
 
+		</config-description>
 	</thing-type>
 
 

@@ -4,6 +4,10 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<thing-type id="ambientlightV2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
 		<label>BrickletAmbientLightV2</label>
 		<description>Tinkerforge BrickletAmbientLightV2</description>
 
@@ -13,21 +17,24 @@
 		
 		</channels>
 
-
 		<config-description>
-	
-			<parameter name="illuminanceRange" type="Short" required="false">
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="illuminanceRange" type="integer" multiple="false" required="false">
 				<label>illuminanceRange</label>
 				<description>illuminanceRange.</description>
 			</parameter>
-	
-			<parameter name="integrationTime" type="Short" required="false">
+
+			<parameter name="integrationTime" type="integer" multiple="false" required="false">
 				<label>integrationTime</label>
 				<description>integrationTime.</description>
 			</parameter>
-	
-		</config-description>
 
+		</config-description>
 	</thing-type>
 
 

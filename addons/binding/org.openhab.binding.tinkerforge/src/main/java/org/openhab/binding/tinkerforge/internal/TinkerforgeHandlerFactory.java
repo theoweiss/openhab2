@@ -12,18 +12,27 @@
  */
 package org.openhab.binding.tinkerforge.internal;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.osgi.service.component.annotations.Component;
+import org.eclipse.smarthome.config.core.Configuration;
+import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.openhab.binding.tinkerforge.handler.BrickdBridgeHandler;
+import org.osgi.framework.ServiceRegistration;
+import org.openhab.binding.tinkerforge.interal.discovery.TinkerforgeDiscoveryService;
 
 import org.openhab.binding.tinkerforge.handler.OutdoorWeatherBrickletHandler;
 
@@ -50,16 +59,45 @@ import org.openhab.binding.tinkerforge.handler.RealTimeClockBrickletHandler;
 @NonNullByDefault
 public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
+    private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
+
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
         return SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
     }
 
     @Override
+    public @Nullable Thing createThing(ThingTypeUID thingTypeUID, Configuration configuration,
+            @Nullable ThingUID thingUID, @Nullable ThingUID bridgeUID) {
+        if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
+            return super.createThing(thingTypeUID, configuration, thingUID, null);
+        } else {
+            ThingUID deviceUID = getDeviceUID(thingTypeUID, thingUID, configuration, bridgeUID);
+            return super.createThing(thingTypeUID, configuration, deviceUID, bridgeUID);
+        }
+    }
+
+    private ThingUID getDeviceUID(ThingTypeUID thingTypeUID, @Nullable ThingUID thingUID, Configuration configuration,
+            @Nullable ThingUID bridgeUID) {
+        if (thingUID != null) {
+            return thingUID;
+        } else {
+            String uid = (String) configuration.get(DEVICE_UID);
+            if (bridgeUID != null) {
+                return new ThingUID(thingTypeUID, uid, bridgeUID.getId());
+            } else {
+                return new ThingUID(thingTypeUID, uid, (String[]) null);
+            }
+        }
+    }
+
+    @Override
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
         if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
-            return new BrickdBridgeHandler((Bridge) thing);
+             BrickdBridgeHandler handler = new BrickdBridgeHandler((Bridge) thing);
+             registerDeviceDiscoveryService(handler);
+             return handler;
         }
     
     
@@ -99,4 +137,28 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         return null;
     }
+
+    private synchronized void registerDeviceDiscoveryService(BrickdBridgeHandler bridgeHandler) {
+        TinkerforgeDiscoveryService discoveryService = new TinkerforgeDiscoveryService(bridgeHandler);
+        this.discoveryServiceRegs.put(bridgeHandler.getThing().getUID(), bundleContext
+                .registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
+    }
+
+    @Override
+    protected synchronized void removeHandler(ThingHandler thingHandler) {
+        if (thingHandler instanceof BrickdBridgeHandler) {
+            ServiceRegistration<?> serviceReg = this.discoveryServiceRegs.get(thingHandler.getThing().getUID());
+            if (serviceReg != null) {
+                // remove discovery service, if bridge handler is removed
+                TinkerforgeDiscoveryService service = (TinkerforgeDiscoveryService) bundleContext
+                        .getService(serviceReg.getReference());
+                if (service != null) {
+                    service.deactivate();
+                }
+                serviceReg.unregister();
+                discoveryServiceRegs.remove(thingHandler.getThing().getUID());
+            }
+        }
+    }
+
 }

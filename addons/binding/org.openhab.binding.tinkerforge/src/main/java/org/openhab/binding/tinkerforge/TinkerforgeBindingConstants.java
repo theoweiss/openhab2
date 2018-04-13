@@ -29,6 +29,7 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 public class TinkerforgeBindingConstants {
 
     private static final String BINDING_ID = "tinkerforge";
+    public static final String DEVICE_UID = "uid";
 
     // List of all Thing Type UIDs
     public static final ThingTypeUID THING_TYPE_BRICKD = new ThingTypeUID(BINDING_ID, "brickd");
