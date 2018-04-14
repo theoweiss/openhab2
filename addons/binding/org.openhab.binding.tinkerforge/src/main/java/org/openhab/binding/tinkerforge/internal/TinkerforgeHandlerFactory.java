@@ -82,7 +82,7 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         if (thingUID != null) {
             return thingUID;
         } else {
-            String uid = (String) configuration.get(DEVICE_UID);
+            String uid = (String) configuration.get(DEVICE_UID_PARAM);
             if (bridgeUID != null) {
                 return new ThingUID(thingTypeUID, uid, bridgeUID.getId());
             } else {

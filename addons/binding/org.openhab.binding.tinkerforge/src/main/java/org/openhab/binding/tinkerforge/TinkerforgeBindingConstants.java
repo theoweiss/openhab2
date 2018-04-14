@@ -25,54 +25,45 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
- @NonNullByDefault
+@NonNullByDefault
 public class TinkerforgeBindingConstants {
 
-    private static final String BINDING_ID = "tinkerforge";
-    public static final String DEVICE_UID = "uid";
+    public static final String BINDING_ID = "tinkerforge";
+    public static final String DEVICE_UID_PARAM = "uid";
 
     // List of all Thing Type UIDs
     public static final ThingTypeUID THING_TYPE_BRICKD = new ThingTypeUID(BINDING_ID, "brickd");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_OUTDOORWEATHER = new ThingTypeUID(BINDING_ID, "outdoorweather");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_TEMPERATURE = new ThingTypeUID(BINDING_ID, "temperature");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_LOADCELL = new ThingTypeUID(BINDING_ID, "loadcell");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_AMBIENTLIGHTV2 = new ThingTypeUID(BINDING_ID, "ambientlightV2");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_HUMIDITYV2 = new ThingTypeUID(BINDING_ID, "humidityV2");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_MOTIONDETECTORV2 = new ThingTypeUID(BINDING_ID, "motiondetectorV2");
-    
-    
+
     public static final ThingTypeUID THING_TYPE_REALTIMECLOCK = new ThingTypeUID(BINDING_ID, "realtimeclock");
-    
-    private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
-      THING_TYPE_BRICKD,
-    
-    
-      THING_TYPE_OUTDOORWEATHER, 
-    
-      THING_TYPE_TEMPERATURE, 
-    
-      THING_TYPE_LOADCELL, 
-    
-      THING_TYPE_AMBIENTLIGHTV2, 
-    
-      THING_TYPE_HUMIDITYV2, 
-    
-      THING_TYPE_MOTIONDETECTORV2, 
-    
-      THING_TYPE_REALTIMECLOCK
-    };
-    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
+
+    private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] { THING_TYPE_BRICKD,
+
+            THING_TYPE_OUTDOORWEATHER,
+
+            THING_TYPE_TEMPERATURE,
+
+            THING_TYPE_LOADCELL,
+
+            THING_TYPE_AMBIENTLIGHTV2,
+
+            THING_TYPE_HUMIDITYV2,
+
+            THING_TYPE_MOTIONDETECTORV2,
+
+            THING_TYPE_REALTIMECLOCK };
+    public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(
+            Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 
 }
