@@ -6,6 +6,6 @@
 
 	<name>Tinkerforge Binding</name>
 	<description>This is the binding for Tinkerforge.</description>
-	<author>Theo Weiss <theo@m1theo.org></author>
+	<author>Theo Weiss</author>
 
 </binding:binding>

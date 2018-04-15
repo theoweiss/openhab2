@@ -1,4 +1,12 @@
-package org.openhab.binding.tinkerforge.interal.discovery;
+/**
+ * Copyright (c) 2010-2018 by the respective copyright holders.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
+package org.openhab.binding.tinkerforge.internal.discovery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +26,11 @@ import org.openhab.binding.tinkerforge.handler.BrickdBridgeHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The {@link TinkerforgeDiscoveryService} devices which are added by the Tinkerforge enumeration service.
+ *
+ * @author Theo Weiss <theo@m1theo.org> - Initial contribution
+ */
 @NonNullByDefault
 public class TinkerforgeDiscoveryService extends AbstractDiscoveryService implements DeviceAdminListener {
 
@@ -49,9 +62,11 @@ public class TinkerforgeDiscoveryService extends AbstractDiscoveryService implem
     @Override
     public void deviceChanged(@Nullable DeviceChangeType deviceChangeType, @Nullable DeviceInfo deviceInfo) {
         if (deviceChangeType == null || deviceInfo == null) {
+            logger.debug("device changed but devicechangtype or deviceinfo are null");
             return;
         }
         if (deviceChangeType == DeviceChangeType.ADD) {
+            logger.debug("device added{} {}", deviceInfo.getDeviceType(), deviceInfo.getUid());
             ThingUID thingUID = getThingUID(deviceInfo);
             ThingTypeUID thingTypeUID = getThingTypeUID(deviceInfo);
             if (thingUID != null) {
