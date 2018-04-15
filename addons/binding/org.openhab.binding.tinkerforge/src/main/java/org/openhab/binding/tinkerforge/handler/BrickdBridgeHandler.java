@@ -8,6 +8,9 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -29,6 +32,7 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
     private static final String IP_ADDRESS = "ipAddress";
     private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
     private Brickd brickd;
+    private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
 
     public BrickdBridgeHandler(Bridge bridge) {
         super(bridge);
@@ -45,6 +49,10 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
         if (getConfig().get(IP_ADDRESS) != null) {
             Host host = new Host(((String) getConfig().get(IP_ADDRESS)));
             brickd = Brickd.createInstance(host);
+            for (DeviceAdminListener listener : deviceAdminListeners) {
+                logger.debug("register deviceadminlistener");
+                brickd.addDeviceAdminListener(listener);
+            }
             brickd.connect();
             updateStatus(ThingStatus.ONLINE);
         } else {
@@ -57,9 +65,7 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
     }
 
     public void registerDeviceStatusListener(DeviceAdminListener deviceAdmin) {
-        if (brickd != null) {
-            brickd.addDeviceAdminListener(deviceAdmin);
-        }
+        deviceAdminListeners.add(deviceAdmin);
     }
 
     public void unregisterDeviceStatusListener(DeviceAdminListener deviceAdmin) {

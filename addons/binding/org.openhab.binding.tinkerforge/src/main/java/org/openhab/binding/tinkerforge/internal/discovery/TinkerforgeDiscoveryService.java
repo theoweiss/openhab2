@@ -50,6 +50,7 @@ public class TinkerforgeDiscoveryService extends AbstractDiscoveryService implem
     }
 
     public void activate() {
+        logger.debug("register device status listener");
         brickdBridgeHandler.registerDeviceStatusListener(this);
     }
 
