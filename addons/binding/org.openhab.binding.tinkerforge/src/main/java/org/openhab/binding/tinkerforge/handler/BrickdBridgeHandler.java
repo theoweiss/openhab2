@@ -18,6 +18,7 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.Brickd;
+import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.config.Host;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
     private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
     private Brickd brickd;
     private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
+    private final List<CallbackListener> callbackListeners = new CopyOnWriteArrayList<>();
 
     public BrickdBridgeHandler(Bridge bridge) {
         super(bridge);
@@ -52,6 +54,9 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
             for (DeviceAdminListener listener : deviceAdminListeners) {
                 logger.debug("register deviceadminlistener");
                 brickd.addDeviceAdminListener(listener);
+            }
+            for (CallbackListener listener : callbackListeners) {
+                brickd.addCallbackListener(listener);
             }
             brickd.connect();
             updateStatus(ThingStatus.ONLINE);
@@ -74,4 +79,14 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
         }
     }
 
+    public void registerCallbackListener(CallbackListener listener) {
+        callbackListeners.add(listener);
+        // TODO get current status of the device and call the listener for initial values
+    }
+
+    public void unregisterCallbackListener(CallbackListener listener) {
+        if (brickd != null) {
+            brickd.removeCallbackListener(listener);
+        }
+    }
 }
