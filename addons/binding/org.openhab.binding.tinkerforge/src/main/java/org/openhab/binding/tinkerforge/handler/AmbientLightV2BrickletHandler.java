@@ -8,16 +8,25 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
-import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.*;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
+import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.tinkerforge.internal.TinkerforgeConfiguration;
+import org.m1theo.tinkerforge.client.CallbackListener;
+import org.m1theo.tinkerforge.client.Notifier;
+import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
+import org.m1theo.tinkerforge.client.types.DecimalValue;
+
+import org.m1theo.tinkerforge.client.devices.ambientlightv2.ChannelId;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +36,14 @@ import org.slf4j.LoggerFactory;
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
- @NonNullByDefault
-public class AmbientLightV2BrickletHandler extends BaseThingHandler {
+@NonNullByDefault
+
+public class AmbientLightV2BrickletHandler extends BaseThingHandler implements CallbackListener {
 
     private final Logger logger = LoggerFactory.getLogger(AmbientLightV2BrickletHandler.class);
-
-    @Nullable
-    private TinkerforgeConfiguration config;
+    private @Nullable BaseDeviceConfig config;
+    private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable String uid;
 
     public AmbientLightV2BrickletHandler(Thing thing) {
         super(thing);
@@ -52,17 +62,70 @@ public class AmbientLightV2BrickletHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        config = getConfigAs(TinkerforgeConfiguration.class);
-
-        // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
-        // Long running initialization should be done asynchronously in background.
-        updateStatus(ThingStatus.ONLINE);
-
-        // Note: When initialization can NOT be done set the status with more details for further
-        // analysis. See also class ThingStatusDetail for all available status details.
-        // Add a description to give user information to understand why thing does not work
-        // as expected. E.g.
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-        // "Can not access device as username and/or password are invalid");
+        config = getConfigAs(BaseDeviceConfig.class);
+        String configUid = config.getUid();
+        if (configUid != null) {
+            uid = configUid;
+            Bridge bridge = getBridge();
+            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+            if (getBrickdBridgeHandler() != null) {
+                if (bridgeStatus == ThingStatus.ONLINE) {
+                    // TODO initializeProperties();
+                    updateStatus(ThingStatus.ONLINE);
+                } else {
+                    updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+                }
+            } else {
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
+        }
     }
+
+    private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
+        if (bridgeHandler == null) {
+            Bridge bridge = getBridge();
+            if (bridge == null) {
+                return null;
+            }
+            ThingHandler handler = bridge.getHandler();
+            if (handler instanceof BrickdBridgeHandler) {
+                bridgeHandler = (BrickdBridgeHandler) handler;
+                bridgeHandler.registerCallbackListener(this);
+            }
+        }
+        return bridgeHandler;
+    }
+
+
+    @Override
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
+    newValue) {
+        if (notifier == null) {
+            return;
+        }
+        if (!notifier.getDeviceId().equals(uid)) {
+            return;
+        }
+        if (notifier.getExternalDeviceId() != null) {
+            // TODO
+        } else {
+            notifier.getChannelId();
+            
+            
+            if (notifier.getChannelId().equals(ChannelId.illuminance.name())) {
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+            
+            
+        }
+    }
+
 }

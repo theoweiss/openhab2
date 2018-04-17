@@ -34,7 +34,7 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
     private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
     private Brickd brickd;
     private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
-    private final List<CallbackListener> callbackListeners = new CopyOnWriteArrayList<>();
+    // private final List<CallbackListener> callbackListeners = new CopyOnWriteArrayList<>();
 
     public BrickdBridgeHandler(Bridge bridge) {
         super(bridge);
@@ -55,9 +55,10 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
                 logger.debug("register deviceadminlistener");
                 brickd.addDeviceAdminListener(listener);
             }
-            for (CallbackListener listener : callbackListeners) {
-                brickd.addCallbackListener(listener);
-            }
+            // for (CallbackListener listener : callbackListeners) {
+            // logger.debug("add callbackListener");
+            // brickd.addCallbackListener(listener);
+            // }
             brickd.connect();
             updateStatus(ThingStatus.ONLINE);
         } else {
@@ -80,7 +81,8 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
     }
 
     public void registerCallbackListener(CallbackListener listener) {
-        callbackListeners.add(listener);
+        // callbackListeners.add(listener);
+        brickd.addCallbackListener(listener);
         // TODO get current status of the device and call the listener for initial values
     }
 

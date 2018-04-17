@@ -10,9 +10,9 @@ package org.openhab.binding.tinkerforge.handler;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
@@ -22,9 +22,11 @@ import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
-import org.m1theo.tinkerforge.client.devices.loadcell.ChannelId;
-import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
+import org.m1theo.tinkerforge.client.types.DecimalValue;
+
+import org.m1theo.tinkerforge.client.devices.loadcell.ChannelId;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,10 +37,10 @@ import org.slf4j.LoggerFactory;
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
 @NonNullByDefault
+
 public class LoadCellBrickletHandler extends BaseThingHandler implements CallbackListener {
 
     private final Logger logger = LoggerFactory.getLogger(LoadCellBrickletHandler.class);
-
     private @Nullable BaseDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable String uid;
@@ -50,11 +52,15 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         switch (channelUID.getId()) {
-
+        
+          
+        
+          
             case "led":
-                // TODO do something
+                //TODO do something
                 break;
-
+          
+        
             default:
                 break;
         }
@@ -91,7 +97,6 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
             }
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
-                logger.debug("registering callbackHandler");
                 bridgeHandler = (BrickdBridgeHandler) handler;
                 bridgeHandler.registerCallbackListener(this);
             }
@@ -99,9 +104,10 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
         return bridgeHandler;
     }
 
+
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
-            @Nullable TinkerforgeValue newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
+    newValue) {
         if (notifier == null) {
             return;
         }
@@ -112,12 +118,22 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
             // TODO
         } else {
             notifier.getChannelId();
+            
+            
             if (notifier.getChannelId().equals(ChannelId.weight.name())) {
+                
                 if (newValue instanceof DecimalValue) {
-                    logger.debug("new weight value {}", newValue);
+                    logger.debug("new value {}", newValue);
                     updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
                 }
+                
             }
+            
+            
+            
+            
         }
     }
+
 }
