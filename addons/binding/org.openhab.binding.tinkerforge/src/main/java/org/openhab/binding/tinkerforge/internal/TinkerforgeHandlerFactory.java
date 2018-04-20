@@ -46,6 +46,8 @@ import org.openhab.binding.tinkerforge.handler.MotionDetectorV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.RealTimeClockBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -132,6 +134,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCK)) {
             return new RealTimeClockBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_ROTARYENCODER)) {
+            return new RotaryEncoderBrickletHandler(thing);
         }
     
         return null;

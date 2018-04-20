@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
@@ -24,6 +25,7 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
+import org.m1theo.tinkerforge.client.types.HighLowValue;
 
 import org.m1theo.tinkerforge.client.devices.motiondetectorV2.ChannelId;
 
@@ -134,7 +136,12 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
             
             if (notifier.getChannelId().equals(ChannelId.motiondetected.name())) {
                 
-                  //TODO
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+                    OpenClosedType value = newValue == HighLowValue.HIGH ? OpenClosedType.OPEN : OpenClosedType.CLOSED;
+                    updateState(notifier.getChannelId(), value);
+                    return;
+                }
                 
             }
             

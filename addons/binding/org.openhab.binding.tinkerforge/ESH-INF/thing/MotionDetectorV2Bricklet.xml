@@ -41,7 +41,7 @@
 
 	<channel-type id="motiondetected">
 	  
-		<item-type>tfTODO</item-type>
+		<item-type>Contact</item-type>
 		
 		<label>MotionDetected</label>
 		<description>MotionDetected</description>

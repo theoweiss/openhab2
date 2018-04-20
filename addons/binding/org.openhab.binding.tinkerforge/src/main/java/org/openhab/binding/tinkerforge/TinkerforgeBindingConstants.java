@@ -51,6 +51,9 @@ public class TinkerforgeBindingConstants {
     
     public static final ThingTypeUID THING_TYPE_REALTIMECLOCK = new ThingTypeUID(BINDING_ID, "realtimeclock");
     
+    
+    public static final ThingTypeUID THING_TYPE_ROTARYENCODER = new ThingTypeUID(BINDING_ID, "rotaryencoder");
+    
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
       THING_TYPE_BRICKD,
     
@@ -67,7 +70,9 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_MOTIONDETECTORV2, 
     
-      THING_TYPE_REALTIMECLOCK
+      THING_TYPE_REALTIMECLOCK, 
+    
+      THING_TYPE_ROTARYENCODER
     };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 
