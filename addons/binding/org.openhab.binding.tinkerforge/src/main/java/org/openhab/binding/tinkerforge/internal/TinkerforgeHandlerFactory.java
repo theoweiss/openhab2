@@ -48,6 +48,8 @@ import org.openhab.binding.tinkerforge.handler.RealTimeClockBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.VoltageCurrentBrickletHandler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -139,6 +141,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_ROTARYENCODER)) {
             return new RotaryEncoderBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENT)) {
+            return new VoltageCurrentBrickletHandler(thing);
         }
     
         return null;
