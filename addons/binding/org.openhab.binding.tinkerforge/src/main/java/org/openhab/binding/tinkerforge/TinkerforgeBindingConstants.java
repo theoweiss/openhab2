@@ -57,6 +57,9 @@ public class TinkerforgeBindingConstants {
     
     public static final ThingTypeUID THING_TYPE_VOLTAGECURRENT = new ThingTypeUID(BINDING_ID, "voltagecurrent");
     
+    
+    public static final ThingTypeUID THING_TYPE_DISTANCEUS = new ThingTypeUID(BINDING_ID, "distanceus");
+    
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
       THING_TYPE_BRICKD,
     
@@ -77,7 +80,9 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_ROTARYENCODER, 
     
-      THING_TYPE_VOLTAGECURRENT
+      THING_TYPE_VOLTAGECURRENT, 
+    
+      THING_TYPE_DISTANCEUS
     };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 

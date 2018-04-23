@@ -50,6 +50,8 @@ import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.VoltageCurrentBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.DistanceUSBrickletHandler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -146,6 +148,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENT)) {
             return new VoltageCurrentBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_DISTANCEUS)) {
+            return new DistanceUSBrickletHandler(thing);
         }
     
         return null;
