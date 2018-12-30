@@ -38,9 +38,21 @@ import org.openhab.binding.tinkerforge.handler.TemperatureBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.LoadCellBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.SoundIntensityBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.AmbientLightBrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.AmbientLightV2BrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.PTCBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.HumidityBrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.HumidityV2BrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.MotionDetectorBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.MotionDetectorV2BrickletHandler;
 
@@ -121,13 +133,43 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
     
     
+        if (thingTypeUID.equals(THING_TYPE_SOUNDINTENSITY)) {
+            return new SoundIntensityBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHT)) {
+            return new AmbientLightBrickletHandler(thing);
+        }
+    
+    
         if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV2)) {
             return new AmbientLightV2BrickletHandler(thing);
         }
     
     
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALANALOGIN)) {
+            return new IndustrialDualAnalogInBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_PTC)) {
+            return new PTCBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_HUMIDITY)) {
+            return new HumidityBrickletHandler(thing);
+        }
+    
+    
         if (thingTypeUID.equals(THING_TYPE_HUMIDITYV2)) {
             return new HumidityV2BrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_MOTIONDETECTOR)) {
+            return new MotionDetectorBrickletHandler(thing);
         }
     
     

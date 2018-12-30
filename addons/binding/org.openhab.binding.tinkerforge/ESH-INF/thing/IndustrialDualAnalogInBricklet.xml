@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="industrialdualanalogIn">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletIndustrialDualAnalogIn</label>
+		<description>Tinkerforge BrickletIndustrialDualAnalogIn</description>
+
+		<channels>
+		
+			<channel id="voltage0" typeId="voltage0"/>
+		
+			<channel id="voltage1" typeId="voltage1"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="sampleRate" type="integer" multiple="false" required="false">
+				<label>sampleRate</label>
+				<description>sampleRate.</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+
+	<channel-type id="voltage0">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Voltage0</label>
+		<description>Voltage0</description>
+	</channel-type>
+
+	<channel-type id="voltage1">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Voltage1</label>
+		<description>Voltage1</description>
+	</channel-type>
+
+</thing:thing-descriptions>

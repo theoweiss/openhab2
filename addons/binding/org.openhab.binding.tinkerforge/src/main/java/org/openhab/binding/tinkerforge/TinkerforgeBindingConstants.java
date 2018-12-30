@@ -40,10 +40,28 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_LOADCELL = new ThingTypeUID(BINDING_ID, "loadcell");
     
     
+    public static final ThingTypeUID THING_TYPE_SOUNDINTENSITY = new ThingTypeUID(BINDING_ID, "soundintensity");
+    
+    
+    public static final ThingTypeUID THING_TYPE_AMBIENTLIGHT = new ThingTypeUID(BINDING_ID, "ambientlight");
+    
+    
     public static final ThingTypeUID THING_TYPE_AMBIENTLIGHTV2 = new ThingTypeUID(BINDING_ID, "ambientlightV2");
     
     
+    public static final ThingTypeUID THING_TYPE_INDUSTRIALDUALANALOGIN = new ThingTypeUID(BINDING_ID, "industrialdualanalogIn");
+    
+    
+    public static final ThingTypeUID THING_TYPE_PTC = new ThingTypeUID(BINDING_ID, "ptc");
+    
+    
+    public static final ThingTypeUID THING_TYPE_HUMIDITY = new ThingTypeUID(BINDING_ID, "humidity");
+    
+    
     public static final ThingTypeUID THING_TYPE_HUMIDITYV2 = new ThingTypeUID(BINDING_ID, "humidityV2");
+    
+    
+    public static final ThingTypeUID THING_TYPE_MOTIONDETECTOR = new ThingTypeUID(BINDING_ID, "motiondetector");
     
     
     public static final ThingTypeUID THING_TYPE_MOTIONDETECTORV2 = new ThingTypeUID(BINDING_ID, "motiondetectorV2");
@@ -70,9 +88,21 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_LOADCELL, 
     
+      THING_TYPE_SOUNDINTENSITY, 
+    
+      THING_TYPE_AMBIENTLIGHT, 
+    
       THING_TYPE_AMBIENTLIGHTV2, 
     
+      THING_TYPE_INDUSTRIALDUALANALOGIN, 
+    
+      THING_TYPE_PTC, 
+    
+      THING_TYPE_HUMIDITY, 
+    
       THING_TYPE_HUMIDITYV2, 
+    
+      THING_TYPE_MOTIONDETECTOR, 
     
       THING_TYPE_MOTIONDETECTORV2, 
     

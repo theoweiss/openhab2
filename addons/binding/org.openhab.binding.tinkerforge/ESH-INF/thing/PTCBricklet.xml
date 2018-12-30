@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="ptc">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletPTC</label>
+		<description>Tinkerforge BrickletPTC</description>
+
+		<channels>
+		
+			<channel id="temperature" typeId="temperature"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="wireMode" type="integer" multiple="false" required="false">
+				<label>wireMode</label>
+				<description>wireMode.</description>
+			</parameter>
+
+			<parameter name="noiseRejectionFilter" type="integer" multiple="false" required="false">
+				<label>noiseRejectionFilter</label>
+				<description>noiseRejectionFilter.</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+
+	<channel-type id="temperature">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Temperature</label>
+		<description>Temperature</description>
+	</channel-type>
+
+</thing:thing-descriptions>

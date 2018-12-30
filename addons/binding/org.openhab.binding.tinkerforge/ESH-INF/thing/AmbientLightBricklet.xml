@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="ambientlight">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletAmbientLight</label>
+		<description>Tinkerforge BrickletAmbientLight</description>
+
+		<channels>
+		
+			<channel id="illuminance" typeId="illuminance"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+
+	<channel-type id="illuminance">
+	  
+		<item-type>Number</item-type>
+		
+		<label>Illuminance</label>
+		<description>Illuminance</description>
+	</channel-type>
+
+</thing:thing-descriptions>
