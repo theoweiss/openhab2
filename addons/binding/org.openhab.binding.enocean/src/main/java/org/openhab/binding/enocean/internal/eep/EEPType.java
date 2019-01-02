@@ -46,6 +46,7 @@ import org.openhab.binding.enocean.internal.eep.A5_02.A5_02_20;
 import org.openhab.binding.enocean.internal.eep.A5_02.A5_02_30;
 import org.openhab.binding.enocean.internal.eep.A5_04.A5_04_01;
 import org.openhab.binding.enocean.internal.eep.A5_04.A5_04_02;
+import org.openhab.binding.enocean.internal.eep.A5_04.A5_04_02_Eltako;
 import org.openhab.binding.enocean.internal.eep.A5_04.A5_04_03;
 import org.openhab.binding.enocean.internal.eep.A5_08.A5_08_01;
 import org.openhab.binding.enocean.internal.eep.A5_08.A5_08_01_FXBH;
@@ -90,6 +91,7 @@ import org.openhab.binding.enocean.internal.eep.A5_12.A5_12_00;
 import org.openhab.binding.enocean.internal.eep.A5_12.A5_12_01;
 import org.openhab.binding.enocean.internal.eep.A5_12.A5_12_02;
 import org.openhab.binding.enocean.internal.eep.A5_12.A5_12_03;
+import org.openhab.binding.enocean.internal.eep.A5_14.A5_14_09;
 import org.openhab.binding.enocean.internal.eep.A5_38.A5_38_08_Blinds;
 import org.openhab.binding.enocean.internal.eep.A5_38.A5_38_08_Dimming;
 import org.openhab.binding.enocean.internal.eep.A5_38.A5_38_08_Switching;
@@ -167,6 +169,8 @@ public enum EEPType {
             CHANNEL_WINDOWHANDLESTATE, CHANNEL_CONTACT, CHANNEL_RECEIVINGSTATE),
     MechanicalHandle01(RORG.RPS, 0x10, 0x01, false, F6_10_01.class, THING_TYPE_MECHANICALHANDLE,
             CHANNEL_WINDOWHANDLESTATE, CHANNEL_CONTACT, CHANNEL_RECEIVINGSTATE),
+    MechanicalHandle02(RORG._4BS, 0x14, 0x09, false, A5_14_09.class, THING_TYPE_MECHANICALHANDLE,
+            CHANNEL_WINDOWHANDLESTATE, CHANNEL_CONTACT, CHANNEL_BATTERY_VOLTAGE, CHANNEL_RECEIVINGSTATE),
 
     ContactAndSwitch(RORG._1BS, 0x00, 0x01, false, D5_00_01.class, THING_TYPE_CONTACT, CHANNEL_CONTACT,
             CHANNEL_RECEIVINGSTATE),
@@ -226,6 +230,9 @@ public enum EEPType {
             THING_TYPE_TEMPERATUREHUMIDITYSENSOR, CHANNEL_TEMPERATURE, CHANNEL_HUMIDITY, CHANNEL_RECEIVINGSTATE),
     TemperatureHumiditySensor_A5_04_02(RORG._4BS, 0x04, 0x02, false, A5_04_02.class,
             THING_TYPE_TEMPERATUREHUMIDITYSENSOR, CHANNEL_TEMPERATURE, CHANNEL_HUMIDITY, CHANNEL_RECEIVINGSTATE),
+    TemperatureHumiditySensor_A5_04_02_Eltako(RORG._4BS, 0x04, 0x02, false, "ELTAKO", ELTAKOID, A5_04_02_Eltako.class,
+            THING_TYPE_TEMPERATUREHUMIDITYSENSOR, CHANNEL_TEMPERATURE, CHANNEL_HUMIDITY, CHANNEL_BATTERY_VOLTAGE,
+            CHANNEL_RECEIVINGSTATE),
     TemperatureHumiditySensor_A5_04_03(RORG._4BS, 0x04, 0x03, false, A5_04_03.class,
             THING_TYPE_TEMPERATUREHUMIDITYSENSOR, CHANNEL_TEMPERATURE, CHANNEL_HUMIDITY, CHANNEL_RECEIVINGSTATE),
 

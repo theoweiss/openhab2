@@ -8,12 +8,7 @@
  */
 package org.openhab.io.hueemulation.internal;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -21,93 +16,129 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.core.ConfigConstants;
 import org.eclipse.smarthome.core.common.registry.RegistryChangeListener;
+import org.eclipse.smarthome.core.items.GroupItem;
 import org.eclipse.smarthome.core.items.Item;
 import org.eclipse.smarthome.core.items.ItemRegistry;
 import org.eclipse.smarthome.core.library.CoreItemFactory;
-import org.eclipse.smarthome.core.types.StateDescription;
+import org.eclipse.smarthome.core.storage.Storage;
 import org.openhab.io.hueemulation.internal.dto.HueDataStore;
 import org.openhab.io.hueemulation.internal.dto.HueDevice;
+import org.openhab.io.hueemulation.internal.dto.HueGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-
 /**
- * Listens to the ItemRegistry for items that fulfill the criteria
- * (type is any of SWITCH, DIMMER, COLOR and it is tagged or has a category)
- * and creates {@link HueDevice} instances for every found item.
+ * Listens to the ItemRegistry for items that fulfill one of these criteria:
+ * <ul>
+ * <li>Type is any of SWITCH, DIMMER, COLOR, or Group
+ * <li>The category is "ColorLight" for coloured lights or "Light" for switchables.
+ * <li>The item is tagged, according to what is set with {@link #setFilterTags(Set, Set, Set)}.
+ * </ul>
  *
  * <p>
- * The {@link HueDevice} instances are kept in the given {@link HueDataStore}.
+ * A {@link HueDevice} instances is created for each found item.
+ * Those are kept in the given {@link HueDataStore}.
  * </p>
  *
  * <p>
- * Implementing groups or scenes should be done here as well by filtering for GroupItems.
- * At the moment only the artificial Group 0 is provided.
+ * Implementing scenes should be done here as well.
  * </p>
  *
- * The HUE Rest API requires a unique integer ID for every listed device.
- * A file in userdata/hueemulation/itemUIDtoHueID is used to keep track of the used integer ids.
+ * <p>
+ * The HUE Rest API requires a unique integer ID for every listed device. A storage service
+ * is used to store and load this mapping. A storage is not required for this class to work,
+ * but without it the mapping will be temporary only and ids may change on every boot up.
+ * </p>
+ *
+ * <p>
+ * </p>
  *
  * @author David Graeff - Initial contribution
+ * @author Florian Schmidt - Removed base type restriction from Group items
  */
 @NonNullByDefault
 public class LightItems implements RegistryChangeListener<Item> {
     private final Logger logger = LoggerFactory.getLogger(LightItems.class);
-    private static final File ITEM_FILE = new File(
-            ConfigConstants.getUserDataFolder() + File.separator + "hueemulation" + File.separator + "itemUIDtoHueID");
+    private static final String ITEM_TYPE_GROUP = "Group";
     private static final Set<String> ALLOWED_ITEM_TYPES = Stream
-            .of(CoreItemFactory.COLOR, CoreItemFactory.DIMMER, CoreItemFactory.SWITCH).collect(Collectors.toSet());
+            .of(CoreItemFactory.COLOR, CoreItemFactory.DIMMER, CoreItemFactory.SWITCH, ITEM_TYPE_GROUP)
+            .collect(Collectors.toSet());
 
     // deviceMap maps a unique Item id to a Hue numeric id
-    private final TreeMap<String, Integer> itemUIDtoHueID = new TreeMap<>();
+    final TreeMap<String, Integer> itemUIDtoHueID = new TreeMap<>();
     private final HueDataStore dataStore;
     private Set<String> switchFilter = Collections.emptySet();
     private Set<String> colorFilter = Collections.emptySet();
     private Set<String> whiteFilter = Collections.emptySet();
-    private final Gson gson;
+    private @Nullable Storage<Integer> storage;
+    private boolean initDone = false;
+    private @NonNullByDefault({}) ItemRegistry itemRegistry;
 
-    public LightItems(HueDataStore ds, Gson gson) {
+    public LightItems(HueDataStore ds) {
         dataStore = ds;
-        this.gson = gson;
     }
 
     /**
-     * Set filter tags. Empty sets are allowed, items will not be filtered then.
+     * Set filter tags. Empty sets are allowed, items will not be filtered by tags but other criteria then.
+     *
+     * <p>
+     * Calling this method will reset the {@link HueDataStore} and parse items from the item registry again.
+     * </p>
      *
      * @param switchFilter The switch filter tags
-     * @param colorFilter The color filter tags
-     * @param whiteFilter The white bulb filter tags
+     * @param colorFilter  The color filter tags
+     * @param whiteFilter  The white bulb filter tags
      */
     public void setFilterTags(Set<String> switchFilter, Set<String> colorFilter, Set<String> whiteFilter) {
         this.switchFilter = switchFilter;
         this.colorFilter = colorFilter;
         this.whiteFilter = whiteFilter;
+        fetchItems();
     }
 
     /**
-     * Load the userdata/hueemulation/itemUIDtoHueID file into {@link #itemUIDtoHueID}.
+     * Sets the item registry. Used to load up items and register to changes
+     *
+     * @param itemRegistry The item registry
      */
-    public void loadMappingFromFile() {
-        // load item list from disk
-        if (ITEM_FILE.exists()) {
-            try (JsonReader reader = new JsonReader(new FileReader(ITEM_FILE))) {
-                Map<String, Integer> tmpMap;
-                tmpMap = gson.fromJson(reader, new TypeToken<Map<String, Integer>>() {
-                }.getType());
-                if (tmpMap != null) {
-                    itemUIDtoHueID.putAll(tmpMap);
-                }
-            } catch (IOException e) {
-                logger.warn("File {} error", ITEM_FILE, e);
-            }
+    public void setItemRegistry(@Nullable ItemRegistry itemRegistry) {
+        this.itemRegistry = itemRegistry;
+    }
+
+    /**
+     * Load the {@link #itemUIDtoHueID} mapping from the given storage.
+     * This method can also be called when the storage service changes.
+     * A changed storage causes an immediately write request.
+     * <p>
+     * Because storage services are dynamically bound and may appear late,
+     * it may happen that the mapping is only loaded after items have been parsed already.
+     * In that case the {@link HueDataStore} is reset and items from the item registry are parsed again.
+     * It is important to keep the once exposed ids though.
+     * </p>
+     *
+     * @param storage A storage service
+     */
+    public void loadMappingFromFile(@Nullable Storage<Integer> storage) {
+        boolean storageChanged = this.storage != null && this.storage != storage;
+        this.storage = storage;
+        if (storage == null) {
+            return;
         }
 
+        for (String itemUID : storage.getKeys()) {
+            Integer hueID = storage.get(itemUID);
+            if (hueID == null) {
+                continue;
+            }
+            itemUIDtoHueID.put(itemUID, hueID);
+        }
+
+        if (storageChanged) {
+            writeToFile();
+        } else if (initDone) { // storage comes late to the game -> reassign all items
+            fetchItems();
+        }
     }
 
     /**
@@ -115,53 +146,57 @@ public class LightItems implements RegistryChangeListener<Item> {
      * Call {@link #close(ItemRegistry)} when you are done with this object.
      *
      * Only call this after you have set the filter tags with {@link #setFilterTags(Set, Set, Set)}.
-     *
-     * @param itemRegistry The item registry
      */
-    public void fetchItemsAndWatchRegistry(ItemRegistry itemRegistry) {
+    public synchronized void fetchItems() {
+        initDone = false;
+
+        dataStore.resetGroupsAndLights();
+
+        itemRegistry.removeRegistryChangeListener(this);
         itemRegistry.addRegistryChangeListener(this);
 
+        boolean changed = false;
         for (Item item : itemRegistry.getItems()) {
-            added(item);
+            changed |= addItem(item);
         }
-    }
+        initDone = true;
 
-    private int generateNextHueID() {
-        return dataStore.lights.size() == 0 ? 1 : new Integer(dataStore.lights.lastKey().intValue() + 1);
+        logger.debug("Added items: {}",
+                dataStore.lights.values().stream().map(l -> l.name).collect(Collectors.joining(", ")));
+        if (changed) {
+            writeToFile();
+        }
     }
 
     /**
-     * Saves the ID->Item association to file.
+     * Saves the ID->Item association to the storage.
      */
     private void writeToFile() {
-        try (JsonWriter writer = new JsonWriter(new FileWriter(ITEM_FILE))) {
-            gson.toJson(itemUIDtoHueID, new TypeToken<Map<String, Integer>>() {
-            }.getType(), writer);
-        } catch (IOException e) {
-            logger.error("Could not persist item cache", e);
+        Storage<Integer> storage = this.storage;
+        if (storage == null) {
+            return;
         }
+        storage.getKeys().forEach(key -> storage.remove(key));
+        itemUIDtoHueID.forEach((itemUID, hueID) -> storage.put(itemUID, hueID));
+    }
+
+    public void resetStorage() {
+        this.storage = null;
     }
 
     /**
      * Unregisters from the {@link ItemRegistry}.
      */
-    public void close(ItemRegistry itemRegistry) {
+    public void close() {
         writeToFile();
         itemRegistry.removeRegistryChangeListener(this);
     }
 
-    private @Nullable DeviceType determineTargetType(Item element) {
+    private @Nullable DeviceType determineTargetType(@Nullable String category, String type, Set<String> tags) {
         // Determine type, heuristically
         DeviceType t = null;
 
-        // No read only states
-        StateDescription stateDescription = element.getStateDescription();
-        if (stateDescription != null && stateDescription.isReadOnly()) {
-            return t;
-        }
-
         // First consider the category
-        String category = element.getCategory();
         if (category != null) {
             switch (category) {
                 case "ColorLight":
@@ -173,19 +208,19 @@ public class LightItems implements RegistryChangeListener<Item> {
         }
 
         // Then the tags
-        if (switchFilter.stream().anyMatch(element.getTags()::contains)) {
+        if (switchFilter.stream().anyMatch(tags::contains)) {
             t = DeviceType.SwitchType;
         }
-        if (whiteFilter.stream().anyMatch(element.getTags()::contains)) {
+        if (whiteFilter.stream().anyMatch(tags::contains)) {
             t = DeviceType.WhiteTemperatureType;
         }
-        if (colorFilter.stream().anyMatch(element.getTags()::contains)) {
+        if (colorFilter.stream().anyMatch(tags::contains)) {
             t = DeviceType.ColorType;
         }
 
         // Last but not least, the item type
         if (t == null) {
-            switch (element.getType()) {
+            switch (type) {
                 case CoreItemFactory.COLOR:
                     if (colorFilter.size() == 0) {
                         t = DeviceType.ColorType;
@@ -206,39 +241,58 @@ public class LightItems implements RegistryChangeListener<Item> {
         return t;
     }
 
-    @SuppressWarnings({ "unused", "null" })
     @Override
-    public void added(Item element) {
+    public synchronized void added(Item element) {
+        addItem(element);
+    }
+
+    String getType(Item element) {
+        if (element instanceof GroupItem) {
+            return ITEM_TYPE_GROUP;
+        }
+        return element.getType();
+    }
+
+    @SuppressWarnings({ "unused", "null" })
+    public boolean addItem(Item element) {
         // Only allowed types
-        if (!ALLOWED_ITEM_TYPES.contains(element.getType())) {
-            return;
+        String type = getType(element);
+
+        if (!ALLOWED_ITEM_TYPES.contains(type)) {
+            return false;
         }
 
-        DeviceType t = determineTargetType(element);
+        DeviceType t = determineTargetType(element.getCategory(), type, element.getTags());
         if (t == null) {
-            return;
+            return false;
         }
 
         Integer hueID = itemUIDtoHueID.get(element.getUID());
 
         boolean itemAssociationCreated = false;
         if (hueID == null) {
-            hueID = generateNextHueID();
+            hueID = dataStore.generateNextLightHueID();
             itemAssociationCreated = true;
         }
 
-        try {
-            HueDevice device = new HueDevice(element, UDN.getUDN() + "-" + hueID.toString(), t);
-            device.item = element;
-            dataStore.lights.put(hueID, device);
-            updateGroup0();
-            itemUIDtoHueID.put(element.getUID(), hueID);
+        HueDevice device = new HueDevice(element, dataStore.config.uuid + "-" + hueID.toString(), t);
+        device.item = element;
+        dataStore.lights.put(hueID, device);
+        if (element instanceof GroupItem) {
+            GroupItem g = (GroupItem) element;
+            g.getMembers();
+            HueGroup group = new HueGroup(g.getName(), g, itemUIDtoHueID);
+            dataStore.groups.put(hueID, group);
+        }
+        updateGroup0();
+        itemUIDtoHueID.put(element.getUID(), hueID);
+        if (initDone) {
+            logger.debug("Add item {}", element.getUID());
             if (itemAssociationCreated) {
                 writeToFile();
             }
-        } catch (IOException e) {
-            logger.warn("IO failed", e);
         }
+        return itemAssociationCreated;
     }
 
     /**
@@ -251,12 +305,14 @@ public class LightItems implements RegistryChangeListener<Item> {
 
     @SuppressWarnings({ "null", "unused" })
     @Override
-    public void removed(Item element) {
+    public synchronized void removed(Item element) {
         Integer hueID = itemUIDtoHueID.get(element.getUID());
         if (hueID == null) {
             return;
         }
+        logger.debug("Remove item {}", element.getUID());
         dataStore.lights.remove(hueID);
+        dataStore.groups.remove(hueID);
         updateGroup0();
         itemUIDtoHueID.remove(element.getUID());
         writeToFile();
@@ -267,13 +323,23 @@ public class LightItems implements RegistryChangeListener<Item> {
      */
     @SuppressWarnings({ "null", "unused" })
     @Override
-    public void updated(Item oldElement, Item element) {
+    public synchronized void updated(Item oldElement, Item element) {
         Integer hueID = itemUIDtoHueID.get(element.getUID());
         if (hueID == null) {
             // If the correct tags got added -> use the logic within added()
             added(element);
             return;
         }
+
+        HueGroup hueGroup = dataStore.groups.get(hueID);
+        if (hueGroup != null) {
+            if (element instanceof GroupItem) {
+                hueGroup.updateItem((GroupItem) element);
+            } else {
+                dataStore.groups.remove(hueID);
+            }
+        }
+
         HueDevice hueDevice = dataStore.lights.get(hueID);
         if (hueDevice == null) {
             // If the correct tags got added -> use the logic within added()
@@ -282,7 +348,7 @@ public class LightItems implements RegistryChangeListener<Item> {
         }
 
         // Check if type can still be determined (tags and category is still sufficient)
-        DeviceType t = determineTargetType(element);
+        DeviceType t = determineTargetType(element.getCategory(), getType(element), element.getTags());
         if (t == null) {
             removed(element);
             return;
