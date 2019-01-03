@@ -28,12 +28,16 @@
 	</thing-type>
 
 
+
 	<channel-type id="temperature">
-	  
+		
 		<item-type>Number</item-type>
 		
 		<label>Temperature</label>
-		<description>Temperature</description>
+		<description>Current Temperature</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%.1f %unit%"/>
 	</channel-type>
+
 
 </thing:thing-descriptions>

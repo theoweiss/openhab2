@@ -28,12 +28,16 @@
 	</thing-type>
 
 
+
 	<channel-type id="motiondetected">
-	  
+		
 		<item-type>Contact</item-type>
 		
 		<label>MotionDetected</label>
 		<description>MotionDetected</description>
+		
+		<state readOnly="true" />
 	</channel-type>
+
 
 </thing:thing-descriptions>

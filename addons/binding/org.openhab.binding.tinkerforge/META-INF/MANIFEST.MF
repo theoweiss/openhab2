@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.openhab.binding.tinkerforge
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/tinkerforge-client-1.0-SNAPSHOT-fat.jar
@@ -7,7 +8,7 @@ Bundle-Name: Tinkerforge Binding
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-SymbolicName: org.openhab.binding.tinkerforge;singleton:=true
 Bundle-Vendor: openHAB
-Bundle-Version: 2.3.0.qualifier
+Bundle-Version: 2.4.0.qualifier
 Export-Package: 
  org.openhab.binding.tinkerforge,
  org.openhab.binding.tinkerforge.handler

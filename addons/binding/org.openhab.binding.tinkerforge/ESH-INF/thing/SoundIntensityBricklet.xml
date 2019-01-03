@@ -28,12 +28,16 @@
 	</thing-type>
 
 
+
 	<channel-type id="intensity">
-	  
+		
 		<item-type>Number</item-type>
 		
 		<label>Intensity</label>
 		<description>Intensity</description>
+		
+		<state readOnly="true" />
 	</channel-type>
+
 
 </thing:thing-descriptions>

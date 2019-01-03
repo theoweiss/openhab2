@@ -15,7 +15,7 @@
 		
 			<channel id="count" typeId="count"/>
 		
-			<channel id="buttonpressed" typeId="buttonpressed"/>
+			<channel id="buttonpressed" typeId="system.rawbutton"/>
 		
 		</channels>
 
@@ -30,20 +30,18 @@
 	</thing-type>
 
 
+
 	<channel-type id="count">
-	  
+		
 		<item-type>Number</item-type>
 		
 		<label>Count</label>
 		<description>Count</description>
+		
+		<state readOnly="true" />
 	</channel-type>
 
-	<channel-type id="buttonpressed">
-	  
-		<item-type>Contact</item-type>
-		
-		<label>ButtonPressed</label>
-		<description>ButtonPressed</description>
-	</channel-type>
+
+
 
 </thing:thing-descriptions>

@@ -39,36 +39,52 @@
 	</thing-type>
 
 
+
 	<channel-type id="motiondetected">
-	  
+		
 		<item-type>Contact</item-type>
 		
 		<label>MotionDetected</label>
 		<description>MotionDetected</description>
+		
+		<state readOnly="true" />
 	</channel-type>
 
+
+
 	<channel-type id="topLeftled">
-	  
+		
 		<item-type>Number</item-type>
 		
 		<label>TopLeftLed</label>
 		<description>TopLeftLed</description>
+		
+		<state readOnly="false" />
 	</channel-type>
 
+
+
 	<channel-type id="topRightled">
-	  
+		
 		<item-type>Number</item-type>
 		
 		<label>TopRightLed</label>
 		<description>TopRightLed</description>
+		
+		<state readOnly="false" />
 	</channel-type>
 
+
+
 	<channel-type id="bottomled">
-	  
+		
 		<item-type>Number</item-type>
 		
 		<label>BottomLed</label>
 		<description>BottomLed</description>
+		
+		<state readOnly="false" />
 	</channel-type>
+
 
 </thing:thing-descriptions>
