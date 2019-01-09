@@ -10,12 +10,10 @@ package org.openhab.binding.tinkerforge.handler;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OpenClosedType;
 import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.CommonTriggerEvents;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
@@ -24,12 +22,9 @@ import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
-import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
-import org.m1theo.tinkerforge.client.types.DecimalValue;
-import org.m1theo.tinkerforge.client.types.HighLowValue;
-
 import org.m1theo.tinkerforge.client.devices.realtimeclock.ChannelId;
-
+import org.m1theo.tinkerforge.client.types.DateTimeValue;
+import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +50,7 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         switch (channelUID.getId()) {
-        
-          
-        
+
             default:
                 break;
         }
@@ -101,10 +94,9 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
         return bridgeHandler;
     }
 
-
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
-    newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
         if (notifier == null) {
             return;
         }
@@ -115,19 +107,18 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
             // TODO
         } else {
             notifier.getChannelId();
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.datetime.name())) {
-                
-                if (newValue instanceof DecimalValue) {
+
+                if (newValue instanceof DateTimeValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    updateState(notifier.getChannelId(), new DateTimeType(java.time.ZonedDateTime
+                            .of(((DateTimeValue) newValue).getDateTime(), java.time.ZoneId.of("UTC"))));
                     return;
                 }
-                
+
             }
-            
-            
+
         }
     }
 

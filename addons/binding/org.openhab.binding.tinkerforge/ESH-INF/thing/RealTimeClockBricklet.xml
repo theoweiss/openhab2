@@ -31,11 +31,11 @@
 
 	<channel-type id="datetime">
 		
-		<item-type>Number</item-type>
+		<item-type>DateTime</item-type>
 		
 		<label>DateTime</label>
-		<description>DateTime</description>
-		
+		<description>Current Time and Date</description>
+		<category>Time</category>
 		<state readOnly="true" />
 	</channel-type>
 
