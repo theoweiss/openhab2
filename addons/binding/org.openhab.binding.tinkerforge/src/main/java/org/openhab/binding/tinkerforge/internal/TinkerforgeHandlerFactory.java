@@ -58,6 +58,8 @@ import org.openhab.binding.tinkerforge.handler.MotionDetectorV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.RealTimeClockBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.RealTimeClockV2BrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.VoltageCurrentBrickletHandler;
@@ -180,6 +182,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCK)) {
             return new RealTimeClockBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCKV2)) {
+            return new RealTimeClockV2BrickletHandler(thing);
         }
     
     

@@ -70,6 +70,9 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_REALTIMECLOCK = new ThingTypeUID(BINDING_ID, "realtimeclock");
     
     
+    public static final ThingTypeUID THING_TYPE_REALTIMECLOCKV2 = new ThingTypeUID(BINDING_ID, "realtimeclockV2");
+    
+    
     public static final ThingTypeUID THING_TYPE_ROTARYENCODER = new ThingTypeUID(BINDING_ID, "rotaryencoder");
     
     
@@ -107,6 +110,8 @@ public class TinkerforgeBindingConstants {
       THING_TYPE_MOTIONDETECTORV2, 
     
       THING_TYPE_REALTIMECLOCK, 
+    
+      THING_TYPE_REALTIMECLOCKV2, 
     
       THING_TYPE_ROTARYENCODER, 
     
