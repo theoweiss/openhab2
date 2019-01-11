@@ -31,11 +31,11 @@
 
 	<channel-type id="humidity">
 		
-		<item-type>Number</item-type>
+		<item-type>Number:Dimensionless</item-type>
 		
 		<label>Humidity</label>
-		<description>Humidity</description>
-		
+		<description>Atmospheric humidity in percent.</description>
+		<category>Humidity</category>
 		<state readOnly="true" />
 	</channel-type>
 

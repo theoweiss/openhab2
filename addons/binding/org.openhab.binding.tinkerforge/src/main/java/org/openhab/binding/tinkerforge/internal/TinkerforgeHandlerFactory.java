@@ -40,13 +40,21 @@ import org.openhab.binding.tinkerforge.handler.LoadCellBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.SoundIntensityBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.SoundPressureLevelBrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.AmbientLightBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.AmbientLightV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInV2BrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.PTCBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.BarometerBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.BarometerV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.HumidityBrickletHandler;
 
@@ -63,6 +71,8 @@ import org.openhab.binding.tinkerforge.handler.RealTimeClockV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.VoltageCurrentBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.VoltageCurrentV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.DistanceUSBrickletHandler;
 
@@ -140,6 +150,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
     
     
+        if (thingTypeUID.equals(THING_TYPE_SOUNDPRESSURELEVEL)) {
+            return new SoundPressureLevelBrickletHandler(thing);
+        }
+    
+    
         if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHT)) {
             return new AmbientLightBrickletHandler(thing);
         }
@@ -155,8 +170,23 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
     
     
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALANALOGINV2)) {
+            return new IndustrialDualAnalogInV2BrickletHandler(thing);
+        }
+    
+    
         if (thingTypeUID.equals(THING_TYPE_PTC)) {
             return new PTCBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_BAROMETER)) {
+            return new BarometerBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_BAROMETERV2)) {
+            return new BarometerV2BrickletHandler(thing);
         }
     
     
@@ -197,6 +227,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENT)) {
             return new VoltageCurrentBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENTV2)) {
+            return new VoltageCurrentV2BrickletHandler(thing);
         }
     
     
