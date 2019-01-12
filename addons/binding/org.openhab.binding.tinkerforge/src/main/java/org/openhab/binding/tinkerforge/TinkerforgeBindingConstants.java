@@ -61,6 +61,9 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_PTC = new ThingTypeUID(BINDING_ID, "ptc");
     
     
+    public static final ThingTypeUID THING_TYPE_PTCV2 = new ThingTypeUID(BINDING_ID, "ptcV2");
+    
+    
     public static final ThingTypeUID THING_TYPE_BAROMETER = new ThingTypeUID(BINDING_ID, "barometer");
     
     
@@ -119,6 +122,8 @@ public class TinkerforgeBindingConstants {
       THING_TYPE_INDUSTRIALDUALANALOGINV2, 
     
       THING_TYPE_PTC, 
+    
+      THING_TYPE_PTCV2, 
     
       THING_TYPE_BAROMETER, 
     

@@ -52,6 +52,8 @@ import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInV2BrickletH
 
 import org.openhab.binding.tinkerforge.handler.PTCBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.PTCV2BrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.BarometerBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.BarometerV2BrickletHandler;
@@ -177,6 +179,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_PTC)) {
             return new PTCBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_PTCV2)) {
+            return new PTCV2BrickletHandler(thing);
         }
     
     
