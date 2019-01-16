@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <!-- Brickd -->
+    <bridge-type id="brickd">
+        <label>Brickd</label>
+        <description>The brickd represents a brickd connection.</description>
+
+        <properties>
+            <property name="vendor">Tinkerforge</property>
+        </properties>
+        <!-- representation-property>serialNumber</representation-property -->
+
+        <config-description>
+            <parameter name="ipAddress" type="text">
+                <context>network_address</context>
+                <label>Network Address</label>
+                <description>Network address of the brickd.</description>
+                <required>true</required>
+            </parameter>
+            <parameter name="authKey" type="text">
+                <context>password</context>
+                <label>Authentication key</label>
+                <description>
+                    The authentication token to access the brickd.
+                </description>
+                <required>false</required>
+            </parameter>
+        </config-description>
+    </bridge-type>
+
+</thing:thing-descriptions>

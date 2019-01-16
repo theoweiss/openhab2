@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="motiondetectorV2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletMotionDetectorV2</label>
+		<description>Tinkerforge BrickletMotionDetectorV2</description>
+
+		<channels>
+		
+			<channel id="motiondetected" typeId="motiondetected"/>
+		
+			<channel id="topLeftled" typeId="topLeftled"/>
+		
+			<channel id="topRightled" typeId="topRightled"/>
+		
+			<channel id="bottomled" typeId="bottomled"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="sensitivity" type="integer" multiple="false" required="false">
+				<label>sensitivity</label>
+				<description>sensitivity.</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+
+
+	<channel-type id="motiondetected">
+		
+		<item-type>Contact</item-type>
+		
+		<label>MotionDetected</label>
+		<description>MotionDetected</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+
+
+	<channel-type id="topLeftled">
+		
+		<item-type>Number</item-type>
+		
+		<label>TopLeftLed</label>
+		<description>TopLeftLed</description>
+		
+		<state readOnly="false" />
+	</channel-type>
+
+
+
+	<channel-type id="topRightled">
+		
+		<item-type>Number</item-type>
+		
+		<label>TopRightLed</label>
+		<description>TopRightLed</description>
+		
+		<state readOnly="false" />
+	</channel-type>
+
+
+
+	<channel-type id="bottomled">
+		
+		<item-type>Number</item-type>
+		
+		<label>BottomLed</label>
+		<description>BottomLed</description>
+		
+		<state readOnly="false" />
+	</channel-type>
+
+
+</thing:thing-descriptions>

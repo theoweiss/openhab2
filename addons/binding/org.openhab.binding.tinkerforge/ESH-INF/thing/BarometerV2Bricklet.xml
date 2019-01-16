@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="barometerV2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletBarometerV2</label>
+		<description>Tinkerforge BrickletBarometerV2</description>
+
+		<channels>
+		
+			<channel id="airpressure" typeId="airpressure"/>
+		
+			<channel id="temperature" typeId="temperature"/>
+		
+			<channel id="altitude" typeId="altitude"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+
+
+	<channel-type id="airpressure">
+		
+		<item-type>Number:Pressure</item-type>
+		
+		<label>AirPressure</label>
+		<description>Barometric pressure</description>
+		<category>Pressure</category>
+		<state readOnly="true" />
+	</channel-type>
+
+
+
+	<channel-type id="temperature">
+		
+		<item-type>Number:Temperature</item-type>
+		
+		<label>Temperature</label>
+		<description>Current Temperature</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+
+
+	<channel-type id="altitude">
+		
+		<item-type>Number</item-type>
+		
+		<label>Altitude</label>
+		<description>Altitude</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+
+</thing:thing-descriptions>
