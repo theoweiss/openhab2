@@ -36,7 +36,7 @@
 		<label>Humidity</label>
 		<description>Atmospheric humidity in percent.</description>
 		<category>Humidity</category>
-		<state pattern="%.1f %unit%" readOnly="true" />
+		<state readOnly="true" />
 	</channel-type>
 
 
