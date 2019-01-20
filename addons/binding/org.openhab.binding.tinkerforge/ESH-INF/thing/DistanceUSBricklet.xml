@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="distance" typeId="distance"/>
+			<channel id="distance" typeId="distanceus"/>
 		
 		</channels>
 
@@ -26,18 +26,5 @@
 
 		</config-description>
 	</thing-type>
-
-
-
-	<channel-type id="distance">
-		
-		<item-type>Number</item-type>
-		
-		<label>Distance</label>
-		<description>Distance</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
 
 </thing:thing-descriptions>

@@ -54,13 +54,7 @@ public class BrickletVoltageCurrentHandler extends BaseThingHandler implements C
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         switch (channelUID.getId()) {
-        
-          
-        
-          
-        
-          
-        
+
             default:
                 break;
         }
@@ -104,10 +98,9 @@ public class BrickletVoltageCurrentHandler extends BaseThingHandler implements C
         return bridgeHandler;
     }
 
-
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
-    newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
         if (notifier == null) {
             return;
         }
@@ -118,43 +111,37 @@ public class BrickletVoltageCurrentHandler extends BaseThingHandler implements C
             // TODO
         } else {
             notifier.getChannelId();
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.voltage.name())) {
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.current.name())) {
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.power.name())) {
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
                     return;
                 }
-                
+
             }
-            
-            
+
         }
     }
 

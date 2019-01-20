@@ -13,7 +13,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.library.types.*;
+import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
+import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.thing.*;
+import org.eclipse.smarthome.core.library.unit.*;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
@@ -117,7 +120,8 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler impl
                 
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    updateState(notifier.getChannelId(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                    
                     return;
                 }
                 
@@ -129,7 +133,8 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler impl
                 
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    updateState(notifier.getChannelId(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                    
                     return;
                 }
                 

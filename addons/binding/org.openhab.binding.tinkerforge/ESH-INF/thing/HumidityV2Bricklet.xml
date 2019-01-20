@@ -41,41 +41,4 @@
 		</config-description>
 	</thing-type>
 
-
-
-	<channel-type id="humidity">
-		
-		<item-type>Number:Dimensionless</item-type>
-		
-		<label>Humidity</label>
-		<description>Atmospheric humidity in percent.</description>
-		<category>Humidity</category>
-		<state readOnly="true" pattern="%.1f %unit%"/>
-	</channel-type>
-
-
-
-	<channel-type id="temperature">
-		
-		<item-type>Number:Temperature</item-type>
-		
-		<label>Temperature</label>
-		<description>Current Temperature</description>
-		<category>Temperature</category>
-		<state readOnly="true" pattern="%.1f %unit%"/>
-	</channel-type>
-
-
-
-	<channel-type id="heater">
-		
-		<item-type>tfTODO</item-type>
-		
-		<label>Heater</label>
-		<description>Heater</description>
-		
-		<state readOnly="false" />
-	</channel-type>
-
-
 </thing:thing-descriptions>

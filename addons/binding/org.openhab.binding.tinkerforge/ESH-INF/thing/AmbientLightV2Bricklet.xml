@@ -37,17 +37,4 @@
 		</config-description>
 	</thing-type>
 
-
-
-	<channel-type id="illuminance">
-		
-		<item-type>Number</item-type>
-		
-		<label>Illuminance</label>
-		<description>Illuminance</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
 </thing:thing-descriptions>

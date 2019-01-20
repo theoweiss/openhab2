@@ -27,17 +27,4 @@
 		</config-description>
 	</thing-type>
 
-
-
-	<channel-type id="humidity">
-		
-		<item-type>Number:Dimensionless</item-type>
-		
-		<label>Humidity</label>
-		<description>Atmospheric humidity in percent.</description>
-		<category>Humidity</category>
-		<state readOnly="true" />
-	</channel-type>
-
-
 </thing:thing-descriptions>

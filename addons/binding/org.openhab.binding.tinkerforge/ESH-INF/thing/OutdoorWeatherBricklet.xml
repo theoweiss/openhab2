@@ -13,27 +13,27 @@
 
 		<channels>
 		
-			<channel id="temperatureStation" typeId="temperatureStation"/>
+			<channel id="temperatureStation" typeId="temperature"/>
 		
-			<channel id="humidityStation" typeId="humidityStation"/>
+			<channel id="humidityStation" typeId="humidity"/>
 		
-			<channel id="windSpeedStation" typeId="windSpeedStation"/>
+			<channel id="windSpeedStation" typeId="speed"/>
 		
-			<channel id="gustSpeedStation" typeId="gustSpeedStation"/>
+			<channel id="gustSpeedStation" typeId="speed"/>
 		
-			<channel id="rainStation" typeId="rainStation"/>
+			<channel id="rainStation" typeId="rain"/>
 		
-			<channel id="windDirectionStation" typeId="windDirectionStation"/>
+			<channel id="windDirectionStation" typeId="direction"/>
 		
-			<channel id="lastChangeStation" typeId="lastChangeStation"/>
+			<channel id="lastChangeStation" typeId="datetime"/>
 		
-			<channel id="batteryLowStation" typeId="batteryLowStation"/>
+			<channel id="batteryLowStation" typeId="system.low-battery"/>
 		
-			<channel id="temperatureSensor" typeId="temperatureSensor"/>
+			<channel id="temperatureSensor" typeId="temperature"/>
 		
-			<channel id="humiditySensor" typeId="humiditySensor"/>
+			<channel id="humiditySensor" typeId="humidity"/>
 		
-			<channel id="lastChangeSensor" typeId="lastChangeSensor"/>
+			<channel id="lastChangeSensor" typeId="datetime"/>
 		
 		</channels>
 
@@ -56,138 +56,5 @@
 
 		</config-description>
 	</thing-type>
-
-
-
-	<channel-type id="temperatureStation">
-		
-		<item-type>Number:Temperature</item-type>
-		
-		<label>TemperatureStation</label>
-		<description>Current Temperature</description>
-		<category>Temperature</category>
-		<state readOnly="true" pattern="%.1f %unit%"/>
-	</channel-type>
-
-
-
-	<channel-type id="humidityStation">
-		
-		<item-type>Number</item-type>
-		
-		<label>HumidityStation</label>
-		<description>HumidityStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="windSpeedStation">
-		
-		<item-type>Number</item-type>
-		
-		<label>WindSpeedStation</label>
-		<description>WindSpeedStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="gustSpeedStation">
-		
-		<item-type>Number</item-type>
-		
-		<label>GustSpeedStation</label>
-		<description>GustSpeedStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="rainStation">
-		
-		<item-type>Number</item-type>
-		
-		<label>RainStation</label>
-		<description>RainStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="windDirectionStation">
-		
-		<item-type>Number</item-type>
-		
-		<label>WindDirectionStation</label>
-		<description>WindDirectionStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="lastChangeStation">
-		
-		<item-type>Number</item-type>
-		
-		<label>LastChangeStation</label>
-		<description>LastChangeStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="batteryLowStation">
-		
-		<item-type>Contact</item-type>
-		
-		<label>BatteryLowStation</label>
-		<description>BatteryLowStation</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="temperatureSensor">
-		
-		<item-type>Number</item-type>
-		
-		<label>TemperatureSensor</label>
-		<description>TemperatureSensor</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="humiditySensor">
-		
-		<item-type>Number</item-type>
-		
-		<label>HumiditySensor</label>
-		<description>HumiditySensor</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="lastChangeSensor">
-		
-		<item-type>Number</item-type>
-		
-		<label>LastChangeSensor</label>
-		<description>LastChangeSensor</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
 
 </thing:thing-descriptions>

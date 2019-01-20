@@ -27,17 +27,4 @@
 		</config-description>
 	</thing-type>
 
-
-
-	<channel-type id="datetime">
-		
-		<item-type>DateTime</item-type>
-		
-		<label>DateTime</label>
-		<description>Current Time and Date</description>
-		<category>Time</category>
-		<state readOnly="true" />
-	</channel-type>
-
-
 </thing:thing-descriptions>

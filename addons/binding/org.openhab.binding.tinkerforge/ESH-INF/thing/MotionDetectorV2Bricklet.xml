@@ -13,13 +13,13 @@
 
 		<channels>
 		
-			<channel id="motiondetected" typeId="motiondetected"/>
+			<channel id="motiondetected" typeId="system.motion"/>
 		
-			<channel id="topLeftled" typeId="topLeftled"/>
+			<channel id="topLeftled" typeId="led"/>
 		
-			<channel id="topRightled" typeId="topRightled"/>
+			<channel id="topRightled" typeId="led"/>
 		
-			<channel id="bottomled" typeId="bottomled"/>
+			<channel id="bottomled" typeId="led"/>
 		
 		</channels>
 
@@ -37,54 +37,5 @@
 
 		</config-description>
 	</thing-type>
-
-
-
-	<channel-type id="motiondetected">
-		
-		<item-type>Contact</item-type>
-		
-		<label>MotionDetected</label>
-		<description>MotionDetected</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="topLeftled">
-		
-		<item-type>Number</item-type>
-		
-		<label>TopLeftLed</label>
-		<description>TopLeftLed</description>
-		
-		<state readOnly="false" />
-	</channel-type>
-
-
-
-	<channel-type id="topRightled">
-		
-		<item-type>Number</item-type>
-		
-		<label>TopRightLed</label>
-		<description>TopRightLed</description>
-		
-		<state readOnly="false" />
-	</channel-type>
-
-
-
-	<channel-type id="bottomled">
-		
-		<item-type>Number</item-type>
-		
-		<label>BottomLed</label>
-		<description>BottomLed</description>
-		
-		<state readOnly="false" />
-	</channel-type>
-
 
 </thing:thing-descriptions>

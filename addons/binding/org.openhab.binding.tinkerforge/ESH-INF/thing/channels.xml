@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+
+	<channel-type id="temperature">
+		<item-type>Number:Temperature</item-type>
+		<label>temperature</label>
+		<description>Current Temperature</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%.2f %unit%"/>
+	</channel-type>
+
+	<channel-type id="weight">
+		<item-type>Number:Mass</item-type>
+		<label>weight</label>
+		<description>Weight</description>
+		<category>Pressure</category>
+		<state readOnly="true" pattern="%.2f %unit%"/>
+	</channel-type>
+
+	<channel-type id="intensity">
+		<item-type>Number</item-type>
+		<label>intensity</label>
+		<description>The current sound intensity. The value has a range of 0 to 4095</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="decibel">
+		<item-type>Number:Dimensionless</item-type>
+		<label>decibel</label>
+		<description>The measured sound pressure in decibels.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="illuminance">
+		<item-type>Number:Illuminance</item-type>
+		<label>illuminance</label>
+		<description>The current illuminance in lux.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="airpressure">
+		<item-type>Number:Pressure</item-type>
+		<label>airpressure</label>
+		<description>Barometric pressure</description>
+		<category>Pressure</category>
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="altitude">
+		<item-type>Number:Length</item-type>
+		<label>altitude</label>
+		<description>The current altitude in Meter.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="humidity">
+		<item-type>Number:Dimensionless</item-type>
+		<label>humidity</label>
+		<description>Humidity in percent.</description>
+		<category>Humidity</category>
+		<state readOnly="true" pattern="%.2f %unit%"/>
+	</channel-type>
+
+	<channel-type id="datetime">
+		<item-type>DateTime</item-type>
+		<label>datetime</label>
+		<description>Current Time and Date</description>
+		<category>Time</category>
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="count">
+		<item-type>Number</item-type>
+		<label>count</label>
+		<description>The current value of a counter.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="voltage">
+		<item-type>Number:ElectricPotential</item-type>
+		<label>voltage</label>
+		<description>The current voltage in milli Volt.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="current">
+		<item-type>Number:ElectricCurrent</item-type>
+		<label>current</label>
+		<description>The current in milli Ampere.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="power">
+		<item-type>Number:Power</item-type>
+		<label>power</label>
+		<description>The power in Watt.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="speed">
+		<item-type>Number</item-type>
+		<label>speed</label>
+		<description>The speed.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="direction">
+		<item-type>null</item-type>
+		<label>direction</label>
+		<description>Die Himmelsrichtung.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="rain">
+		<item-type>Number</item-type>
+		<label>rain</label>
+		<description>Der Regen.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="heater">
+		<item-type>Contact</item-type>
+		<label>heater</label>
+		<description>Heater status.</description>
+		
+		<state readOnly="false" />
+	</channel-type>
+
+	<channel-type id="resistance">
+		<item-type>Number</item-type>
+		<label>resistance</label>
+		<description>Resistance in Ohm.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="distanceus">
+		<item-type>Number</item-type>
+		<label>distanceus</label>
+		<description>Distance value.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+</thing:thing-descriptions>

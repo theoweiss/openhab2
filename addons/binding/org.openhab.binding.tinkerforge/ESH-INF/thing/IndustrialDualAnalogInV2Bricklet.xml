@@ -13,9 +13,9 @@
 
 		<channels>
 		
-			<channel id="voltage0" typeId="voltage0"/>
+			<channel id="voltage0" typeId="voltage"/>
 		
-			<channel id="voltage1" typeId="voltage1"/>
+			<channel id="voltage1" typeId="voltage"/>
 		
 		</channels>
 
@@ -33,30 +33,5 @@
 
 		</config-description>
 	</thing-type>
-
-
-
-	<channel-type id="voltage0">
-		
-		<item-type>Number</item-type>
-		
-		<label>Voltage0</label>
-		<description>Voltage0</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="voltage1">
-		
-		<item-type>Number</item-type>
-		
-		<label>Voltage1</label>
-		<description>Voltage1</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
 
 </thing:thing-descriptions>

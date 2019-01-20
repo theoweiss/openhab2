@@ -29,19 +29,4 @@
 		</config-description>
 	</thing-type>
 
-
-
-	<channel-type id="count">
-		
-		<item-type>Number</item-type>
-		
-		<label>Count</label>
-		<description>Count</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-
 </thing:thing-descriptions>

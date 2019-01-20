@@ -29,29 +29,4 @@
 		</config-description>
 	</thing-type>
 
-
-
-	<channel-type id="weight">
-		
-		<item-type>Number</item-type>
-		
-		<label>Weight</label>
-		<description>Weight</description>
-		
-		<state readOnly="true" />
-	</channel-type>
-
-
-
-	<channel-type id="led">
-		
-		<item-type>tfTODO</item-type>
-		
-		<label>Led</label>
-		<description>Led</description>
-		
-		<state readOnly="false" />
-	</channel-type>
-
-
 </thing:thing-descriptions>

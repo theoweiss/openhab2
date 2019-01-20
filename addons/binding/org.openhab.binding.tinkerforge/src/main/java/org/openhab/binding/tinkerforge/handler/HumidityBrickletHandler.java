@@ -10,23 +10,23 @@ package org.openhab.binding.tinkerforge.handler;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.QuantityType;
-import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.ThingStatusDetail;
+import org.eclipse.smarthome.core.library.types.*;
+import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
+import org.eclipse.smarthome.core.library.unit.MetricPrefix;
+import org.eclipse.smarthome.core.thing.*;
+import org.eclipse.smarthome.core.library.unit.*;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.types.*;
+
 import org.m1theo.tinkerforge.client.devices.humidity.ChannelId;
-import org.m1theo.tinkerforge.client.types.DecimalValue;
-import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,9 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         switch (channelUID.getId()) {
-
+        
+          
+        
             default:
                 break;
         }
@@ -96,9 +98,10 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
         return bridgeHandler;
     }
 
+
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
-            @Nullable TinkerforgeValue newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
+    newValue) {
         if (notifier == null) {
             return;
         }
@@ -109,18 +112,20 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
             // TODO
         } else {
             notifier.getChannelId();
-
+            
+            
             if (notifier.getChannelId().equals(ChannelId.humidity.name())) {
-
+                
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new QuantityType<>(
-                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.PERCENT));
+                    updateState(notifier.getChannelId(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.PERCENT));
+                    
                     return;
                 }
-
+                
             }
-
+            
+            
         }
     }
 
