@@ -215,7 +215,7 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
                     
-                    OpenClosedType value = newValue == HighLowValue.HIGH ? OpenClosedType.OPEN : OpenClosedType.CLOSED;
+                    OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
                     updateState(notifier.getChannelId(), value);
                     
                     return;

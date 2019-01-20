@@ -137,7 +137,7 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
                     
-                    OpenClosedType value = newValue == HighLowValue.HIGH ? OpenClosedType.OPEN : OpenClosedType.CLOSED;
+                    OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
                     updateState(notifier.getChannelId(), value);
                     
                     return;
