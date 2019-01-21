@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="multitouch">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletMultiTouch</label>
+		<description>Tinkerforge BrickletMultiTouch</description>
+
+		<channels>
+		
+			<channel id="electrode0" typeId="system.rawbutton"/>
+		
+			<channel id="electrode1" typeId="system.rawbutton"/>
+		
+			<channel id="electrode2" typeId="system.rawbutton"/>
+		
+			<channel id="electrode3" typeId="system.rawbutton"/>
+		
+			<channel id="electrode4" typeId="system.rawbutton"/>
+		
+			<channel id="electrode5" typeId="system.rawbutton"/>
+		
+			<channel id="electrode6" typeId="system.rawbutton"/>
+		
+			<channel id="electrode7" typeId="system.rawbutton"/>
+		
+			<channel id="electrode8" typeId="system.rawbutton"/>
+		
+			<channel id="electrode9" typeId="system.rawbutton"/>
+		
+			<channel id="electrode10" typeId="system.rawbutton"/>
+		
+			<channel id="electrode11" typeId="system.rawbutton"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies one certain bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="electrodeSensitivity" type="integer" multiple="false" required="false">
+				<label>electrodeSensitivity</label>
+				<description>electrodeSensitivity.</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

@@ -91,6 +91,9 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_ROTARYENCODER = new ThingTypeUID(BINDING_ID, "rotaryencoder");
     
     
+    public static final ThingTypeUID THING_TYPE_MULTITOUCH = new ThingTypeUID(BINDING_ID, "multitouch");
+    
+    
     public static final ThingTypeUID THING_TYPE_VOLTAGECURRENT = new ThingTypeUID(BINDING_ID, "voltagecurrent");
     
     
@@ -142,6 +145,8 @@ public class TinkerforgeBindingConstants {
       THING_TYPE_REALTIMECLOCKV2, 
     
       THING_TYPE_ROTARYENCODER, 
+    
+      THING_TYPE_MULTITOUCH, 
     
       THING_TYPE_VOLTAGECURRENT, 
     

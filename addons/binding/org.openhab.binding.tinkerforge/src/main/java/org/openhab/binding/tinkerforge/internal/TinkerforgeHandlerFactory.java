@@ -72,6 +72,8 @@ import org.openhab.binding.tinkerforge.handler.RealTimeClockV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.MultiTouchBrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.VoltageCurrentBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.VoltageCurrentV2BrickletHandler;
@@ -229,6 +231,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_ROTARYENCODER)) {
             return new RotaryEncoderBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_MULTITOUCH)) {
+            return new MultiTouchBrickletHandler(thing);
         }
     
     
