@@ -88,6 +88,10 @@ import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletV2Hand
 
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.SolidStateRelayBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.SolidStateRelayBrickletV2Handler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -279,6 +283,16 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_INDUSTRIALQUADRELAY)) {
             return new IndustrialQuadRelayBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAY)) {
+            return new SolidStateRelayBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAYV2)) {
+            return new SolidStateRelayBrickletV2Handler(thing);
         }
     
         return null;

@@ -114,6 +114,12 @@ public class TinkerforgeBindingConstants {
     
     public static final ThingTypeUID THING_TYPE_INDUSTRIALQUADRELAY = new ThingTypeUID(BINDING_ID, "industrialquadrelay");
     
+    
+    public static final ThingTypeUID THING_TYPE_SOLIDSTATERELAY = new ThingTypeUID(BINDING_ID, "solidstaterelay");
+    
+    
+    public static final ThingTypeUID THING_TYPE_SOLIDSTATERELAYV2 = new ThingTypeUID(BINDING_ID, "solidstaterelayV2");
+    
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
       THING_TYPE_BRICKD,
     
@@ -172,7 +178,11 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_INDUSTRIALQUADRELAYV2, 
     
-      THING_TYPE_INDUSTRIALQUADRELAY
+      THING_TYPE_INDUSTRIALQUADRELAY, 
+    
+      THING_TYPE_SOLIDSTATERELAY, 
+    
+      THING_TYPE_SOLIDSTATERELAYV2
     };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 
