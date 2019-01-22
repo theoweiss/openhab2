@@ -80,6 +80,10 @@ import org.openhab.binding.tinkerforge.handler.VoltageCurrentV2BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.DistanceUSBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.DualRelayBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.IndustrialDualRelayBrickletHandler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -251,6 +255,16 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_DISTANCEUS)) {
             return new DistanceUSBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_DUALRELAY)) {
+            return new DualRelayBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALRELAY)) {
+            return new IndustrialDualRelayBrickletHandler(thing);
         }
     
         return null;

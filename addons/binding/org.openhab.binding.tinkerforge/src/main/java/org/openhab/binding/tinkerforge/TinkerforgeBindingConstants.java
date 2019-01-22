@@ -102,6 +102,12 @@ public class TinkerforgeBindingConstants {
     
     public static final ThingTypeUID THING_TYPE_DISTANCEUS = new ThingTypeUID(BINDING_ID, "distanceus");
     
+    
+    public static final ThingTypeUID THING_TYPE_DUALRELAY = new ThingTypeUID(BINDING_ID, "dualrelay");
+    
+    
+    public static final ThingTypeUID THING_TYPE_INDUSTRIALDUALRELAY = new ThingTypeUID(BINDING_ID, "industrialdualrelay");
+    
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
       THING_TYPE_BRICKD,
     
@@ -152,7 +158,11 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_VOLTAGECURRENTV2, 
     
-      THING_TYPE_DISTANCEUS
+      THING_TYPE_DISTANCEUS, 
+    
+      THING_TYPE_DUALRELAY, 
+    
+      THING_TYPE_INDUSTRIALDUALRELAY
     };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 

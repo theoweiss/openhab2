@@ -13,22 +13,23 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.library.types.*;
-import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
-import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.thing.*;
-import org.eclipse.smarthome.core.library.unit.*;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.m1theo.tinkerforge.client.devices.barometerV2.ChannelId;
+import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
+import org.eclipse.smarthome.core.library.unit.MetricPrefix;
+import org.eclipse.smarthome.core.library.unit.*;
+import org.m1theo.tinkerforge.client.Notifier;
+import org.m1theo.tinkerforge.client.CallbackListener;
+import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * The {@link BarometerV2BrickletHandler} is responsible for handling commands, which are
@@ -51,17 +52,7 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        switch (channelUID.getId()) {
-        
-          
-        
-          
-        
-          
-        
-            default:
-                break;
-        }
+
     }
 
     @Override
