@@ -84,6 +84,8 @@ import org.openhab.binding.tinkerforge.handler.DualRelayBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.IndustrialDualRelayBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletV2Handler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -265,6 +267,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALRELAY)) {
             return new IndustrialDualRelayBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALQUADRELAYV2)) {
+            return new IndustrialQuadRelayBrickletV2Handler(thing);
         }
     
         return null;
