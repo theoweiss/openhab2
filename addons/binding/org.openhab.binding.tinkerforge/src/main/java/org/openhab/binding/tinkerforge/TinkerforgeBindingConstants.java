@@ -120,6 +120,9 @@ public class TinkerforgeBindingConstants {
     
     public static final ThingTypeUID THING_TYPE_SOLIDSTATERELAYV2 = new ThingTypeUID(BINDING_ID, "solidstaterelayV2");
     
+    
+    public static final ThingTypeUID THING_TYPE_NFCRFID = new ThingTypeUID(BINDING_ID, "nfcrfid");
+    
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] {
       THING_TYPE_BRICKD,
     
@@ -182,7 +185,9 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_SOLIDSTATERELAY, 
     
-      THING_TYPE_SOLIDSTATERELAYV2
+      THING_TYPE_SOLIDSTATERELAYV2, 
+    
+      THING_TYPE_NFCRFID
     };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 

@@ -92,6 +92,8 @@ import org.openhab.binding.tinkerforge.handler.SolidStateRelayBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.SolidStateRelayBrickletV2Handler;
 
+import org.openhab.binding.tinkerforge.handler.NFCRFIDBrickletHandler;
+
 
 /**
  * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
@@ -293,6 +295,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAYV2)) {
             return new SolidStateRelayBrickletV2Handler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_NFCRFID)) {
+            return new NFCRFIDBrickletHandler(thing);
         }
     
         return null;

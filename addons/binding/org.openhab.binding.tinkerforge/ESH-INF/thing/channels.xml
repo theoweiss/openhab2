@@ -156,4 +156,12 @@
 		<state readOnly="true" />
 	</channel-type>
 
+	<channel-type id="rfidtagid">
+		<item-type>String</item-type>
+		<label>rfidtagid</label>
+		<description>RFID tag ID</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
 </thing:thing-descriptions>
