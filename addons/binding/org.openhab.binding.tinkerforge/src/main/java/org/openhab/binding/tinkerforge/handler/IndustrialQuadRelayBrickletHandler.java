@@ -18,6 +18,9 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.DeviceAdminListener;
+import org.m1theo.tinkerforge.client.DeviceChangeType;
+import org.m1theo.tinkerforge.client.DeviceInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +37,7 @@ import org.m1theo.tinkerforge.client.ActuatorChannel;
  */
 @NonNullByDefault
 
-public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler {
+public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler implements DeviceAdminListener {
 
     private final Logger logger = LoggerFactory.getLogger(IndustrialQuadRelayBrickletHandler.class);
     private @Nullable BaseDeviceConfig config;
@@ -112,10 +115,15 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler {
             uid = configUid;
             Bridge bridge = getBridge();
             ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-            if (getBrickdBridgeHandler() != null) {
+            BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+            if (brickdBridgeHandler != null) {
+                brickdBridgeHandler.registerDeviceStatusListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    // TODO initializeProperties();
-                    updateStatus(ThingStatus.ONLINE);
+                    if (brickdBridgeHandler.getBrickd().getDevice(uid) != null) {
+                        updateStatus(ThingStatus.ONLINE);
+                    } else {
+                        updateStatus(ThingStatus.OFFLINE);
+                    }
                 } else {
                     updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
                 }
@@ -142,5 +150,22 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler {
         return bridgeHandler;
     }
 
+
+
+    @Override
+    public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
+        if (changeType == null || info == null) {
+            logger.debug("device changed but devicechangtype or deviceinfo are null");
+            return;
+        }
+
+        if (info.getUid().equals(uid)) {
+            if (changeType == DeviceChangeType.ADD) {
+                updateStatus(ThingStatus.ONLINE);
+            } else {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
+            }
+        }
+    }
 
 }
