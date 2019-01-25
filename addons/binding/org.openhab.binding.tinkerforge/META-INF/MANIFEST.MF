@@ -15,7 +15,7 @@ Export-Package:
 Import-Package: 
  javax.measure,
  javax.measure.quantity,
- org.eclipse.jdt.annotation,
+ org.eclipse.jdt.annotation;resolution:=optional,
  org.eclipse.smarthome.config.core,
  org.eclipse.smarthome.config.discovery,
  org.eclipse.smarthome.core.library.types,

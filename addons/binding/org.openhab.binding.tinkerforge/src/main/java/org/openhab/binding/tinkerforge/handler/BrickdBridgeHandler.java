@@ -72,6 +72,9 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
 
     public void registerDeviceStatusListener(DeviceAdminListener deviceAdmin) {
         deviceAdminListeners.add(deviceAdmin);
+        if (brickd != null) {
+            brickd.addDeviceAdminListener(deviceAdmin);
+        }
     }
 
     public void unregisterDeviceStatusListener(DeviceAdminListener deviceAdmin) {
