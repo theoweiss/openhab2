@@ -21,6 +21,10 @@ import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
+import org.m1theo.tinkerforge.client.Device;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelay.QuadRelayConfig;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelay.IndustrialQuadRelayBricklet;
+import org.m1theo.tinkerforge.client.devices.DeviceType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +44,7 @@ import org.m1theo.tinkerforge.client.ActuatorChannel;
 public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler implements DeviceAdminListener {
 
     private final Logger logger = LoggerFactory.getLogger(IndustrialQuadRelayBrickletHandler.class);
-    private @Nullable BaseDeviceConfig config;
+    private @Nullable QuadRelayConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable String uid;
 
@@ -109,7 +113,7 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
 
     @Override
     public void initialize() {
-        config = getConfigAs(BaseDeviceConfig.class);
+        config = getConfigAs(QuadRelayConfig.class);
         String configUid = config.getUid();
         if (configUid != null) {
             uid = configUid;
@@ -119,8 +123,17 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    if (brickdBridgeHandler.getBrickd().getDevice(uid) != null) {
+                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (device != null) {
+                      if (device.getDeviceType() == DeviceType.industrialquadrelay){
+                        IndustrialQuadRelayBricklet device2 = (IndustrialQuadRelayBricklet) device;
+                        device2.setDeviceConfig(config);
+                        device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+                      } else {
+                        // TODO add reason  configuration error
+                        updateStatus(ThingStatus.OFFLINE);
+                      }
                     } else {
                         updateStatus(ThingStatus.OFFLINE);
                     }

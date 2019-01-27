@@ -21,6 +21,10 @@ import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
+import org.m1theo.tinkerforge.client.Device;
+import org.m1theo.tinkerforge.client.devices.solidstaterelayV2.RelayConfig;
+import org.m1theo.tinkerforge.client.devices.solidstaterelayV2.SolidStateRelayBrickletV2;
+import org.m1theo.tinkerforge.client.devices.DeviceType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +44,7 @@ import org.m1theo.tinkerforge.client.ActuatorChannel;
 public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implements DeviceAdminListener {
 
     private final Logger logger = LoggerFactory.getLogger(SolidStateRelayBrickletV2Handler.class);
-    private @Nullable BaseDeviceConfig config;
+    private @Nullable RelayConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable String uid;
 
@@ -73,7 +77,7 @@ public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implement
 
     @Override
     public void initialize() {
-        config = getConfigAs(BaseDeviceConfig.class);
+        config = getConfigAs(RelayConfig.class);
         String configUid = config.getUid();
         if (configUid != null) {
             uid = configUid;
@@ -83,8 +87,17 @@ public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implement
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    if (brickdBridgeHandler.getBrickd().getDevice(uid) != null) {
+                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (device != null) {
+                      if (device.getDeviceType() == DeviceType.solidstaterelayV2){
+                        SolidStateRelayBrickletV2 device2 = (SolidStateRelayBrickletV2) device;
+                        device2.setDeviceConfig(config);
+                        device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+                      } else {
+                        // TODO add reason  configuration error
+                        updateStatus(ThingStatus.OFFLINE);
+                      }
                     } else {
                         updateStatus(ThingStatus.OFFLINE);
                     }

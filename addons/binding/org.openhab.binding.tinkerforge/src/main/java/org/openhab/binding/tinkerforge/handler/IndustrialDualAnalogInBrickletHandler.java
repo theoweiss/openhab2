@@ -21,6 +21,10 @@ import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
+import org.m1theo.tinkerforge.client.Device;
+import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.IndustrialDualAnalogInDeviceConfig;
+import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.IndustrialDualAnalogInBricklet;
+import org.m1theo.tinkerforge.client.devices.DeviceType;
 
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.ChannelId;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
@@ -45,7 +49,7 @@ import org.slf4j.LoggerFactory;
 public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler implements CallbackListener, DeviceAdminListener {
 
     private final Logger logger = LoggerFactory.getLogger(IndustrialDualAnalogInBrickletHandler.class);
-    private @Nullable BaseDeviceConfig config;
+    private @Nullable IndustrialDualAnalogInDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable String uid;
 
@@ -60,7 +64,7 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler impl
 
     @Override
     public void initialize() {
-        config = getConfigAs(BaseDeviceConfig.class);
+        config = getConfigAs(IndustrialDualAnalogInDeviceConfig.class);
         String configUid = config.getUid();
         if (configUid != null) {
             uid = configUid;
@@ -70,8 +74,17 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler impl
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    if (brickdBridgeHandler.getBrickd().getDevice(uid) != null) {
+                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (device != null) {
+                      if (device.getDeviceType() == DeviceType.industrialdualanalogIn){
+                        IndustrialDualAnalogInBricklet device2 = (IndustrialDualAnalogInBricklet) device;
+                        device2.setDeviceConfig(config);
+                        device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+                      } else {
+                        // TODO add reason  configuration error
+                        updateStatus(ThingStatus.OFFLINE);
+                      }
                     } else {
                         updateStatus(ThingStatus.OFFLINE);
                     }

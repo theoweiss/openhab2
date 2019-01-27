@@ -50,7 +50,7 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
         logger.debug("Initializing brickd bridge handler.");
         if (getConfig().get(IP_ADDRESS) != null) {
             Host host = new Host(((String) getConfig().get(IP_ADDRESS)));
-            brickd = Brickd.createInstance(host);
+            brickd = Brickd.createInstance(host, false);
             for (DeviceAdminListener listener : deviceAdminListeners) {
                 logger.debug("register deviceadminlistener");
                 brickd.addDeviceAdminListener(listener);
