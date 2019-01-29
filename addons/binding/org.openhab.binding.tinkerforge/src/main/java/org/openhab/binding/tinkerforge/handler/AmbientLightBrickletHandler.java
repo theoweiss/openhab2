@@ -82,8 +82,7 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
                       } else {
-                        // TODO add reason  configuration error
-                        updateStatus(ThingStatus.OFFLINE);
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
                     } else {
                         updateStatus(ThingStatus.OFFLINE);

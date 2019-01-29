@@ -82,8 +82,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
                       } else {
-                        // TODO add reason  configuration error
-                        updateStatus(ThingStatus.OFFLINE);
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
                     } else {
                         updateStatus(ThingStatus.OFFLINE);

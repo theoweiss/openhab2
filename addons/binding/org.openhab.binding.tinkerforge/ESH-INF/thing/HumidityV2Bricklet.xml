@@ -24,18 +24,32 @@
 		<config-description>
 			<parameter name="uid" type="text">
 				<label>Bricklet uid</label>
-				<description>The uid identifies one certain bricklet.</description>
+				<description>The uid identifies the bricklet.</description>
 				<required>true</required>
 			</parameter>
 
-			<parameter name="movingAverageLengthHumidity" type="integer" multiple="false" required="false">
+			<parameter name="movingAverageLengthHumidity" type="integer" min="0" max="1000" multiple="false" required="false">
 				<label>movingAverageLengthHumidity</label>
-				<description>movingAverageLengthHumidity.</description>
+				
+				<default>5</default>
+				
+				<description>length of a moving averaging<![CDATA[<br>]]>1=>50ms, 1000=>50s; default 5<![CDATA[<br>]]>For long term measurements the longest moving average will give the cleanest results..</description>
 			</parameter>
 
-			<parameter name="movingAverageLengthTemperature" type="integer" multiple="false" required="false">
+			<parameter name="movingAverageLengthTemperature" type="integer" min="0" max="1000" multiple="false" required="false">
 				<label>movingAverageLengthTemperature</label>
-				<description>movingAverageLengthTemperature.</description>
+				
+				<default>5</default>
+				
+				<description>length of a moving averaging<![CDATA[<br>]]>1=>50ms, 1000=>50s; default 5<![CDATA[<br>]]>For long term measurements the longest moving average will give the cleanest results..</description>
+			</parameter>
+
+			<parameter name="samplesPerSecond" type="integer" min="0" max="5" multiple="false" required="false">
+				<label>samplesPerSecond</label>
+				
+				<default>3</default>
+				
+				<description>samples per second that are gathered<![CDATA[<br>]]>0=>20, 1=>10, 2=>5, 3=>1, 4=>0.2, 5=>0.1 samples per second; default is 1 sample per second.</description>
 			</parameter>
 
 		</config-description>

@@ -24,8 +24,48 @@
 		<config-description>
 			<parameter name="uid" type="text">
 				<label>Bricklet uid</label>
-				<description>The uid identifies one certain bricklet.</description>
+				<description>The uid identifies the bricklet.</description>
 				<required>true</required>
+			</parameter>
+
+			<parameter name="referenceAirPressure" type="integer" min="10000" max="1200000" multiple="false" required="false">
+				<label>referenceAirPressure</label>
+				
+				<default>1013250</default>
+				
+				<description>Reference air pressure in mbar/1000. Default is 1013250 => 1013.250mbar.</description>
+			</parameter>
+
+			<parameter name="movingAveragePressure" type="integer" min="1" max="1000" multiple="false" required="false">
+				<label>movingAveragePressure</label>
+				
+				<default>100</default>
+				
+				<description>Length of a moving averaging of pressure<![CDATA[<br>]]>default 100; 1 will turn off the averaging.</description>
+			</parameter>
+
+			<parameter name="movingAverageTemperature" type="integer" min="1" max="1000" multiple="false" required="false">
+				<label>movingAverageTemperature</label>
+				
+				<default>100</default>
+				
+				<description>Length of a moving averaging of pressure<![CDATA[<br>]]>default 100; 1 will turn off the averaging.</description>
+			</parameter>
+
+			<parameter name="dataRate" type="integer" min="0" max="5" multiple="false" required="false">
+				<label>dataRate</label>
+				
+				<default>4</default>
+				
+				<description>Data rate<![CDATA[<br>]]>0=>OFF, 1=>1Hz, 2=>10Hz, 3=>25Hz, 4=>50Hz, 5=>75Hz; default 4.</description>
+			</parameter>
+
+			<parameter name="airPressureLowPassFilter" type="integer" min="0" max="2" multiple="false" required="false">
+				<label>airPressureLowPassFilter</label>
+				
+				<default>1</default>
+				
+				<description>Air pressure low pass filter<![CDATA[<br>]]>0=>OFF, 1=>1/9th, 2=>1/20th; default 1.</description>
 			</parameter>
 
 		</config-description>

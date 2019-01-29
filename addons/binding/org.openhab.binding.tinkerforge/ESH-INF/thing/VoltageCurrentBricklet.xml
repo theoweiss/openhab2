@@ -24,7 +24,7 @@
 		<config-description>
 			<parameter name="uid" type="text">
 				<label>Bricklet uid</label>
-				<description>The uid identifies one certain bricklet.</description>
+				<description>The uid identifies the bricklet.</description>
 				<required>true</required>
 			</parameter>
 

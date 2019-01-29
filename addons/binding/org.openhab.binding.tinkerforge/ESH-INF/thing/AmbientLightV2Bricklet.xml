@@ -20,18 +20,24 @@
 		<config-description>
 			<parameter name="uid" type="text">
 				<label>Bricklet uid</label>
-				<description>The uid identifies one certain bricklet.</description>
+				<description>The uid identifies the bricklet.</description>
 				<required>true</required>
 			</parameter>
 
-			<parameter name="illuminanceRange" type="integer" multiple="false" required="false">
+			<parameter name="illuminanceRange" type="integer" min="0" max="6" multiple="false" required="false">
 				<label>illuminanceRange</label>
-				<description>illuminanceRange.</description>
+				
+				<default>3</default>
+				
+				<description>Illuminance range<![CDATA[<br>]]>Between 600 (5), 1300 (4), 8000 (3), 16000 (2), 32000 (1), 64000 (0) and umlimited (6)..</description>
 			</parameter>
 
-			<parameter name="integrationTime" type="integer" multiple="false" required="false">
+			<parameter name="integrationTime" type="integer" min="0" max="7" multiple="false" required="false">
 				<label>integrationTime</label>
-				<description>integrationTime.</description>
+				
+				<default>3</default>
+				
+				<description>Integration time <![CDATA[<br>]]>Between 50ms and 400ms (+ 50ms/step) default 2 => 200ms.</description>
 			</parameter>
 
 		</config-description>

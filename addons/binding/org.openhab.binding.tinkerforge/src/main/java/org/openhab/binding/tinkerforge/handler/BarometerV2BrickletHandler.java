@@ -82,8 +82,7 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
                       } else {
-                        // TODO add reason  configuration error
-                        updateStatus(ThingStatus.OFFLINE);
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
                     } else {
                         updateStatus(ThingStatus.OFFLINE);

@@ -40,17 +40,19 @@
 		<config-description>
 			<parameter name="uid" type="text">
 				<label>Bricklet uid</label>
-				<description>The uid identifies one certain bricklet.</description>
+				<description>The uid identifies the bricklet.</description>
 				<required>true</required>
 			</parameter>
 
-			<parameter name="stationDevices" type="text" multiple="true" required="false">
+			<parameter name="stationDevices" type="text"   multiple="true" required="false">
 				<label>stationDevices</label>
+				
 				<description>stationDevices.</description>
 			</parameter>
 
-			<parameter name="sensorDevices" type="text" multiple="true" required="false">
+			<parameter name="sensorDevices" type="text"   multiple="true" required="false">
 				<label>sensorDevices</label>
+				
 				<description>sensorDevices.</description>
 			</parameter>
 

@@ -42,13 +42,30 @@
 		<config-description>
 			<parameter name="uid" type="text">
 				<label>Bricklet uid</label>
-				<description>The uid identifies one certain bricklet.</description>
+				<description>The uid identifies the bricklet.</description>
 				<required>true</required>
 			</parameter>
 
-			<parameter name="electrodeSensitivity" type="integer" multiple="false" required="false">
+			<parameter name="electrodeSensitivity" type="integer" min="5" max="201" multiple="false" required="false">
 				<label>electrodeSensitivity</label>
+				
+				<default>181</default>
+				
 				<description>electrodeSensitivity.</description>
+			</parameter>
+
+			<parameter name="disableProximity" type="boolean"   multiple="false" required="false">
+				<label>disableProximity</label>
+				
+				<default>false</default>
+				
+				<description>disable proximity sensing.</description>
+			</parameter>
+
+			<parameter name="disabledElectrodes" type="integer" min="0" max="11" multiple="true" required="false">
+				<label>disabledElectrodes</label>
+				
+				<description>list of disabled electrodes.</description>
 			</parameter>
 
 		</config-description>
