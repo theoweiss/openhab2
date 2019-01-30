@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -84,6 +85,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
                         device2.setDeviceConfig(config);
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+
                       } else {
                         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
@@ -240,5 +242,12 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
     }
 
 
+
+
+
+@Override
+public void dispose() {
+
+}
 
 }

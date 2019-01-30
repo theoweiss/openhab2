@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -85,6 +86,7 @@ public class VoltageCurrentBrickletHandler extends BaseThingHandler implements C
                         device2.setDeviceConfig(config);
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+
                       } else {
                         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
@@ -281,5 +283,12 @@ public class VoltageCurrentBrickletHandler extends BaseThingHandler implements C
     }
 
 
+
+
+
+@Override
+public void dispose() {
+
+}
 
 }

@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -84,6 +85,7 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
                         device2.setDeviceConfig(config);
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+
                       } else {
                         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
@@ -238,5 +240,12 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
     }
 
 
+
+
+
+@Override
+public void dispose() {
+
+}
 
 }

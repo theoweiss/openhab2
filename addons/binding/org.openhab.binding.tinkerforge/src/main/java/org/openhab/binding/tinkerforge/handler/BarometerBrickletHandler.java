@@ -8,6 +8,10 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
+
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
@@ -57,6 +61,8 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable String uid;
 
+    private @Nullable ScheduledFuture<?> pollingJob;
+
     public BarometerBrickletHandler(Thing thing) {
         super(thing);
     }
@@ -85,6 +91,7 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
                         device2.setDeviceConfig(config);
                         device2.enable();
                         updateStatus(ThingStatus.ONLINE);
+                        pollChannels();
                       } else {
                         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
                       }
@@ -270,5 +277,27 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
     }
 
 
+
+
+    private void pollChannels() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+              gettemperature();
+
+            }
+        };
+        pollingJob = scheduler.scheduleAtFixedRate(runnable, 0, 30, TimeUnit.SECONDS);
+    }
+
+
+@Override
+public void dispose() {
+
+    if (pollingJob != null){
+      pollingJob.cancel(true);
+    }
+}
 
 }
