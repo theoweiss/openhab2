@@ -25,6 +25,11 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.industrialdualrelay.DualRelayConfig;
 import org.m1theo.tinkerforge.client.devices.industrialdualrelay.IndustrialDualRelayBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
+import org.m1theo.tinkerforge.client.devices.industrialdualrelay.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.industrialdualrelay.Relay0Channel;
+import org.m1theo.tinkerforge.client.devices.industrialdualrelay.Relay1Channel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,5 +160,70 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "relay0":
+              getrelay0();
+              break;
+
+
+          case "relay1":
+              getrelay1();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getrelay0() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialDualRelayBricklet device2 = (IndustrialDualRelayBricklet) device;
+                Relay0Channel channel = (Relay0Channel) device2.getChannel("relay0");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay0.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getrelay1() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialDualRelayBricklet device2 = (IndustrialDualRelayBricklet) device;
+                Relay1Channel channel = (Relay1Channel) device2.getChannel("relay1");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay1.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

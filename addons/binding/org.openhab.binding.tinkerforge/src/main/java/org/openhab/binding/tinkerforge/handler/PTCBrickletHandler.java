@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.ptc.PTCDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.ptc.PTCBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.ptc.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.ptc.TemperatureChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class PTCBrickletHandler extends BaseThingHandler implements CallbackList
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.temperature.name())) {
@@ -160,5 +161,43 @@ public class PTCBrickletHandler extends BaseThingHandler implements CallbackList
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "temperature":
+              gettemperature();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void gettemperature() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                PTCBricklet device2 = (PTCBricklet) device;
+                TemperatureChannel channel = (TemperatureChannel) device2.getChannel("temperature");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.temperature.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.CELSIUS));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

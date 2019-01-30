@@ -25,14 +25,26 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.OutdoorWeatherDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.OutdoorWeatherBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.outdoorweather.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.outdoorweather.TemperatureStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.HumidityStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.WindSpeedStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.GustSpeedStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.RainStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.WindDirectionStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.LastChangeStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.BatteryLowStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.TemperatureSensorChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.HumiditySensorChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.LastChangeSensorChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +138,6 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.temperatureStation.name())) {
@@ -266,5 +277,307 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "temperatureStation":
+              gettemperatureStation();
+              break;
+
+
+          case "humidityStation":
+              gethumidityStation();
+              break;
+
+
+          case "windSpeedStation":
+              getwindSpeedStation();
+              break;
+
+
+          case "gustSpeedStation":
+              getgustSpeedStation();
+              break;
+
+
+          case "rainStation":
+              getrainStation();
+              break;
+
+
+          case "windDirectionStation":
+              getwindDirectionStation();
+              break;
+
+
+          case "lastChangeStation":
+              getlastChangeStation();
+              break;
+
+
+          case "batteryLowStation":
+              getbatteryLowStation();
+              break;
+
+
+          case "temperatureSensor":
+              gettemperatureSensor();
+              break;
+
+
+          case "humiditySensor":
+              gethumiditySensor();
+              break;
+
+
+          case "lastChangeSensor":
+              getlastChangeSensor();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void gettemperatureStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                TemperatureStationChannel channel = (TemperatureStationChannel) device2.getChannel("temperatureStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.temperatureStation.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.CELSIUS));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gethumidityStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                HumidityStationChannel channel = (HumidityStationChannel) device2.getChannel("humidityStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.humidityStation.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.PERCENT));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getwindSpeedStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                WindSpeedStationChannel channel = (WindSpeedStationChannel) device2.getChannel("windSpeedStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.windSpeedStation.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getgustSpeedStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                GustSpeedStationChannel channel = (GustSpeedStationChannel) device2.getChannel("gustSpeedStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.gustSpeedStation.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getrainStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                RainStationChannel channel = (RainStationChannel) device2.getChannel("rainStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.rainStation.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getwindDirectionStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                WindDirectionStationChannel channel = (WindDirectionStationChannel) device2.getChannel("windDirectionStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.windDirectionStation.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getlastChangeStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                LastChangeStationChannel channel = (LastChangeStationChannel) device2.getChannel("lastChangeStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.lastChangeStation.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getbatteryLowStation() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                BatteryLowStationChannel channel = (BatteryLowStationChannel) device2.getChannel("batteryLowStation");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.batteryLowStation.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gettemperatureSensor() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                TemperatureSensorChannel channel = (TemperatureSensorChannel) device2.getChannel("temperatureSensor");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.temperatureSensor.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.CELSIUS));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gethumiditySensor() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                HumiditySensorChannel channel = (HumiditySensorChannel) device2.getChannel("humiditySensor");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.humiditySensor.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.PERCENT));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getlastChangeSensor() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
+                LastChangeSensorChannel channel = (LastChangeSensorChannel) device2.getChannel("lastChangeSensor");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.lastChangeSensor.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

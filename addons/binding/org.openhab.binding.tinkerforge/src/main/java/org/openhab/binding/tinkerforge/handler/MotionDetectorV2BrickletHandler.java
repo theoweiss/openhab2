@@ -25,14 +25,19 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.motiondetectorV2.MotionDetectorV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.motiondetectorV2.MotionDetectorV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.motiondetectorV2.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.motiondetectorV2.MotionDetectedChannel;
+import org.m1theo.tinkerforge.client.devices.motiondetectorV2.TopLeftLedChannel;
+import org.m1theo.tinkerforge.client.devices.motiondetectorV2.TopRightLedChannel;
+import org.m1theo.tinkerforge.client.devices.motiondetectorV2.BottomLedChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +131,6 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.motiondetected.name())) {
@@ -168,5 +172,121 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "motiondetected":
+              getmotiondetected();
+              break;
+
+
+          case "topLeftled":
+              gettopLeftled();
+              break;
+
+
+          case "topRightled":
+              gettopRightled();
+              break;
+
+
+          case "bottomled":
+              getbottomled();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getmotiondetected() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                MotionDetectorV2Bricklet device2 = (MotionDetectorV2Bricklet) device;
+                MotionDetectedChannel channel = (MotionDetectedChannel) device2.getChannel("motiondetected");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.motiondetected.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gettopLeftled() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                MotionDetectorV2Bricklet device2 = (MotionDetectorV2Bricklet) device;
+                TopLeftLedChannel channel = (TopLeftLedChannel) device2.getChannel("topLeftled");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.topLeftled.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gettopRightled() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                MotionDetectorV2Bricklet device2 = (MotionDetectorV2Bricklet) device;
+                TopRightLedChannel channel = (TopRightLedChannel) device2.getChannel("topRightled");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.topRightled.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getbottomled() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                MotionDetectorV2Bricklet device2 = (MotionDetectorV2Bricklet) device;
+                BottomLedChannel channel = (BottomLedChannel) device2.getChannel("bottomled");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.bottomled.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

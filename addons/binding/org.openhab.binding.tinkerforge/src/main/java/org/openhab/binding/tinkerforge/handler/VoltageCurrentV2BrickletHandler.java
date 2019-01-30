@@ -25,14 +25,18 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.voltagecurrentv2.VoltageCurrentV2Config;
 import org.m1theo.tinkerforge.client.devices.voltagecurrentv2.VoltageCurrentV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.voltagecurrentv2.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.voltagecurrentv2.VoltageChannel;
+import org.m1theo.tinkerforge.client.devices.voltagecurrentv2.CurrentChannel;
+import org.m1theo.tinkerforge.client.devices.voltagecurrentv2.PowerChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +130,6 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.voltage.name())) {
@@ -186,5 +189,97 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "voltage":
+              getvoltage();
+              break;
+
+
+          case "current":
+              getcurrent();
+              break;
+
+
+          case "power":
+              getpower();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getvoltage() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                VoltageCurrentV2Bricklet device2 = (VoltageCurrentV2Bricklet) device;
+                VoltageChannel channel = (VoltageChannel) device2.getChannel("voltage");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.voltage.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getcurrent() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                VoltageCurrentV2Bricklet device2 = (VoltageCurrentV2Bricklet) device;
+                CurrentChannel channel = (CurrentChannel) device2.getChannel("current");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.current.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.AMPERE)));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getpower() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                VoltageCurrentV2Bricklet device2 = (VoltageCurrentV2Bricklet) device;
+                PowerChannel channel = (PowerChannel) device2.getChannel("power");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.power.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.WATT)));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

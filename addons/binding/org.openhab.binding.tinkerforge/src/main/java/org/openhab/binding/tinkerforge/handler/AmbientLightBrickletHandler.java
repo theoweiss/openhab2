@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.ambientlight.AmbientLightDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.ambientlight.AmbientLightBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.ambientlight.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.ambientlight.IlluminanceChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.illuminance.name())) {
@@ -160,5 +161,43 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "illuminance":
+              getilluminance();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getilluminance() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                AmbientLightBricklet device2 = (AmbientLightBricklet) device;
+                IlluminanceChannel channel = (IlluminanceChannel) device2.getChannel("illuminance");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.illuminance.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.LUX));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

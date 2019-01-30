@@ -25,14 +25,18 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.barometerV2.BarometerV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.barometerV2.BarometerV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.barometerV2.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.barometerV2.AirPressureChannel;
+import org.m1theo.tinkerforge.client.devices.barometerV2.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.barometerV2.AltitudeChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +130,6 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.airpressure.name())) {
@@ -186,5 +189,97 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "airpressure":
+              getairpressure();
+              break;
+
+
+          case "temperature":
+              gettemperature();
+              break;
+
+
+          case "altitude":
+              getaltitude();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getairpressure() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                BarometerV2Bricklet device2 = (BarometerV2Bricklet) device;
+                AirPressureChannel channel = (AirPressureChannel) device2.getChannel("airpressure");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.airpressure.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.MILLIBAR));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gettemperature() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                BarometerV2Bricklet device2 = (BarometerV2Bricklet) device;
+                TemperatureChannel channel = (TemperatureChannel) device2.getChannel("temperature");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.temperature.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.CELSIUS));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getaltitude() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                BarometerV2Bricklet device2 = (BarometerV2Bricklet) device;
+                AltitudeChannel channel = (AltitudeChannel) device2.getChannel("altitude");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.altitude.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SIUnits.METRE)));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

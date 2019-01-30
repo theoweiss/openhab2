@@ -25,14 +25,17 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.RotaryEncoderDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.RotaryEncoderBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.rotaryencoder.CountChannel;
+import org.m1theo.tinkerforge.client.devices.rotaryencoder.ButtonPressedChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +129,6 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.count.name())) {
@@ -174,5 +176,45 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "count":
+              getcount();
+              break;
+
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getcount() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                RotaryEncoderBricklet device2 = (RotaryEncoderBricklet) device;
+                CountChannel channel = (CountChannel) device2.getChannel("count");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.count.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+
 
 }

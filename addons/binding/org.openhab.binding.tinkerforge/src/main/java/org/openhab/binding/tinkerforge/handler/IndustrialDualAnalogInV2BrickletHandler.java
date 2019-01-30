@@ -25,14 +25,17 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogInV2.IndustrialDualAnalogInV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogInV2.IndustrialDualAnalogInV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogInV2.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.industrialdualanalogInV2.Voltage0Channel;
+import org.m1theo.tinkerforge.client.devices.industrialdualanalogInV2.Voltage1Channel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +129,6 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.voltage0.name())) {
@@ -173,5 +175,70 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "voltage0":
+              getvoltage0();
+              break;
+
+
+          case "voltage1":
+              getvoltage1();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getvoltage0() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialDualAnalogInV2Bricklet device2 = (IndustrialDualAnalogInV2Bricklet) device;
+                Voltage0Channel channel = (Voltage0Channel) device2.getChannel("voltage0");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.voltage0.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getvoltage1() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialDualAnalogInV2Bricklet device2 = (IndustrialDualAnalogInV2Bricklet) device;
+                Voltage1Channel channel = (Voltage1Channel) device2.getChannel("voltage1");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.voltage1.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

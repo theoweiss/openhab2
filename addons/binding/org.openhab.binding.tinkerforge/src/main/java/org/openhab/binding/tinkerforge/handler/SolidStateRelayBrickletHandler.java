@@ -25,6 +25,10 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.solidstaterelay.RelayConfig;
 import org.m1theo.tinkerforge.client.devices.solidstaterelay.SolidStateRelayBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
+import org.m1theo.tinkerforge.client.devices.solidstaterelay.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.solidstaterelay.RelayChannel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -143,5 +147,43 @@ public class SolidStateRelayBrickletHandler extends BaseThingHandler implements 
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "relay":
+              getrelay();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getrelay() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                SolidStateRelayBricklet device2 = (SolidStateRelayBricklet) device;
+                RelayChannel channel = (RelayChannel) device2.getChannel("relay");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

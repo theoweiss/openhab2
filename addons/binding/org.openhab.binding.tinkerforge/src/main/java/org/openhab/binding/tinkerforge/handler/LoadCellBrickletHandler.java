@@ -25,14 +25,17 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.loadcell.LoadCellDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.loadcell.LoadCellBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.loadcell.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.loadcell.WeightChannel;
+import org.m1theo.tinkerforge.client.devices.loadcell.LedChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +129,6 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.weight.name())) {
@@ -162,5 +164,70 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "weight":
+              getweight();
+              break;
+
+
+          case "led":
+              getled();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getweight() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LoadCellBricklet device2 = (LoadCellBricklet) device;
+                WeightChannel channel = (WeightChannel) device2.getChannel("weight");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.weight.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.GRAM));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getled() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LoadCellBricklet device2 = (LoadCellBricklet) device;
+                LedChannel channel = (LedChannel) device2.getChannel("led");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.led.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

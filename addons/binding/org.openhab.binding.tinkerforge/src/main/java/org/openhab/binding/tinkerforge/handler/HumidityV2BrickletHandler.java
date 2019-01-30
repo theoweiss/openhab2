@@ -25,14 +25,18 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.humidityV2.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityChannel;
+import org.m1theo.tinkerforge.client.devices.humidityV2.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.humidityV2.HeaterChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +130,6 @@ public class HumidityV2BrickletHandler extends BaseThingHandler implements Callb
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.humidity.name())) {
@@ -175,5 +178,97 @@ public class HumidityV2BrickletHandler extends BaseThingHandler implements Callb
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "humidity":
+              gethumidity();
+              break;
+
+
+          case "temperature":
+              gettemperature();
+              break;
+
+
+          case "heater":
+              getheater();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void gethumidity() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                HumidityV2Bricklet device2 = (HumidityV2Bricklet) device;
+                HumidityChannel channel = (HumidityChannel) device2.getChannel("humidity");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.humidity.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.PERCENT));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void gettemperature() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                HumidityV2Bricklet device2 = (HumidityV2Bricklet) device;
+                TemperatureChannel channel = (TemperatureChannel) device2.getChannel("temperature");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.temperature.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.CELSIUS));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getheater() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                HumidityV2Bricklet device2 = (HumidityV2Bricklet) device;
+                HeaterChannel channel = (HeaterChannel) device2.getChannel("heater");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.heater.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.nfc.NFCConfig;
 import org.m1theo.tinkerforge.client.devices.nfc.NFCBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.nfc.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.nfc.TagIDChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class NFCBrickletHandler extends BaseThingHandler implements CallbackList
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.tagID.name())) {
@@ -159,5 +160,42 @@ public class NFCBrickletHandler extends BaseThingHandler implements CallbackList
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "tagID":
+              gettagID();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void gettagID() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                NFCBricklet device2 = (NFCBricklet) device;
+                TagIDChannel channel = (TagIDChannel) device2.getChannel("tagID");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof StringValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.tagID.name(), new StringType(newValue.toString()));
+                   return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

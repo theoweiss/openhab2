@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.SoundPressureLevelDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.SoundPressureLevelBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.soundpressurelevel.DecibelChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.decibel.name())) {
@@ -160,5 +161,43 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "decibel":
+              getdecibel();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getdecibel() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                SoundPressureLevelBricklet device2 = (SoundPressureLevelBricklet) device;
+                DecibelChannel channel = (DecibelChannel) device2.getChannel("decibel");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.decibel.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.DECIBEL));
+                    
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

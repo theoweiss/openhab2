@@ -25,14 +25,27 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.multitouch.MultiTouchDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.multitouch.MultiTouchBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.multitouch.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode0Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode1Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode2Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode3Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode4Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode5Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode6Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode7Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode8Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode9Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode10Channel;
+import org.m1theo.tinkerforge.client.devices.multitouch.Electrode11Channel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +139,6 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.electrode0.name())) {
@@ -327,5 +339,52 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+          default:
+            break;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.soundintensity.SoundIntensityDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.soundintensity.SoundIntensityBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.soundintensity.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.soundintensity.IntensityChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class SoundIntensityBrickletHandler extends BaseThingHandler implements C
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.intensity.name())) {
@@ -159,5 +160,42 @@ public class SoundIntensityBrickletHandler extends BaseThingHandler implements C
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "intensity":
+              getintensity();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getintensity() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                SoundIntensityBricklet device2 = (SoundIntensityBricklet) device;
+                IntensityChannel channel = (IntensityChannel) device2.getChannel("intensity");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.intensity.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

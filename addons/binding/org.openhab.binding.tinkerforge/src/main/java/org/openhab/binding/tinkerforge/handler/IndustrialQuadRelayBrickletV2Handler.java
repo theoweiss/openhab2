@@ -25,6 +25,13 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.QuadRelayConfig;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.IndustrialQuadRelayBrickletV2;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay0Channel;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay1Channel;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay2Channel;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay3Channel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,5 +186,124 @@ public class IndustrialQuadRelayBrickletV2Handler extends BaseThingHandler imple
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "relay0":
+              getrelay0();
+              break;
+
+
+          case "relay1":
+              getrelay1();
+              break;
+
+
+          case "relay2":
+              getrelay2();
+              break;
+
+
+          case "relay3":
+              getrelay3();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getrelay0() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
+                Relay0Channel channel = (Relay0Channel) device2.getChannel("relay0");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay0.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getrelay1() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
+                Relay1Channel channel = (Relay1Channel) device2.getChannel("relay1");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay1.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getrelay2() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
+                Relay2Channel channel = (Relay2Channel) device2.getChannel("relay2");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay2.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
+
+    private void getrelay3() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
+                Relay3Channel channel = (Relay3Channel) device2.getChannel("relay3");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof OnOffValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.relay3.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

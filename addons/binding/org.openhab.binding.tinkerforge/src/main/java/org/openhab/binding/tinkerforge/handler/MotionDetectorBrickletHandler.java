@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectorDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectorBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.motiondetector.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectedChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.motiondetected.name())) {
@@ -162,5 +163,43 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "motiondetected":
+              getmotiondetected();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getmotiondetected() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                MotionDetectorBricklet device2 = (MotionDetectorBricklet) device;
+                MotionDetectedChannel channel = (MotionDetectedChannel) device2.getChannel("motiondetected");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+                    OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
+                    updateState(ChannelId.motiondetected.name(), value);
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }

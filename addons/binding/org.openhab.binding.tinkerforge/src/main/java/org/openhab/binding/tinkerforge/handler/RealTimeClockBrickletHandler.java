@@ -25,14 +25,16 @@ import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.devices.realtimeclock.RealTimeClockDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.realtimeclock.RealTimeClockBricklet;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
-
 import org.m1theo.tinkerforge.client.devices.realtimeclock.ChannelId;
+import org.m1theo.tinkerforge.client.types.*;
+
+import org.m1theo.tinkerforge.client.devices.realtimeclock.DateTimeChannel;
+
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.*;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.CallbackListener;
-import org.m1theo.tinkerforge.client.types.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,6 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            notifier.getChannelId();
             
             
             if (notifier.getChannelId().equals(ChannelId.datetime.name())) {
@@ -160,5 +161,43 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
             }
         }
     }
+
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        switch (channelUID.getId()) {
+
+
+          case "datetime":
+              getdatetime();
+              break;
+
+          default:
+            break;
+        }
+    }
+
+
+
+    private void getdatetime() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                RealTimeClockBricklet device2 = (RealTimeClockBricklet) device;
+                DateTimeChannel channel = (DateTimeChannel) device2.getChannel("datetime");
+                Object newValue = channel.getValue();
+                
+                if (newValue instanceof DateTimeValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.datetime.name(), new DateTimeType(
+                            java.time.ZonedDateTime.of(((DateTimeValue) newValue).getDateTime(), java.time.ZoneId.of("UTC"))));
+                    return;
+                }
+                
+            }
+        }
+    }
+
+
 
 }
