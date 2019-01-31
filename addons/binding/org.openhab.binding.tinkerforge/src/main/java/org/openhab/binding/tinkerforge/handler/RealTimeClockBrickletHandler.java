@@ -54,6 +54,7 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
     private final Logger logger = LoggerFactory.getLogger(RealTimeClockBrickletHandler.class);
     private @Nullable RealTimeClockDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable RealTimeClockBricklet device;
     private @Nullable String uid;
 
     public RealTimeClockBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.realtimeclock){
-                        RealTimeClockBricklet device2 = (RealTimeClockBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.realtimeclock){
+                        device = (RealTimeClockBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -207,6 +208,14 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

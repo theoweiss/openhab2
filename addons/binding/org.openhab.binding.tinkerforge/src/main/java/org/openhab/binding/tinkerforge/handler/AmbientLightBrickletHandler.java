@@ -54,6 +54,7 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
     private final Logger logger = LoggerFactory.getLogger(AmbientLightBrickletHandler.class);
     private @Nullable AmbientLightDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable AmbientLightBricklet device;
     private @Nullable String uid;
 
     public AmbientLightBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.ambientlight){
-                        AmbientLightBricklet device2 = (AmbientLightBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.ambientlight){
+                        device = (AmbientLightBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -207,6 +208,14 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

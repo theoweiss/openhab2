@@ -55,6 +55,7 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
     private final Logger logger = LoggerFactory.getLogger(RotaryEncoderBrickletHandler.class);
     private @Nullable RotaryEncoderDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable RotaryEncoderBricklet device;
     private @Nullable String uid;
 
     public RotaryEncoderBrickletHandler(Thing thing) {
@@ -77,13 +78,14 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.rotaryencoder){
-                        RotaryEncoderBricklet device2 = (RotaryEncoderBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.rotaryencoder){
+                        device = (RotaryEncoderBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -112,7 +114,6 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -224,6 +225,14 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

@@ -52,6 +52,7 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
     private final Logger logger = LoggerFactory.getLogger(IndustrialDualRelayBrickletHandler.class);
     private @Nullable DualRelayConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable IndustrialDualRelayBricklet device;
     private @Nullable String uid;
 
     public IndustrialDualRelayBrickletHandler(Thing thing) {
@@ -104,13 +105,14 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.industrialdualrelay){
-                        IndustrialDualRelayBricklet device2 = (IndustrialDualRelayBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.industrialdualrelay){
+                        device = (IndustrialDualRelayBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -139,7 +141,6 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                
             }
         }
         return bridgeHandler;
@@ -233,6 +234,14 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

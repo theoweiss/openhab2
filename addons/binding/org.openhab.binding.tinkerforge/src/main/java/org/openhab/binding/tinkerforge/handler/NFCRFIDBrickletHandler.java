@@ -54,6 +54,7 @@ public class NFCRFIDBrickletHandler extends BaseThingHandler implements Callback
     private final Logger logger = LoggerFactory.getLogger(NFCRFIDBrickletHandler.class);
     private @Nullable NFCRFIDConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable NFCRFIDBricklet device;
     private @Nullable String uid;
 
     public NFCRFIDBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class NFCRFIDBrickletHandler extends BaseThingHandler implements Callback
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.nfcrfid){
-                        NFCRFIDBricklet device2 = (NFCRFIDBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.nfcrfid){
+                        device = (NFCRFIDBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class NFCRFIDBrickletHandler extends BaseThingHandler implements Callback
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -172,6 +173,14 @@ public class NFCRFIDBrickletHandler extends BaseThingHandler implements Callback
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

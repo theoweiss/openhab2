@@ -59,6 +59,7 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
     private final Logger logger = LoggerFactory.getLogger(BarometerBrickletHandler.class);
     private @Nullable BarometerDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable BarometerBricklet device;
     private @Nullable String uid;
 
     private @Nullable ScheduledFuture<?> pollingJob;
@@ -83,13 +84,14 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.barometer){
-                        BarometerBricklet device2 = (BarometerBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.barometer){
+                        device = (BarometerBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
                         pollChannels();
                       } else {
@@ -118,7 +120,6 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -295,6 +296,14 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
     if (pollingJob != null){
       pollingJob.cancel(true);

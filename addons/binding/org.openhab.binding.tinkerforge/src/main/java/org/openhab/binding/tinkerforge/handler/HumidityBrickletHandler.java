@@ -54,6 +54,7 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
     private final Logger logger = LoggerFactory.getLogger(HumidityBrickletHandler.class);
     private @Nullable HumidityDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable HumidityBricklet device;
     private @Nullable String uid;
 
     public HumidityBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.humidity){
-                        HumidityBricklet device2 = (HumidityBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.humidity){
+                        device = (HumidityBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -207,6 +208,14 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

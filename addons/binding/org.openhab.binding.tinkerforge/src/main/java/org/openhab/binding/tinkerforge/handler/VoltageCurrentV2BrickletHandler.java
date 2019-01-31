@@ -56,6 +56,7 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
     private final Logger logger = LoggerFactory.getLogger(VoltageCurrentV2BrickletHandler.class);
     private @Nullable VoltageCurrentV2Config config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable VoltageCurrentV2Bricklet device;
     private @Nullable String uid;
 
     public VoltageCurrentV2BrickletHandler(Thing thing) {
@@ -78,13 +79,14 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.voltagecurrentV2){
-                        VoltageCurrentV2Bricklet device2 = (VoltageCurrentV2Bricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.voltagecurrentV2){
+                        device = (VoltageCurrentV2Bricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -113,7 +115,6 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -289,6 +290,14 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

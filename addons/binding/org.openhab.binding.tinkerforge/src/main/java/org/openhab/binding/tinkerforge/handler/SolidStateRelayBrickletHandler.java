@@ -51,6 +51,7 @@ public class SolidStateRelayBrickletHandler extends BaseThingHandler implements 
     private final Logger logger = LoggerFactory.getLogger(SolidStateRelayBrickletHandler.class);
     private @Nullable RelayConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable SolidStateRelayBricklet device;
     private @Nullable String uid;
 
     public SolidStateRelayBrickletHandler(Thing thing) {
@@ -91,13 +92,14 @@ public class SolidStateRelayBrickletHandler extends BaseThingHandler implements 
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.solidstaterelay){
-                        SolidStateRelayBricklet device2 = (SolidStateRelayBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.solidstaterelay){
+                        device = (SolidStateRelayBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -126,7 +128,6 @@ public class SolidStateRelayBrickletHandler extends BaseThingHandler implements 
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                
             }
         }
         return bridgeHandler;
@@ -193,6 +194,14 @@ public class SolidStateRelayBrickletHandler extends BaseThingHandler implements 
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

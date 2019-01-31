@@ -56,6 +56,7 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
     private final Logger logger = LoggerFactory.getLogger(BarometerV2BrickletHandler.class);
     private @Nullable BarometerV2DeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable BarometerV2Bricklet device;
     private @Nullable String uid;
 
     public BarometerV2BrickletHandler(Thing thing) {
@@ -78,13 +79,14 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.barometerV2){
-                        BarometerV2Bricklet device2 = (BarometerV2Bricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.barometerV2){
+                        device = (BarometerV2Bricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -113,7 +115,6 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -289,6 +290,14 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

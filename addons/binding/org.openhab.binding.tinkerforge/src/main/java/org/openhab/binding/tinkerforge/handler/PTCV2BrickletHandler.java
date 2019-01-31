@@ -55,6 +55,7 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
     private final Logger logger = LoggerFactory.getLogger(PTCV2BrickletHandler.class);
     private @Nullable PTCV2DeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable PTCV2Bricklet device;
     private @Nullable String uid;
 
     public PTCV2BrickletHandler(Thing thing) {
@@ -77,13 +78,14 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.ptcV2){
-                        PTCV2Bricklet device2 = (PTCV2Bricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.ptcV2){
+                        device = (PTCV2Bricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -112,7 +114,6 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -246,6 +247,14 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

@@ -54,6 +54,7 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
     private final Logger logger = LoggerFactory.getLogger(SoundPressureLevelBrickletHandler.class);
     private @Nullable SoundPressureLevelDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable SoundPressureLevelBricklet device;
     private @Nullable String uid;
 
     public SoundPressureLevelBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.soundpressurelevel){
-                        SoundPressureLevelBricklet device2 = (SoundPressureLevelBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.soundpressurelevel){
+                        device = (SoundPressureLevelBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -207,6 +208,14 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

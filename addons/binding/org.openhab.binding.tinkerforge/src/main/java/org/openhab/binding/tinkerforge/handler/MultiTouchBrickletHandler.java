@@ -65,6 +65,7 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
     private final Logger logger = LoggerFactory.getLogger(MultiTouchBrickletHandler.class);
     private @Nullable MultiTouchDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable MultiTouchBricklet device;
     private @Nullable String uid;
 
     public MultiTouchBrickletHandler(Thing thing) {
@@ -87,13 +88,14 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.multitouch){
-                        MultiTouchBricklet device2 = (MultiTouchBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.multitouch){
+                        device = (MultiTouchBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -122,7 +124,6 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -394,6 +395,14 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

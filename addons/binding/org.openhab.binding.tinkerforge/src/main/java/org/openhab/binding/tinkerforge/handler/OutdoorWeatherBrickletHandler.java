@@ -64,6 +64,7 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
     private final Logger logger = LoggerFactory.getLogger(OutdoorWeatherBrickletHandler.class);
     private @Nullable OutdoorWeatherDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable OutdoorWeatherBricklet device;
     private @Nullable String uid;
 
     public OutdoorWeatherBrickletHandler(Thing thing) {
@@ -86,13 +87,14 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.outdoorweather){
-                        OutdoorWeatherBricklet device2 = (OutdoorWeatherBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.outdoorweather){
+                        device = (OutdoorWeatherBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -121,7 +123,6 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -587,6 +588,14 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

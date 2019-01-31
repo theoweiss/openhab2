@@ -54,6 +54,7 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
     private final Logger logger = LoggerFactory.getLogger(MotionDetectorBrickletHandler.class);
     private @Nullable MotionDetectorDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable MotionDetectorBricklet device;
     private @Nullable String uid;
 
     public MotionDetectorBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.motiondetector){
-                        MotionDetectorBricklet device2 = (MotionDetectorBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.motiondetector){
+                        device = (MotionDetectorBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -209,6 +210,14 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

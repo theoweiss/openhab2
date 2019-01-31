@@ -52,6 +52,7 @@ public class DualRelayBrickletHandler extends BaseThingHandler implements Device
     private final Logger logger = LoggerFactory.getLogger(DualRelayBrickletHandler.class);
     private @Nullable DualRelayConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable DualRelayBricklet device;
     private @Nullable String uid;
 
     public DualRelayBrickletHandler(Thing thing) {
@@ -104,13 +105,14 @@ public class DualRelayBrickletHandler extends BaseThingHandler implements Device
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.dualrelay){
-                        DualRelayBricklet device2 = (DualRelayBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.dualrelay){
+                        device = (DualRelayBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -139,7 +141,6 @@ public class DualRelayBrickletHandler extends BaseThingHandler implements Device
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                
             }
         }
         return bridgeHandler;
@@ -233,6 +234,14 @@ public class DualRelayBrickletHandler extends BaseThingHandler implements Device
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

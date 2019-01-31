@@ -54,6 +54,7 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
     private final Logger logger = LoggerFactory.getLogger(DistanceUSBrickletHandler.class);
     private @Nullable DistanceUSConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable DistanceUSBricklet device;
     private @Nullable String uid;
 
     public DistanceUSBrickletHandler(Thing thing) {
@@ -76,13 +77,14 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.distanceus){
-                        DistanceUSBricklet device2 = (DistanceUSBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.distanceus){
+                        device = (DistanceUSBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -111,7 +113,6 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -205,6 +206,14 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 

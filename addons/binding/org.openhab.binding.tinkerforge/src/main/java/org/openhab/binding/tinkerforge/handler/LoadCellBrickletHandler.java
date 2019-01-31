@@ -55,6 +55,7 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
     private final Logger logger = LoggerFactory.getLogger(LoadCellBrickletHandler.class);
     private @Nullable LoadCellDeviceConfig config;
     private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable LoadCellBricklet device;
     private @Nullable String uid;
 
     public LoadCellBrickletHandler(Thing thing) {
@@ -77,13 +78,14 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
+                brickdBridgeHandler.registerCallbackListener(this);
                 if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (device != null) {
-                      if (device.getDeviceType() == DeviceType.loadcell){
-                        LoadCellBricklet device2 = (LoadCellBricklet) device;
-                        device2.setDeviceConfig(config);
-                        device2.enable();
+                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                    if (deviceIn != null) {
+                      if (deviceIn.getDeviceType() == DeviceType.loadcell){
+                        device = (LoadCellBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
                         updateStatus(ThingStatus.ONLINE);
 
                       } else {
@@ -112,7 +114,6 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
             ThingHandler handler = bridge.getHandler();
             if (handler instanceof BrickdBridgeHandler) {
                 bridgeHandler = (BrickdBridgeHandler) handler;
-                bridgeHandler.registerCallbackListener(this);
             }
         }
         return bridgeHandler;
@@ -237,6 +238,14 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
 
 @Override
 public void dispose() {
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.unregisterDeviceStatusListener(this);
+        brickdBridgeHandler.unregisterCallbackListener(this);
+    }
+    if (device != null) {
+        device.disable();
+    }
 
 }
 
