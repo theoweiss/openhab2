@@ -180,6 +180,7 @@ public class PTCBrickletHandler extends BaseThingHandler implements CallbackList
 
 
 
+
     private void gettemperature() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

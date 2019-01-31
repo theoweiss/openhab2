@@ -207,6 +207,7 @@ public class HumidityV2BrickletHandler extends BaseThingHandler implements Callb
 
 
 
+
     private void gethumidity() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

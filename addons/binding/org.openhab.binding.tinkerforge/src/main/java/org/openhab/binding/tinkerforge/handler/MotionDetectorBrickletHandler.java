@@ -182,6 +182,7 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
 
 
 
+
     private void getmotiondetected() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

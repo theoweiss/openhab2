@@ -206,6 +206,7 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
 
 
 
+
     private void getmotiondetected() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

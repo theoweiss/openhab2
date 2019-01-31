@@ -180,6 +180,7 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
 
 
 
+
     private void getdatetime() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

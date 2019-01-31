@@ -180,6 +180,7 @@ public class TemperatureBrickletHandler extends BaseThingHandler implements Call
 
 
 
+
     private void gettemperature() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

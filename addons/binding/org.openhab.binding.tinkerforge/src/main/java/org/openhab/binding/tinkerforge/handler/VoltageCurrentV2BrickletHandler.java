@@ -218,6 +218,7 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
 
 
 
+
     private void getvoltage() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

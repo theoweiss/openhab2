@@ -180,6 +180,7 @@ public class AmbientLightBrickletHandler extends BaseThingHandler implements Cal
 
 
 
+
     private void getilluminance() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

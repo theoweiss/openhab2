@@ -180,6 +180,7 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler implemen
 
 
 
+
     private void getdecibel() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

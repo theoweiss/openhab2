@@ -179,6 +179,7 @@ public class SoundIntensityBrickletHandler extends BaseThingHandler implements C
 
 
 
+
     private void getintensity() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

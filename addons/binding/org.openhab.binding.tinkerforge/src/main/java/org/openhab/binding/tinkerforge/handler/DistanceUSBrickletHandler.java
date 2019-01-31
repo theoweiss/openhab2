@@ -179,6 +179,7 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
 
 
 
+
     private void getdistance() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

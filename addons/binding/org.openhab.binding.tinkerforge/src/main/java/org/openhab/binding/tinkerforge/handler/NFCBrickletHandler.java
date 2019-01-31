@@ -163,40 +163,8 @@ public class NFCBrickletHandler extends BaseThingHandler implements CallbackList
         }
     }
 
-    @Override
-    public void channelLinked(ChannelUID channelUID) {
-        switch (channelUID.getId()) {
 
 
-          case "tagID":
-              gettagID();
-              break;
-
-          default:
-            break;
-        }
-    }
-
-
-
-    private void gettagID() {
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
-            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (device != null) {
-                NFCBricklet device2 = (NFCBricklet) device;
-                TagIDChannel channel = (TagIDChannel) device2.getChannel("tagID");
-                Object newValue = channel.getValue();
-                
-                if (newValue instanceof StringValue) {
-                    logger.debug("new value {}", newValue);
-                    updateState(ChannelId.tagID.name(), new StringType(newValue.toString()));
-                   return;
-                }
-                
-            }
-        }
-    }
 
 
 

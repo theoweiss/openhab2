@@ -188,6 +188,7 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
 
 
 
+
     private void getweight() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

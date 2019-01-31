@@ -220,6 +220,7 @@ public class IndustrialQuadRelayBrickletV2Handler extends BaseThingHandler imple
 
 
 
+
     private void getrelay0() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

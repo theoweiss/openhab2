@@ -346,6 +346,7 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
 
 
 
+
     private void gettemperatureStation() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

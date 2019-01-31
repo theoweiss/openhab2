@@ -180,6 +180,7 @@ public class AmbientLightV2BrickletHandler extends BaseThingHandler implements C
 
 
 
+
     private void getilluminance() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

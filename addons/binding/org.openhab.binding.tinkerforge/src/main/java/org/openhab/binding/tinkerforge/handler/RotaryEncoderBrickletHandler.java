@@ -196,6 +196,7 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
 
 
 
+
     private void getcount() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

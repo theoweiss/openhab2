@@ -212,6 +212,7 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
 
 
 
+
     private void getairpressure() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

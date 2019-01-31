@@ -184,6 +184,7 @@ public class DualRelayBrickletHandler extends BaseThingHandler implements Device
 
 
 
+
     private void getrelay1() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

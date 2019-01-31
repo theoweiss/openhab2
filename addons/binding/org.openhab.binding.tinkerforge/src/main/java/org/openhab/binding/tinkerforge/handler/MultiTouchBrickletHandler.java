@@ -391,6 +391,7 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
 
 
 
+
 @Override
 public void dispose() {
 

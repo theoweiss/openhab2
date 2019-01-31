@@ -166,6 +166,7 @@ public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implement
 
 
 
+
     private void getrelay() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

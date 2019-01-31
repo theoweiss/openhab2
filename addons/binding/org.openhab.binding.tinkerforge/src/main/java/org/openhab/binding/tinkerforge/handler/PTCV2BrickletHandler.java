@@ -198,6 +198,7 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
 
 
 
+
     private void gettemperature() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {

@@ -199,6 +199,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
 
 
 
+
     private void getvoltage0() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
