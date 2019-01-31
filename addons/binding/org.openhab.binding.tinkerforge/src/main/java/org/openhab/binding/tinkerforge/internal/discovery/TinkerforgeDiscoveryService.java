@@ -77,7 +77,7 @@ public class TinkerforgeDiscoveryService extends AbstractDiscoveryService implem
                 DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withThingType(thingTypeUID)
                         .withProperties(properties).withBridge(bridgeUID)
                         .withRepresentationProperty(TinkerforgeBindingConstants.DEVICE_UID_PARAM)
-                        .withLabel(deviceInfo.getDeviceType().name()).build();
+                        .withLabel(deviceInfo.getDeviceType().getDeviceName() + " " + deviceInfo.getUid()).build();
                 thingDiscovered(discoveryResult);
             } else {
                 logger.debug("discovered unsupported device {} with uid {}", deviceInfo.getDeviceType().name(),
