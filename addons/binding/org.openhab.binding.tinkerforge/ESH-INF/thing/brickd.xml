@@ -14,7 +14,7 @@
         <!-- representation-property>serialNumber</representation-property -->
 
         <config-description>
-            <parameter name="ipAddress" type="text">
+            <parameter name="host" type="text">
                 <context>network_address</context>
                 <label>Network Address</label>
                 <description>Network address of the brickd.</description>
@@ -27,6 +27,14 @@
                     The authentication token to access the brickd.
                 </description>
                 <required>false</required>
+            </parameter>
+            <parameter name="port" type="integer">
+                <label>Port</label>
+                <description>
+                    Port number of the brickd.
+                </description>
+                <required>false</required>
+                <default>4223</default>
             </parameter>
         </config-description>
     </bridge-type>

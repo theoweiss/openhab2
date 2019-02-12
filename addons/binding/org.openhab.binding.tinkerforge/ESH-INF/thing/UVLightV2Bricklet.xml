@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="uvlightv2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletUVLightV2</label>
+		<description>Tinkerforge BrickletUVLightV2</description>
+
+		<channels>
+		
+			<channel id="uva" typeId="uvaintensity"/>
+		
+			<channel id="uvb" typeId="uvbintensity"/>
+		
+			<channel id="uvi" typeId="uvindex"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+
+			<parameter name="integrationTime" type="integer" min="0" max="4" multiple="false" required="false">
+				<label>integrationTime</label>
+				
+				<default>3</default>
+				
+				<description>Integration time <![CDATA[<br>]]>Between 50ms and 800ms default 3 => 400ms.</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

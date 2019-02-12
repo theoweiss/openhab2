@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="temperatureir">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletTemperatureIR</label>
+		<description>Tinkerforge BrickletTemperatureIR</description>
+
+		<channels>
+		
+			<channel id="objectTemperature" typeId="temperature"/>
+		
+			<channel id="ambientTemperature" typeId="temperature"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+
+			<parameter name="emissivity" type="integer" min="6553" max="65535" multiple="false" required="false">
+				<label>emissivity</label>
+				
+				<default>65535</default>
+				
+				<description>Sets the emissivity that is used to calculate the surface temperature..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

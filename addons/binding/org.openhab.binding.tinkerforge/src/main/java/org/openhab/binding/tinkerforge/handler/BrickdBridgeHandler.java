@@ -18,6 +18,7 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.Brickd;
+import org.m1theo.tinkerforge.client.BrickdStatusListener;
 import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.config.Host;
@@ -29,8 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
-public class BrickdBridgeHandler extends BaseBridgeHandler {
-    private static final String IP_ADDRESS = "ipAddress";
+public class BrickdBridgeHandler extends BaseBridgeHandler implements BrickdStatusListener {
     private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
     private Brickd brickd;
     private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
@@ -47,20 +47,17 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
 
     @Override
     public void initialize() {
+        Host config = getConfigAs(Host.class);
         logger.debug("Initializing brickd bridge handler.");
-        if (getConfig().get(IP_ADDRESS) != null) {
-            Host host = new Host(((String) getConfig().get(IP_ADDRESS)));
-            brickd = Brickd.createInstance(host, false);
+        if (config.getHost() != null) {
+            brickd = Brickd.createInstance(config, false);
+            brickd.addBrickdStatusListener(this);
             for (DeviceAdminListener listener : deviceAdminListeners) {
                 logger.debug("register deviceadminlistener");
                 brickd.addDeviceAdminListener(listener);
             }
-            // for (CallbackListener listener : callbackListeners) {
-            // logger.debug("add callbackListener");
-            // brickd.addCallbackListener(listener);
-            // }
+            updateStatus(ThingStatus.OFFLINE);
             brickd.connect();
-            updateStatus(ThingStatus.ONLINE);
         } else {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.CONFIGURATION_ERROR, "ip address is missing");
         }
@@ -78,20 +75,28 @@ public class BrickdBridgeHandler extends BaseBridgeHandler {
     }
 
     public void unregisterDeviceStatusListener(DeviceAdminListener deviceAdmin) {
+        deviceAdminListeners.remove(deviceAdmin);
         if (brickd != null) {
             brickd.removeDeviceAdminListener(deviceAdmin);
         }
     }
 
     public void registerCallbackListener(CallbackListener listener) {
-        // callbackListeners.add(listener);
         brickd.addCallbackListener(listener);
-        // TODO get current status of the device and call the listener for initial values
     }
 
     public void unregisterCallbackListener(CallbackListener listener) {
         if (brickd != null) {
             brickd.removeCallbackListener(listener);
+        }
+    }
+
+    @Override
+    public void connected(boolean connected) {
+        if (connected) {
+            updateStatus(ThingStatus.ONLINE);
+        } else {
+            updateStatus(ThingStatus.OFFLINE);
         }
     }
 }

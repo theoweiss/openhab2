@@ -56,6 +56,7 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable MotionDetectorBricklet device;
     private @Nullable String uid;
+    private boolean enabled = false;
 
     public MotionDetectorBrickletHandler(Thing thing) {
         super(thing);
@@ -77,25 +78,7 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
-                brickdBridgeHandler.registerCallbackListener(this);
-                if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (deviceIn != null) {
-                      if (deviceIn.getDeviceType() == DeviceType.motiondetector){
-                        device = (MotionDetectorBricklet) deviceIn;
-                        device.setDeviceConfig(config);
-                        device.enable();
-                        updateStatus(ThingStatus.ONLINE);
-
-                      } else {
-                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-                      }
-                    } else {
-                        updateStatus(ThingStatus.OFFLINE);
-                    }
-                } else {
-                    updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-                }
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE);
             }
@@ -117,6 +100,42 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
         }
         return bridgeHandler;
     }
+
+private void enable(){
+    logger.debug("executing enable");
+    Bridge bridge = getBridge();
+    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.registerCallbackListener(this);
+        if (bridgeStatus == ThingStatus.ONLINE) {
+            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (deviceIn != null) {
+              if (deviceIn.getDeviceType() == DeviceType.motiondetector){
+                device = (MotionDetectorBricklet) deviceIn;
+                device.setDeviceConfig(config);
+                device.enable();
+                enabled = true;
+                updateStatus(ThingStatus.ONLINE);
+                updateChannelStates();
+    
+              } else {
+                logger.error("configuration error");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+              }
+            } else {
+                logger.error("deviceIn is null");
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            logger.error("bridge is offline");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        }
+    } else {
+        logger.error("brickdBridgeHandler is null");
+        updateStatus(ThingStatus.OFFLINE);
+    }
+}
 
 
     @Override
@@ -160,7 +179,8 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
 
         if (info.getUid().equals(uid)) {
             if (changeType == DeviceChangeType.ADD) {
-                updateStatus(ThingStatus.ONLINE);
+                logger.debug("{} added", uid);
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
             }
@@ -169,6 +189,7 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
+      if (enabled) {
         switch (channelUID.getId()) {
 
 
@@ -179,6 +200,18 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
           default:
             break;
         }
+      }
+    }
+
+
+
+    private void updateChannelStates() {
+
+
+      if (isLinked("motiondetected")) {
+        getmotiondetected();
+      }
+
     }
 
 
@@ -219,6 +252,7 @@ public void dispose() {
         device.disable();
     }
 
+    enabled = false;
 }
 
 }

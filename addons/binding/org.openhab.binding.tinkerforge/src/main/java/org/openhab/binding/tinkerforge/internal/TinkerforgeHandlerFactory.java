@@ -36,6 +36,12 @@ import org.openhab.binding.tinkerforge.handler.OutdoorWeatherBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.TemperatureBrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.TemperatureV2BrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.TemperatureIRBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.TemperatureIRV2BrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.LoadCellBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.SoundIntensityBrickletHandler;
@@ -45,6 +51,8 @@ import org.openhab.binding.tinkerforge.handler.SoundPressureLevelBrickletHandler
 import org.openhab.binding.tinkerforge.handler.AmbientLightBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.AmbientLightV2BrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.AmbientLightV3BrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInBrickletHandler;
 
@@ -58,6 +66,14 @@ import org.openhab.binding.tinkerforge.handler.BarometerBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.BarometerV2BrickletHandler;
 
+import org.openhab.binding.tinkerforge.handler.DistanceIRBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.DistanceIRV2BrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.UVLightBrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.UVLightV2BrickletHandler;
+
 import org.openhab.binding.tinkerforge.handler.HumidityBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.HumidityV2BrickletHandler;
@@ -65,6 +81,8 @@ import org.openhab.binding.tinkerforge.handler.HumidityV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MotionDetectorBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.MotionDetectorV2BrickletHandler;
+
+import org.openhab.binding.tinkerforge.handler.AirQualityBrickletHandler;
 
 import org.openhab.binding.tinkerforge.handler.RealTimeClockBrickletHandler;
 
@@ -160,6 +178,21 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
     
     
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATUREV2)) {
+            return new TemperatureV2BrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATUREIR)) {
+            return new TemperatureIRBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATUREIRV2)) {
+            return new TemperatureIRV2BrickletHandler(thing);
+        }
+    
+    
         if (thingTypeUID.equals(THING_TYPE_LOADCELL)) {
             return new LoadCellBrickletHandler(thing);
         }
@@ -182,6 +215,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV2)) {
             return new AmbientLightV2BrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV3)) {
+            return new AmbientLightV3BrickletHandler(thing);
         }
     
     
@@ -215,6 +253,26 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
     
     
+        if (thingTypeUID.equals(THING_TYPE_DISTANCEIR)) {
+            return new DistanceIRBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_DISTANCEIRV2)) {
+            return new DistanceIRV2BrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_UVLIGHT)) {
+            return new UVLightBrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_UVLIGHTV2)) {
+            return new UVLightV2BrickletHandler(thing);
+        }
+    
+    
         if (thingTypeUID.equals(THING_TYPE_HUMIDITY)) {
             return new HumidityBrickletHandler(thing);
         }
@@ -232,6 +290,11 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
     
         if (thingTypeUID.equals(THING_TYPE_MOTIONDETECTORV2)) {
             return new MotionDetectorV2BrickletHandler(thing);
+        }
+    
+    
+        if (thingTypeUID.equals(THING_TYPE_AIRQUALITY)) {
+            return new AirQualityBrickletHandler(thing);
         }
     
     

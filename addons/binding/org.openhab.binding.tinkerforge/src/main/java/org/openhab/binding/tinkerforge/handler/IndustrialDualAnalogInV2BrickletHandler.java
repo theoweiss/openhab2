@@ -57,6 +57,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable IndustrialDualAnalogInV2Bricklet device;
     private @Nullable String uid;
+    private boolean enabled = false;
 
     public IndustrialDualAnalogInV2BrickletHandler(Thing thing) {
         super(thing);
@@ -78,25 +79,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
-                brickdBridgeHandler.registerCallbackListener(this);
-                if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (deviceIn != null) {
-                      if (deviceIn.getDeviceType() == DeviceType.industrialdualanalogInV2){
-                        device = (IndustrialDualAnalogInV2Bricklet) deviceIn;
-                        device.setDeviceConfig(config);
-                        device.enable();
-                        updateStatus(ThingStatus.ONLINE);
-
-                      } else {
-                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-                      }
-                    } else {
-                        updateStatus(ThingStatus.OFFLINE);
-                    }
-                } else {
-                    updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-                }
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE);
             }
@@ -118,6 +101,42 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
         }
         return bridgeHandler;
     }
+
+private void enable(){
+    logger.debug("executing enable");
+    Bridge bridge = getBridge();
+    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.registerCallbackListener(this);
+        if (bridgeStatus == ThingStatus.ONLINE) {
+            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (deviceIn != null) {
+              if (deviceIn.getDeviceType() == DeviceType.industrialdualanalogInV2){
+                device = (IndustrialDualAnalogInV2Bricklet) deviceIn;
+                device.setDeviceConfig(config);
+                device.enable();
+                enabled = true;
+                updateStatus(ThingStatus.ONLINE);
+                updateChannelStates();
+    
+              } else {
+                logger.error("configuration error");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+              }
+            } else {
+                logger.error("deviceIn is null");
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            logger.error("bridge is offline");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        }
+    } else {
+        logger.error("brickdBridgeHandler is null");
+        updateStatus(ThingStatus.OFFLINE);
+    }
+}
 
 
     @Override
@@ -172,7 +191,8 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
 
         if (info.getUid().equals(uid)) {
             if (changeType == DeviceChangeType.ADD) {
-                updateStatus(ThingStatus.ONLINE);
+                logger.debug("{} added", uid);
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
             }
@@ -181,6 +201,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
+      if (enabled) {
         switch (channelUID.getId()) {
 
 
@@ -196,6 +217,23 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler im
           default:
             break;
         }
+      }
+    }
+
+
+
+    private void updateChannelStates() {
+
+
+      if (isLinked("voltage0")) {
+        getvoltage0();
+      }
+
+
+      if (isLinked("voltage1")) {
+        getvoltage1();
+      }
+
     }
 
 
@@ -258,6 +296,7 @@ public void dispose() {
         device.disable();
     }
 
+    enabled = false;
 }
 
 }

@@ -37,6 +37,15 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_TEMPERATURE = new ThingTypeUID(BINDING_ID, "temperature");
     
     
+    public static final ThingTypeUID THING_TYPE_TEMPERATUREV2 = new ThingTypeUID(BINDING_ID, "temperatureV2");
+    
+    
+    public static final ThingTypeUID THING_TYPE_TEMPERATUREIR = new ThingTypeUID(BINDING_ID, "temperatureir");
+    
+    
+    public static final ThingTypeUID THING_TYPE_TEMPERATUREIRV2 = new ThingTypeUID(BINDING_ID, "temperatureirv2");
+    
+    
     public static final ThingTypeUID THING_TYPE_LOADCELL = new ThingTypeUID(BINDING_ID, "loadcell");
     
     
@@ -50,6 +59,9 @@ public class TinkerforgeBindingConstants {
     
     
     public static final ThingTypeUID THING_TYPE_AMBIENTLIGHTV2 = new ThingTypeUID(BINDING_ID, "ambientlightV2");
+    
+    
+    public static final ThingTypeUID THING_TYPE_AMBIENTLIGHTV3 = new ThingTypeUID(BINDING_ID, "ambientlightV3");
     
     
     public static final ThingTypeUID THING_TYPE_INDUSTRIALDUALANALOGIN = new ThingTypeUID(BINDING_ID, "industrialdualanalogIn");
@@ -70,6 +82,18 @@ public class TinkerforgeBindingConstants {
     public static final ThingTypeUID THING_TYPE_BAROMETERV2 = new ThingTypeUID(BINDING_ID, "barometerV2");
     
     
+    public static final ThingTypeUID THING_TYPE_DISTANCEIR = new ThingTypeUID(BINDING_ID, "distanceIR");
+    
+    
+    public static final ThingTypeUID THING_TYPE_DISTANCEIRV2 = new ThingTypeUID(BINDING_ID, "distanceIRV2");
+    
+    
+    public static final ThingTypeUID THING_TYPE_UVLIGHT = new ThingTypeUID(BINDING_ID, "uvlight");
+    
+    
+    public static final ThingTypeUID THING_TYPE_UVLIGHTV2 = new ThingTypeUID(BINDING_ID, "uvlightv2");
+    
+    
     public static final ThingTypeUID THING_TYPE_HUMIDITY = new ThingTypeUID(BINDING_ID, "humidity");
     
     
@@ -80,6 +104,9 @@ public class TinkerforgeBindingConstants {
     
     
     public static final ThingTypeUID THING_TYPE_MOTIONDETECTORV2 = new ThingTypeUID(BINDING_ID, "motiondetectorV2");
+    
+    
+    public static final ThingTypeUID THING_TYPE_AIRQUALITY = new ThingTypeUID(BINDING_ID, "airquality");
     
     
     public static final ThingTypeUID THING_TYPE_REALTIMECLOCK = new ThingTypeUID(BINDING_ID, "realtimeclock");
@@ -134,6 +161,12 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_TEMPERATURE, 
     
+      THING_TYPE_TEMPERATUREV2, 
+    
+      THING_TYPE_TEMPERATUREIR, 
+    
+      THING_TYPE_TEMPERATUREIRV2, 
+    
       THING_TYPE_LOADCELL, 
     
       THING_TYPE_SOUNDINTENSITY, 
@@ -143,6 +176,8 @@ public class TinkerforgeBindingConstants {
       THING_TYPE_AMBIENTLIGHT, 
     
       THING_TYPE_AMBIENTLIGHTV2, 
+    
+      THING_TYPE_AMBIENTLIGHTV3, 
     
       THING_TYPE_INDUSTRIALDUALANALOGIN, 
     
@@ -156,6 +191,14 @@ public class TinkerforgeBindingConstants {
     
       THING_TYPE_BAROMETERV2, 
     
+      THING_TYPE_DISTANCEIR, 
+    
+      THING_TYPE_DISTANCEIRV2, 
+    
+      THING_TYPE_UVLIGHT, 
+    
+      THING_TYPE_UVLIGHTV2, 
+    
       THING_TYPE_HUMIDITY, 
     
       THING_TYPE_HUMIDITYV2, 
@@ -163,6 +206,8 @@ public class TinkerforgeBindingConstants {
       THING_TYPE_MOTIONDETECTOR, 
     
       THING_TYPE_MOTIONDETECTORV2, 
+    
+      THING_TYPE_AIRQUALITY, 
     
       THING_TYPE_REALTIMECLOCK, 
     

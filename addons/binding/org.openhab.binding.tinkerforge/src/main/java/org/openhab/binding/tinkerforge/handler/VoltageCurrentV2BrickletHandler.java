@@ -58,6 +58,7 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable VoltageCurrentV2Bricklet device;
     private @Nullable String uid;
+    private boolean enabled = false;
 
     public VoltageCurrentV2BrickletHandler(Thing thing) {
         super(thing);
@@ -79,25 +80,7 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
-                brickdBridgeHandler.registerCallbackListener(this);
-                if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (deviceIn != null) {
-                      if (deviceIn.getDeviceType() == DeviceType.voltagecurrentV2){
-                        device = (VoltageCurrentV2Bricklet) deviceIn;
-                        device.setDeviceConfig(config);
-                        device.enable();
-                        updateStatus(ThingStatus.ONLINE);
-
-                      } else {
-                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-                      }
-                    } else {
-                        updateStatus(ThingStatus.OFFLINE);
-                    }
-                } else {
-                    updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-                }
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE);
             }
@@ -119,6 +102,42 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
         }
         return bridgeHandler;
     }
+
+private void enable(){
+    logger.debug("executing enable");
+    Bridge bridge = getBridge();
+    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        brickdBridgeHandler.registerCallbackListener(this);
+        if (bridgeStatus == ThingStatus.ONLINE) {
+            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (deviceIn != null) {
+              if (deviceIn.getDeviceType() == DeviceType.voltagecurrentV2){
+                device = (VoltageCurrentV2Bricklet) deviceIn;
+                device.setDeviceConfig(config);
+                device.enable();
+                enabled = true;
+                updateStatus(ThingStatus.ONLINE);
+                updateChannelStates();
+    
+              } else {
+                logger.error("configuration error");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+              }
+            } else {
+                logger.error("deviceIn is null");
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            logger.error("bridge is offline");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        }
+    } else {
+        logger.error("brickdBridgeHandler is null");
+        updateStatus(ThingStatus.OFFLINE);
+    }
+}
 
 
     @Override
@@ -186,7 +205,8 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
 
         if (info.getUid().equals(uid)) {
             if (changeType == DeviceChangeType.ADD) {
-                updateStatus(ThingStatus.ONLINE);
+                logger.debug("{} added", uid);
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
             }
@@ -195,6 +215,7 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
+      if (enabled) {
         switch (channelUID.getId()) {
 
 
@@ -215,6 +236,28 @@ public class VoltageCurrentV2BrickletHandler extends BaseThingHandler implements
           default:
             break;
         }
+      }
+    }
+
+
+
+    private void updateChannelStates() {
+
+
+      if (isLinked("voltage")) {
+        getvoltage();
+      }
+
+
+      if (isLinked("current")) {
+        getcurrent();
+      }
+
+
+      if (isLinked("power")) {
+        getpower();
+      }
+
     }
 
 
@@ -299,6 +342,7 @@ public void dispose() {
         device.disable();
     }
 
+    enabled = false;
 }
 
 }

@@ -56,6 +56,7 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
     private @Nullable BrickdBridgeHandler bridgeHandler;
     private @Nullable IndustrialQuadRelayBricklet device;
     private @Nullable String uid;
+    private boolean enabled = false;
 
     public IndustrialQuadRelayBrickletHandler(Thing thing) {
         super(thing);
@@ -131,25 +132,7 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
-                
-                if (bridgeStatus == ThingStatus.ONLINE) {
-                    Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-                    if (deviceIn != null) {
-                      if (deviceIn.getDeviceType() == DeviceType.industrialquadrelay){
-                        device = (IndustrialQuadRelayBricklet) deviceIn;
-                        device.setDeviceConfig(config);
-                        device.enable();
-                        updateStatus(ThingStatus.ONLINE);
-
-                      } else {
-                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-                      }
-                    } else {
-                        updateStatus(ThingStatus.OFFLINE);
-                    }
-                } else {
-                    updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-                }
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE);
             }
@@ -172,6 +155,42 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
         return bridgeHandler;
     }
 
+private void enable(){
+    logger.debug("executing enable");
+    Bridge bridge = getBridge();
+    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+    if (brickdBridgeHandler != null) {
+        
+        if (bridgeStatus == ThingStatus.ONLINE) {
+            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (deviceIn != null) {
+              if (deviceIn.getDeviceType() == DeviceType.industrialquadrelay){
+                device = (IndustrialQuadRelayBricklet) deviceIn;
+                device.setDeviceConfig(config);
+                device.enable();
+                enabled = true;
+                updateStatus(ThingStatus.ONLINE);
+                updateChannelStates();
+    
+              } else {
+                logger.error("configuration error");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+              }
+            } else {
+                logger.error("deviceIn is null");
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            logger.error("bridge is offline");
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+        }
+    } else {
+        logger.error("brickdBridgeHandler is null");
+        updateStatus(ThingStatus.OFFLINE);
+    }
+}
+
 
 
     @Override
@@ -183,7 +202,8 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
 
         if (info.getUid().equals(uid)) {
             if (changeType == DeviceChangeType.ADD) {
-                updateStatus(ThingStatus.ONLINE);
+                logger.debug("{} added", uid);
+                enable();
             } else {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
             }
@@ -192,6 +212,7 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
+      if (enabled) {
         switch (channelUID.getId()) {
 
 
@@ -217,6 +238,33 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
           default:
             break;
         }
+      }
+    }
+
+
+
+    private void updateChannelStates() {
+
+
+      if (isLinked("relay0")) {
+        getrelay0();
+      }
+
+
+      if (isLinked("relay1")) {
+        getrelay1();
+      }
+
+
+      if (isLinked("relay2")) {
+        getrelay2();
+      }
+
+
+      if (isLinked("relay3")) {
+        getrelay3();
+      }
+
     }
 
 
@@ -323,6 +371,7 @@ public void dispose() {
         device.disable();
     }
 
+    enabled = false;
 }
 
 }

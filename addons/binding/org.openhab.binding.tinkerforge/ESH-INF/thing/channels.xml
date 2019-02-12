@@ -6,7 +6,7 @@
 
 	<channel-type id="temperature">
 		<item-type>Number:Temperature</item-type>
-		<label>temperature</label>
+		<label>Temperature</label>
 		<description>Current Temperature</description>
 		<category>Temperature</category>
 		<state readOnly="true" pattern="%.2f %unit%"/>
@@ -14,7 +14,7 @@
 
 	<channel-type id="weight">
 		<item-type>Number:Mass</item-type>
-		<label>weight</label>
+		<label>Weight</label>
 		<description>Weight</description>
 		<category>Pressure</category>
 		<state readOnly="true" pattern="%.2f %unit%"/>
@@ -22,7 +22,7 @@
 
 	<channel-type id="intensity">
 		<item-type>Number</item-type>
-		<label>intensity</label>
+		<label>Intensity</label>
 		<description>The current sound intensity. The value has a range of 0 to 4095</description>
 		
 		<state readOnly="true" />
@@ -30,7 +30,7 @@
 
 	<channel-type id="decibel">
 		<item-type>Number:Dimensionless</item-type>
-		<label>decibel</label>
+		<label>Decibel</label>
 		<description>The measured sound pressure in decibels.</description>
 		
 		<state readOnly="true" pattern="%.1f %unit%"/>
@@ -38,7 +38,7 @@
 
 	<channel-type id="illuminance">
 		<item-type>Number:Illuminance</item-type>
-		<label>illuminance</label>
+		<label>Illuminance</label>
 		<description>The current illuminance in lux.</description>
 		
 		<state readOnly="true" pattern="%.1f %unit%"/>
@@ -46,7 +46,7 @@
 
 	<channel-type id="airpressure">
 		<item-type>Number:Pressure</item-type>
-		<label>airpressure</label>
+		<label>Airpressure</label>
 		<description>Barometric pressure</description>
 		<category>Pressure</category>
 		<state readOnly="true" pattern="%.1f %unit%"/>
@@ -54,15 +54,23 @@
 
 	<channel-type id="altitude">
 		<item-type>Number:Length</item-type>
-		<label>altitude</label>
-		<description>The current altitude in Meter.</description>
+		<label>Altitude</label>
+		<description>The current altitude.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="distance">
+		<item-type>Number:Length</item-type>
+		<label>Distance</label>
+		<description>The current distance.</description>
 		
 		<state readOnly="true" pattern="%.1f %unit%"/>
 	</channel-type>
 
 	<channel-type id="humidity">
 		<item-type>Number:Dimensionless</item-type>
-		<label>humidity</label>
+		<label>Humidity</label>
 		<description>Humidity in percent.</description>
 		<category>Humidity</category>
 		<state readOnly="true" pattern="%.2f %unit%"/>
@@ -70,7 +78,7 @@
 
 	<channel-type id="datetime">
 		<item-type>DateTime</item-type>
-		<label>datetime</label>
+		<label>DateTime</label>
 		<description>Current Time and Date</description>
 		<category>Time</category>
 		<state readOnly="true" />
@@ -78,7 +86,7 @@
 
 	<channel-type id="count">
 		<item-type>Number</item-type>
-		<label>count</label>
+		<label>Count</label>
 		<description>The current value of a counter.</description>
 		
 		<state readOnly="true" />
@@ -86,7 +94,7 @@
 
 	<channel-type id="voltage">
 		<item-type>Number:ElectricPotential</item-type>
-		<label>voltage</label>
+		<label>Voltage</label>
 		<description>The current voltage in milli Volt.</description>
 		
 		<state readOnly="true" pattern="%.1f %unit%"/>
@@ -94,7 +102,7 @@
 
 	<channel-type id="current">
 		<item-type>Number:ElectricCurrent</item-type>
-		<label>current</label>
+		<label>Current</label>
 		<description>The current in milli Ampere.</description>
 		
 		<state readOnly="true" pattern="%.1f %unit%"/>
@@ -102,7 +110,7 @@
 
 	<channel-type id="power">
 		<item-type>Number:Power</item-type>
-		<label>power</label>
+		<label>Power</label>
 		<description>The power in Watt.</description>
 		
 		<state readOnly="true" pattern="%.1f %unit%"/>
@@ -110,7 +118,7 @@
 
 	<channel-type id="speed">
 		<item-type>Number</item-type>
-		<label>speed</label>
+		<label>Speed</label>
 		<description>The speed.</description>
 		
 		<state readOnly="true" />
@@ -118,7 +126,7 @@
 
 	<channel-type id="direction">
 		<item-type>null</item-type>
-		<label>direction</label>
+		<label>Direction</label>
 		<description>Die Himmelsrichtung.</description>
 		
 		<state readOnly="true" />
@@ -126,15 +134,23 @@
 
 	<channel-type id="rain">
 		<item-type>Number</item-type>
-		<label>rain</label>
+		<label>Rain</label>
 		<description>Der Regen.</description>
 		
 		<state readOnly="true" />
 	</channel-type>
 
+	<channel-type id="led">
+		<item-type>Contact</item-type>
+		<label>LED</label>
+		<description>LED status.</description>
+		
+		<state readOnly="false" />
+	</channel-type>
+
 	<channel-type id="heater">
 		<item-type>Contact</item-type>
-		<label>heater</label>
+		<label>Heater</label>
 		<description>Heater status.</description>
 		
 		<state readOnly="false" />
@@ -142,7 +158,7 @@
 
 	<channel-type id="resistance">
 		<item-type>Number</item-type>
-		<label>resistance</label>
+		<label>Resistance</label>
 		<description>Resistance in Ohm.</description>
 		
 		<state readOnly="true" />
@@ -150,7 +166,7 @@
 
 	<channel-type id="distanceus">
 		<item-type>Number</item-type>
-		<label>distanceus</label>
+		<label>Distance</label>
 		<description>Distance value.</description>
 		
 		<state readOnly="true" />
@@ -158,10 +174,50 @@
 
 	<channel-type id="rfidtagid">
 		<item-type>String</item-type>
-		<label>rfidtagid</label>
+		<label>TagId</label>
 		<description>RFID tag ID</description>
 		
 		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="iaqindex">
+		<item-type>Number</item-type>
+		<label>IAQIndex</label>
+		<description>IAQIndex value.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="iaqaccuracy">
+		<item-type>Number</item-type>
+		<label>IAQIndex Accuracy</label>
+		<description>IAQIndex accurance value.</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="uvindex">
+		<item-type>Number</item-type>
+		<label>UV Index</label>
+		<description>UV Index</description>
+		
+		<state readOnly="true" />
+	</channel-type>
+
+	<channel-type id="uvaintensity">
+		<item-type>Number:Intensity</item-type>
+		<label>UVA Intensity</label>
+		<description>UVA  Intensity</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+	</channel-type>
+
+	<channel-type id="uvbintensity">
+		<item-type>Number:Intensity</item-type>
+		<label>UVB Intensity</label>
+		<description>UVB  Intensity</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
 	</channel-type>
 
 </thing:thing-descriptions>
