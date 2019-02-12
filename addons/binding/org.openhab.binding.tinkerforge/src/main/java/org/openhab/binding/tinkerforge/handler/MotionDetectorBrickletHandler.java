@@ -8,38 +8,32 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.library.types.*;
-import org.eclipse.smarthome.core.thing.*;
+import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.CallbackListener;
+import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
-import org.m1theo.tinkerforge.client.Device;
-import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectorDeviceConfig;
-import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectorBricklet;
+import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.motiondetector.ChannelId;
-import org.m1theo.tinkerforge.client.types.*;
-
 import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectedChannel;
-
-import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
-import org.eclipse.smarthome.core.library.unit.MetricPrefix;
-import org.eclipse.smarthome.core.library.unit.*;
-import org.m1theo.tinkerforge.client.Notifier;
-import org.m1theo.tinkerforge.client.CallbackListener;
-
+import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectorBricklet;
+import org.m1theo.tinkerforge.client.devices.motiondetector.MotionDetectorDeviceConfig;
+import org.m1theo.tinkerforge.client.types.HighLowValue;
+import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * The {@link MotionDetectorBrickletHandler} is responsible for handling commands, which are
@@ -101,46 +95,45 @@ public class MotionDetectorBrickletHandler extends BaseThingHandler implements C
         return bridgeHandler;
     }
 
-private void enable(){
-    logger.debug("executing enable");
-    Bridge bridge = getBridge();
-    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.registerCallbackListener(this);
-        if (bridgeStatus == ThingStatus.ONLINE) {
-            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (deviceIn != null) {
-              if (deviceIn.getDeviceType() == DeviceType.motiondetector){
-                device = (MotionDetectorBricklet) deviceIn;
-                device.setDeviceConfig(config);
-                device.enable();
-                enabled = true;
-                updateStatus(ThingStatus.ONLINE);
-                updateChannelStates();
-    
-              } else {
-                logger.error("configuration error");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-              }
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.registerCallbackListener(this);
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.motiondetector) {
+                        device = (MotionDetectorBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
+                        updateChannelStates();
+
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
             } else {
-                logger.error("deviceIn is null");
-                updateStatus(ThingStatus.OFFLINE);
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
             }
         } else {
-            logger.error("bridge is offline");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
         }
-    } else {
-        logger.error("brickdBridgeHandler is null");
-        updateStatus(ThingStatus.OFFLINE);
     }
-}
-
 
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
-    newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
         if (notifier == null) {
             return;
         }
@@ -150,25 +143,22 @@ private void enable(){
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.motiondetected.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
+
                     OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
                     updateState(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
+
         }
     }
-
 
     @Override
     public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
@@ -189,33 +179,26 @@ private void enable(){
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
-      if (enabled) {
-        switch (channelUID.getId()) {
+        if (enabled) {
+            switch (channelUID.getId()) {
 
+                case "motiondetected":
+                    getmotiondetected();
+                    break;
 
-          case "motiondetected":
-              getmotiondetected();
-              break;
-
-          default:
-            break;
+                default:
+                    break;
+            }
         }
-      }
     }
-
-
 
     private void updateChannelStates() {
 
-
-      if (isLinked("motiondetected")) {
-        getmotiondetected();
-      }
+        if (isLinked("motiondetected")) {
+            getmotiondetected();
+        }
 
     }
-
-
-
 
     private void getmotiondetected() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -225,34 +208,30 @@ private void enable(){
                 MotionDetectorBricklet device2 = (MotionDetectorBricklet) device;
                 MotionDetectedChannel channel = (MotionDetectedChannel) device2.getChannel("motiondetected");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
                     OnOffType value = newValue == HighLowValue.HIGH ? OnOffType.ON : OnOffType.OFF;
                     updateState(ChannelId.motiondetected.name(), value);
                     return;
                 }
-                
+
             }
         }
     }
 
+    @Override
+    public void dispose() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this);
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-
-
-
-@Override
-public void dispose() {
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.unregisterDeviceStatusListener(this);
-        brickdBridgeHandler.unregisterCallbackListener(this);
+        enabled = false;
     }
-    if (device != null) {
-        device.disable();
-    }
-
-    enabled = false;
-}
 
 }

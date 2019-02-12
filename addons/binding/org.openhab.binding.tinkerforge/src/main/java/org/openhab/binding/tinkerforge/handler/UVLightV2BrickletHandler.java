@@ -8,40 +8,37 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.QuantityType;
+import org.eclipse.smarthome.core.library.unit.MetricPrefix;
+import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.library.types.*;
-import org.eclipse.smarthome.core.thing.*;
+import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.CallbackListener;
+import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
-import org.m1theo.tinkerforge.client.Device;
-import org.m1theo.tinkerforge.client.devices.uvlightv2.UVLightV2DeviceConfig;
-import org.m1theo.tinkerforge.client.devices.uvlightv2.UVLightV2Bricklet;
+import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.ChannelId;
-import org.m1theo.tinkerforge.client.types.*;
-
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVAChannel;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVBChannel;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVIChannel;
-
-import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
-import org.eclipse.smarthome.core.library.unit.MetricPrefix;
-import org.eclipse.smarthome.core.library.unit.*;
-import org.m1theo.tinkerforge.client.Notifier;
-import org.m1theo.tinkerforge.client.CallbackListener;
-
+import org.m1theo.tinkerforge.client.devices.uvlightv2.UVLightV2Bricklet;
+import org.m1theo.tinkerforge.client.devices.uvlightv2.UVLightV2DeviceConfig;
+import org.m1theo.tinkerforge.client.types.DecimalValue;
+import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * The {@link UVLightV2BrickletHandler} is responsible for handling commands, which are
@@ -103,46 +100,45 @@ public class UVLightV2BrickletHandler extends BaseThingHandler implements Callba
         return bridgeHandler;
     }
 
-private void enable(){
-    logger.debug("executing enable");
-    Bridge bridge = getBridge();
-    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.registerCallbackListener(this);
-        if (bridgeStatus == ThingStatus.ONLINE) {
-            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (deviceIn != null) {
-              if (deviceIn.getDeviceType() == DeviceType.uvlightv2){
-                device = (UVLightV2Bricklet) deviceIn;
-                device.setDeviceConfig(config);
-                device.enable();
-                enabled = true;
-                updateStatus(ThingStatus.ONLINE);
-                updateChannelStates();
-    
-              } else {
-                logger.error("configuration error");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-              }
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.registerCallbackListener(this);
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.uvlightv2) {
+                        device = (UVLightV2Bricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
+                        updateChannelStates();
+
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
             } else {
-                logger.error("deviceIn is null");
-                updateStatus(ThingStatus.OFFLINE);
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
             }
         } else {
-            logger.error("bridge is offline");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
         }
-    } else {
-        logger.error("brickdBridgeHandler is null");
-        updateStatus(ThingStatus.OFFLINE);
     }
-}
-
 
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
-    newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
         if (notifier == null) {
             return;
         }
@@ -152,48 +148,45 @@ private void enable(){
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.uva.name())) {
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
-                    
+                    updateState(notifier.getChannelId(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.uvb.name())) {
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
-                    
+                    updateState(notifier.getChannelId(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.uvi.name())) {
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
                     return;
                 }
-                
+
             }
-            
-            
+
         }
     }
-
 
     @Override
     public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
@@ -214,53 +207,42 @@ private void enable(){
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
-      if (enabled) {
-        switch (channelUID.getId()) {
+        if (enabled) {
+            switch (channelUID.getId()) {
 
+                case "uva":
+                    getuva();
+                    break;
 
-          case "uva":
-              getuva();
-              break;
+                case "uvb":
+                    getuvb();
+                    break;
 
+                case "uvi":
+                    getuvi();
+                    break;
 
-          case "uvb":
-              getuvb();
-              break;
-
-
-          case "uvi":
-              getuvi();
-              break;
-
-          default:
-            break;
+                default:
+                    break;
+            }
         }
-      }
     }
-
-
 
     private void updateChannelStates() {
 
+        if (isLinked("uva")) {
+            getuva();
+        }
 
-      if (isLinked("uva")) {
-        getuva();
-      }
+        if (isLinked("uvb")) {
+            getuvb();
+        }
 
-
-      if (isLinked("uvb")) {
-        getuvb();
-      }
-
-
-      if (isLinked("uvi")) {
-        getuvi();
-      }
+        if (isLinked("uvi")) {
+            getuvi();
+        }
 
     }
-
-
-
 
     private void getuva() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -270,19 +252,19 @@ private void enable(){
                 UVLightV2Bricklet device2 = (UVLightV2Bricklet) device;
                 UVAChannel channel = (UVAChannel) device2.getChannel("uva");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(ChannelId.uva.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
-                    
+                    updateState(ChannelId.uva.name(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
+
                     return;
                 }
-                
+
             }
         }
     }
-
-
 
     private void getuvb() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -292,19 +274,19 @@ private void enable(){
                 UVLightV2Bricklet device2 = (UVLightV2Bricklet) device;
                 UVBChannel channel = (UVBChannel) device2.getChannel("uvb");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
-                    updateState(ChannelId.uvb.name(), new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()), MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
-                    
+                    updateState(ChannelId.uvb.name(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SIUnits.IRRADIANCE)));
+
                     return;
                 }
-                
+
             }
         }
     }
-
-
 
     private void getuvi() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -314,33 +296,29 @@ private void enable(){
                 UVLightV2Bricklet device2 = (UVLightV2Bricklet) device;
                 UVIChannel channel = (UVIChannel) device2.getChannel("uvi");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(ChannelId.uvi.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
                     return;
                 }
-                
+
             }
         }
     }
 
+    @Override
+    public void dispose() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this);
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-
-
-
-@Override
-public void dispose() {
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.unregisterDeviceStatusListener(this);
-        brickdBridgeHandler.unregisterCallbackListener(this);
+        enabled = false;
     }
-    if (device != null) {
-        device.disable();
-    }
-
-    enabled = false;
-}
 
 }

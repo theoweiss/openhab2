@@ -8,49 +8,31 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.library.types.*;
-import org.eclipse.smarthome.core.thing.*;
+import org.eclipse.smarthome.core.thing.CommonTriggerEvents;
+import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.CallbackListener;
+import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
-import org.m1theo.tinkerforge.client.Device;
-import org.m1theo.tinkerforge.client.devices.multitouch.MultiTouchDeviceConfig;
-import org.m1theo.tinkerforge.client.devices.multitouch.MultiTouchBricklet;
+import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.multitouch.ChannelId;
-import org.m1theo.tinkerforge.client.types.*;
-
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode0Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode1Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode2Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode3Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode4Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode5Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode6Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode7Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode8Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode9Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode10Channel;
-import org.m1theo.tinkerforge.client.devices.multitouch.Electrode11Channel;
-
-import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
-import org.eclipse.smarthome.core.library.unit.MetricPrefix;
-import org.eclipse.smarthome.core.library.unit.*;
-import org.m1theo.tinkerforge.client.Notifier;
-import org.m1theo.tinkerforge.client.CallbackListener;
-
+import org.m1theo.tinkerforge.client.devices.multitouch.MultiTouchBricklet;
+import org.m1theo.tinkerforge.client.devices.multitouch.MultiTouchDeviceConfig;
+import org.m1theo.tinkerforge.client.types.HighLowValue;
+import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * The {@link MultiTouchBrickletHandler} is responsible for handling commands, which are
@@ -112,46 +94,45 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
         return bridgeHandler;
     }
 
-private void enable(){
-    logger.debug("executing enable");
-    Bridge bridge = getBridge();
-    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.registerCallbackListener(this);
-        if (bridgeStatus == ThingStatus.ONLINE) {
-            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (deviceIn != null) {
-              if (deviceIn.getDeviceType() == DeviceType.multitouch){
-                device = (MultiTouchBricklet) deviceIn;
-                device.setDeviceConfig(config);
-                device.enable();
-                enabled = true;
-                updateStatus(ThingStatus.ONLINE);
-                updateChannelStates();
-    
-              } else {
-                logger.error("configuration error");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-              }
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.registerCallbackListener(this);
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.multitouch) {
+                        device = (MultiTouchBricklet) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
+                        updateChannelStates();
+
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
             } else {
-                logger.error("deviceIn is null");
-                updateStatus(ThingStatus.OFFLINE);
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
             }
         } else {
-            logger.error("bridge is offline");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
         }
-    } else {
-        logger.error("brickdBridgeHandler is null");
-        updateStatus(ThingStatus.OFFLINE);
     }
-}
-
 
     @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue, @Nullable TinkerforgeValue
-    newValue) {
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
         if (notifier == null) {
             return;
         }
@@ -161,190 +142,177 @@ private void enable(){
         if (notifier.getExternalDeviceId() != null) {
             // TODO
         } else {
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode0.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode1.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode2.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode3.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode4.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode5.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode6.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode7.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode8.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode9.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode10.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
-            
+
             if (notifier.getChannelId().equals(ChannelId.electrode11.name())) {
-                
+
                 if (newValue instanceof HighLowValue) {
                     logger.debug("new value {}", newValue);
-                    
-                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED : CommonTriggerEvents.RELEASED;
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
                     triggerChannel(notifier.getChannelId(), value);
-                    
+
                     return;
                 }
-                
+
             }
-            
-            
+
         }
     }
-
 
     @Override
     public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
@@ -365,86 +333,31 @@ private void enable(){
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
-      if (enabled) {
-        switch (channelUID.getId()) {
+        if (enabled) {
+            switch (channelUID.getId()) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-          default:
-            break;
+                default:
+                    break;
+            }
         }
-      }
     }
-
-
 
     private void updateChannelStates() {
 
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
+    @Override
+    public void dispose() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this);
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@Override
-public void dispose() {
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.unregisterDeviceStatusListener(this);
-        brickdBridgeHandler.unregisterCallbackListener(this);
+        enabled = false;
     }
-    if (device != null) {
-        device.disable();
-    }
-
-    enabled = false;
-}
 
 }

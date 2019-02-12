@@ -8,38 +8,34 @@
  */
 package org.openhab.binding.tinkerforge.handler;
 
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.library.types.*;
-import org.eclipse.smarthome.core.thing.*;
+import org.eclipse.smarthome.core.thing.Thing;
+import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.m1theo.tinkerforge.client.config.BaseDeviceConfig;
+import org.m1theo.tinkerforge.client.ActuatorChannel;
+import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
-import org.m1theo.tinkerforge.client.Device;
-import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.QuadRelayConfig;
-import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.IndustrialQuadRelayBrickletV2;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.ChannelId;
-import org.m1theo.tinkerforge.client.types.*;
-
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.IndustrialQuadRelayBrickletV2;
+import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.QuadRelayConfig;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay0Channel;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay1Channel;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay2Channel;
 import org.m1theo.tinkerforge.client.devices.industrialquadrelayV2.Relay3Channel;
-
+import org.m1theo.tinkerforge.client.types.OnOffValue;
+import org.openhab.binding.tinkerforge.internal.CommandConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.openhab.binding.tinkerforge.internal.CommandConverter;
-import org.m1theo.tinkerforge.client.ActuatorChannel;
-
 
 /**
  * The {@link IndustrialQuadRelayBrickletV2Handler} is responsible for handling commands, which are
@@ -66,55 +62,51 @@ public class IndustrialQuadRelayBrickletV2Handler extends BaseThingHandler imple
     public void handleCommand(ChannelUID channelUID, Command command) {
 
         switch (channelUID.getId()) {
-        
-          
+
             case "relay0":
-                
-                if(command instanceof OnOffType) {
-                  ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid, channelUID.getId());
-                  channel.setValue(CommandConverter.convert(command));
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
                 }
-                
-                //TODO do something
+
+                // TODO do something
                 break;
-          
-        
-          
+
             case "relay1":
-                
-                if(command instanceof OnOffType) {
-                  ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid, channelUID.getId());
-                  channel.setValue(CommandConverter.convert(command));
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
                 }
-                
-                //TODO do something
+
+                // TODO do something
                 break;
-          
-        
-          
+
             case "relay2":
-                
-                if(command instanceof OnOffType) {
-                  ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid, channelUID.getId());
-                  channel.setValue(CommandConverter.convert(command));
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
                 }
-                
-                //TODO do something
+
+                // TODO do something
                 break;
-          
-        
-          
+
             case "relay3":
-                
-                if(command instanceof OnOffType) {
-                  ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid, channelUID.getId());
-                  channel.setValue(CommandConverter.convert(command));
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
                 }
-                
-                //TODO do something
+
+                // TODO do something
                 break;
-          
-        
+
             default:
                 break;
         }
@@ -155,43 +147,41 @@ public class IndustrialQuadRelayBrickletV2Handler extends BaseThingHandler imple
         return bridgeHandler;
     }
 
-private void enable(){
-    logger.debug("executing enable");
-    Bridge bridge = getBridge();
-    ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        
-        if (bridgeStatus == ThingStatus.ONLINE) {
-            Device<?,?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (deviceIn != null) {
-              if (deviceIn.getDeviceType() == DeviceType.industrialquadrelayV2){
-                device = (IndustrialQuadRelayBrickletV2) deviceIn;
-                device.setDeviceConfig(config);
-                device.enable();
-                enabled = true;
-                updateStatus(ThingStatus.ONLINE);
-                updateChannelStates();
-    
-              } else {
-                logger.error("configuration error");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-              }
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.industrialquadrelayV2) {
+                        device = (IndustrialQuadRelayBrickletV2) deviceIn;
+                        device.setDeviceConfig(config);
+                        device.enable();
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
+                        updateChannelStates();
+
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
             } else {
-                logger.error("deviceIn is null");
-                updateStatus(ThingStatus.OFFLINE);
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
             }
         } else {
-            logger.error("bridge is offline");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
         }
-    } else {
-        logger.error("brickdBridgeHandler is null");
-        updateStatus(ThingStatus.OFFLINE);
     }
-}
-
-
 
     @Override
     public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
@@ -212,63 +202,50 @@ private void enable(){
 
     @Override
     public void channelLinked(ChannelUID channelUID) {
-      if (enabled) {
-        switch (channelUID.getId()) {
+        if (enabled) {
+            switch (channelUID.getId()) {
 
+                case "relay0":
+                    getrelay0();
+                    break;
 
-          case "relay0":
-              getrelay0();
-              break;
+                case "relay1":
+                    getrelay1();
+                    break;
 
+                case "relay2":
+                    getrelay2();
+                    break;
 
-          case "relay1":
-              getrelay1();
-              break;
+                case "relay3":
+                    getrelay3();
+                    break;
 
-
-          case "relay2":
-              getrelay2();
-              break;
-
-
-          case "relay3":
-              getrelay3();
-              break;
-
-          default:
-            break;
+                default:
+                    break;
+            }
         }
-      }
     }
-
-
 
     private void updateChannelStates() {
 
+        if (isLinked("relay0")) {
+            getrelay0();
+        }
 
-      if (isLinked("relay0")) {
-        getrelay0();
-      }
+        if (isLinked("relay1")) {
+            getrelay1();
+        }
 
+        if (isLinked("relay2")) {
+            getrelay2();
+        }
 
-      if (isLinked("relay1")) {
-        getrelay1();
-      }
-
-
-      if (isLinked("relay2")) {
-        getrelay2();
-      }
-
-
-      if (isLinked("relay3")) {
-        getrelay3();
-      }
+        if (isLinked("relay3")) {
+            getrelay3();
+        }
 
     }
-
-
-
 
     private void getrelay0() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -278,19 +255,17 @@ private void enable(){
                 IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
                 Relay0Channel channel = (Relay0Channel) device2.getChannel("relay0");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof OnOffValue) {
                     logger.debug("new value {}", newValue);
                     OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
                     updateState(ChannelId.relay0.name(), value);
                     return;
                 }
-                
+
             }
         }
     }
-
-
 
     private void getrelay1() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -300,19 +275,17 @@ private void enable(){
                 IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
                 Relay1Channel channel = (Relay1Channel) device2.getChannel("relay1");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof OnOffValue) {
                     logger.debug("new value {}", newValue);
                     OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
                     updateState(ChannelId.relay1.name(), value);
                     return;
                 }
-                
+
             }
         }
     }
-
-
 
     private void getrelay2() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -322,19 +295,17 @@ private void enable(){
                 IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
                 Relay2Channel channel = (Relay2Channel) device2.getChannel("relay2");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof OnOffValue) {
                     logger.debug("new value {}", newValue);
                     OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
                     updateState(ChannelId.relay2.name(), value);
                     return;
                 }
-                
+
             }
         }
     }
-
-
 
     private void getrelay3() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
@@ -344,34 +315,30 @@ private void enable(){
                 IndustrialQuadRelayBrickletV2 device2 = (IndustrialQuadRelayBrickletV2) device;
                 Relay3Channel channel = (Relay3Channel) device2.getChannel("relay3");
                 Object newValue = channel.getValue();
-                
+
                 if (newValue instanceof OnOffValue) {
                     logger.debug("new value {}", newValue);
                     OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
                     updateState(ChannelId.relay3.name(), value);
                     return;
                 }
-                
+
             }
         }
     }
 
+    @Override
+    public void dispose() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
 
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-
-
-@Override
-public void dispose() {
-    BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-    if (brickdBridgeHandler != null) {
-        brickdBridgeHandler.unregisterDeviceStatusListener(this);
-        
+        enabled = false;
     }
-    if (device != null) {
-        device.disable();
-    }
-
-    enabled = false;
-}
 
 }
