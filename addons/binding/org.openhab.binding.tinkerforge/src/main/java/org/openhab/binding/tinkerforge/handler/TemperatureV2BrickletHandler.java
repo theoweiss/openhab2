@@ -66,11 +66,9 @@ public class TemperatureV2BrickletHandler extends BaseThingHandler implements Ca
     @Override
     public void initialize() {
         config = getConfigAs(TemperatureV2DeviceConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -108,9 +106,10 @@ public class TemperatureV2BrickletHandler extends BaseThingHandler implements Ca
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.temperatureV2) {
-                        device = (TemperatureV2Bricklet) deviceIn;
+                        TemperatureV2Bricklet device = (TemperatureV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

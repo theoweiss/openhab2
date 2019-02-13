@@ -116,11 +116,9 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
     @Override
     public void initialize() {
         config = getConfigAs(QuadRelayConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -158,9 +156,10 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.industrialquadrelay) {
-                        device = (IndustrialQuadRelayBricklet) deviceIn;
+                        IndustrialQuadRelayBricklet device = (IndustrialQuadRelayBricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

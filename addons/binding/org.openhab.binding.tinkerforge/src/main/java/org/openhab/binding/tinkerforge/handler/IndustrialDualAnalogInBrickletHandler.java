@@ -69,11 +69,9 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler
     @Override
     public void initialize() {
         config = getConfigAs(IndustrialDualAnalogInDeviceConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -111,9 +109,10 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.industrialdualanalogIn) {
-                        device = (IndustrialDualAnalogInBricklet) deviceIn;
+                        IndustrialDualAnalogInBricklet device = (IndustrialDualAnalogInBricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

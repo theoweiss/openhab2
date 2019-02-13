@@ -63,11 +63,9 @@ public class NFCBrickletHandler extends BaseThingHandler implements CallbackList
     @Override
     public void initialize() {
         config = getConfigAs(NFCConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -105,9 +103,10 @@ public class NFCBrickletHandler extends BaseThingHandler implements CallbackList
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.nfc) {
-                        device = (NFCBricklet) deviceIn;
+                        NFCBricklet device = (NFCBricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
 

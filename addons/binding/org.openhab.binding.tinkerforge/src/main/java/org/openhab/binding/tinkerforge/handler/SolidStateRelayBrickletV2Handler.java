@@ -80,11 +80,9 @@ public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implement
     @Override
     public void initialize() {
         config = getConfigAs(RelayConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -122,9 +120,10 @@ public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implement
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.solidstaterelayV2) {
-                        device = (SolidStateRelayBrickletV2) deviceIn;
+                        SolidStateRelayBrickletV2 device = (SolidStateRelayBrickletV2) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

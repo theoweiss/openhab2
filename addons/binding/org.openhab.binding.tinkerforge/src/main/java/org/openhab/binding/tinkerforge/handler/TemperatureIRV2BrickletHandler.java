@@ -67,11 +67,9 @@ public class TemperatureIRV2BrickletHandler extends BaseThingHandler implements 
     @Override
     public void initialize() {
         config = getConfigAs(TemperatureIRV2DeviceConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -109,9 +107,10 @@ public class TemperatureIRV2BrickletHandler extends BaseThingHandler implements 
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.temperatureirv2) {
-                        device = (TemperatureIRV2Bricklet) deviceIn;
+                        TemperatureIRV2Bricklet device = (TemperatureIRV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

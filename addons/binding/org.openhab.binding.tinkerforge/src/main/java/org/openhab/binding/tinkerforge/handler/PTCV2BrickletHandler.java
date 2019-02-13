@@ -67,11 +67,9 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
     @Override
     public void initialize() {
         config = getConfigAs(PTCV2DeviceConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -109,9 +107,10 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.ptcV2) {
-                        device = (PTCV2Bricklet) deviceIn;
+                        PTCV2Bricklet device = (PTCV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

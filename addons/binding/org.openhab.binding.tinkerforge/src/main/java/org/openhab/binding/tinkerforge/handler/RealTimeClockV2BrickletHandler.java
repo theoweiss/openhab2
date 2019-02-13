@@ -64,11 +64,9 @@ public class RealTimeClockV2BrickletHandler extends BaseThingHandler implements 
     @Override
     public void initialize() {
         config = getConfigAs(RealTimeClockDeviceConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -106,9 +104,10 @@ public class RealTimeClockV2BrickletHandler extends BaseThingHandler implements 
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.realtimeclockV2) {
-                        device = (RealTimeClockV2Bricklet) deviceIn;
+                        RealTimeClockV2Bricklet device = (RealTimeClockV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();

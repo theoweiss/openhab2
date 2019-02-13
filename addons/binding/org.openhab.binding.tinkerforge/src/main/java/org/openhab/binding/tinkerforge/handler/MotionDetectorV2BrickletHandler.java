@@ -69,11 +69,9 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
     @Override
     public void initialize() {
         config = getConfigAs(MotionDetectorV2DeviceConfig.class);
-        String configUid = config.getUid();
-        if (configUid != null) {
-            uid = configUid;
-            Bridge bridge = getBridge();
-            ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
             BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
             if (brickdBridgeHandler != null) {
                 brickdBridgeHandler.registerDeviceStatusListener(this);
@@ -111,9 +109,10 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
                     if (deviceIn.getDeviceType() == DeviceType.motiondetectorV2) {
-                        device = (MotionDetectorV2Bricklet) deviceIn;
+                        MotionDetectorV2Bricklet device = (MotionDetectorV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
                         device.enable();
+                        this.device = device;
                         enabled = true;
                         updateStatus(ThingStatus.ONLINE);
                         updateChannelStates();
