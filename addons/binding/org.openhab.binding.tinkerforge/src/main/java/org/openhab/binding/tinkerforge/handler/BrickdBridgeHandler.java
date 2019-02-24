@@ -10,6 +10,7 @@ package org.openhab.binding.tinkerforge.handler;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -33,6 +34,8 @@ import org.slf4j.LoggerFactory;
 public class BrickdBridgeHandler extends BaseBridgeHandler implements BrickdStatusListener {
     private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
     private Brickd brickd;
+    private AtomicBoolean isConnected = new AtomicBoolean(false);
+
     private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
     // private final List<CallbackListener> callbackListeners = new CopyOnWriteArrayList<>();
 
@@ -81,22 +84,39 @@ public class BrickdBridgeHandler extends BaseBridgeHandler implements BrickdStat
         }
     }
 
-    public void registerCallbackListener(CallbackListener listener) {
-        brickd.addCallbackListener(listener);
+    public void registerCallbackListener(CallbackListener listener, String uid) {
+        if (brickd != null) {
+            brickd.addCallbackListener(listener, uid);
+        } else {
+            logger.error("listener registration failed, brickd is null. uid {}", uid);
+        }
     }
 
-    public void unregisterCallbackListener(CallbackListener listener) {
+    public void unregisterCallbackListener(CallbackListener listener, String uid) {
         if (brickd != null) {
-            brickd.removeCallbackListener(listener);
+            brickd.removeCallbackListener(listener, uid);
+        } else {
+            logger.error("listener removal failed, brickd is null. uid {}", uid);
         }
     }
 
     @Override
     public void connected(boolean connected) {
         if (connected) {
+            isConnected.compareAndSet(false, true);
             updateStatus(ThingStatus.ONLINE);
         } else {
+            isConnected.compareAndSet(true, false);
             updateStatus(ThingStatus.OFFLINE);
         }
     }
+
+    @Override
+    public void dispose() {
+        if (isConnected.get()) {
+            brickd.disconnect();
+        }
+        brickd.removeBrickdStatusListener(this);
+    }
+
 }

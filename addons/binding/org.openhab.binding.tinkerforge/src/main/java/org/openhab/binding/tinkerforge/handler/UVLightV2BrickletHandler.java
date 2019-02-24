@@ -104,7 +104,7 @@ public class UVLightV2BrickletHandler extends BaseThingHandler implements Callba
         ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
-            brickdBridgeHandler.registerCallbackListener(this);
+            brickdBridgeHandler.registerCallbackListener(this, uid);
             if (bridgeStatus == ThingStatus.ONLINE) {
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
@@ -311,7 +311,7 @@ public class UVLightV2BrickletHandler extends BaseThingHandler implements Callba
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);
-            brickdBridgeHandler.unregisterCallbackListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this, uid);
         }
         if (device != null) {
             device.disable();
