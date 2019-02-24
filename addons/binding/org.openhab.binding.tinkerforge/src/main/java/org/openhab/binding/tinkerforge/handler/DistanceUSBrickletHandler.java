@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -28,6 +29,7 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.distanceus.ChannelId;
 import org.m1theo.tinkerforge.client.devices.distanceus.DistanceChannel;
+import org.m1theo.tinkerforge.client.devices.distanceus.DistanceChannelConfig;
 import org.m1theo.tinkerforge.client.devices.distanceus.DistanceUSBricklet;
 import org.m1theo.tinkerforge.client.devices.distanceus.DistanceUSConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
@@ -106,6 +108,19 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
                     if (deviceIn.getDeviceType() == DeviceType.distanceus) {
                         DistanceUSBricklet device = (DistanceUSBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel distanceChannel = thing.getChannel("distance");
+                        if (distanceChannel != null) {
+
+                            DistanceChannelConfig channelConfig = distanceChannel.getConfiguration()
+                                    .as(DistanceChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.distance.name());
+                            if (tfChannel instanceof DistanceChannel) {
+                                ((DistanceChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

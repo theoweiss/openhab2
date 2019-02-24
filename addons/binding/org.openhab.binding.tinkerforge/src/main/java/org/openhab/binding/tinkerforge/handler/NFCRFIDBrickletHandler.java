@@ -105,6 +105,7 @@ public class NFCRFIDBrickletHandler extends BaseThingHandler implements Callback
                     if (deviceIn.getDeviceType() == DeviceType.nfcrfid) {
                         NFCRFIDBricklet device = (NFCRFIDBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

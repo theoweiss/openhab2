@@ -16,6 +16,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -33,9 +34,11 @@ import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.humidityV2.ChannelId;
 import org.m1theo.tinkerforge.client.devices.humidityV2.HeaterChannel;
 import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityChannel;
+import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityChannelConfig;
 import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.humidityV2.HumidityV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.humidityV2.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.humidityV2.TemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.OnOffValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
@@ -113,6 +116,31 @@ public class HumidityV2BrickletHandler extends BaseThingHandler implements Callb
                     if (deviceIn.getDeviceType() == DeviceType.humidityV2) {
                         HumidityV2Bricklet device = (HumidityV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel humidityChannel = thing.getChannel("humidity");
+                        if (humidityChannel != null) {
+
+                            HumidityChannelConfig channelConfig = humidityChannel.getConfiguration()
+                                    .as(HumidityChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.humidity.name());
+                            if (tfChannel instanceof HumidityChannel) {
+                                ((HumidityChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel temperatureChannel = thing.getChannel("temperature");
+                        if (temperatureChannel != null) {
+
+                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                                    .as(TemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperature.name());
+                            if (tfChannel instanceof TemperatureChannel) {
+                                ((TemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

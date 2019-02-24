@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -43,6 +44,7 @@ import org.m1theo.tinkerforge.client.devices.io16.Gpio6Channel;
 import org.m1theo.tinkerforge.client.devices.io16.Gpio7Channel;
 import org.m1theo.tinkerforge.client.devices.io16.Gpio8Channel;
 import org.m1theo.tinkerforge.client.devices.io16.Gpio9Channel;
+import org.m1theo.tinkerforge.client.devices.io16.GpioChannelConfig;
 import org.m1theo.tinkerforge.client.devices.io16.IO16Bricklet;
 import org.m1theo.tinkerforge.client.devices.io16.IO16DeviceConfig;
 import org.m1theo.tinkerforge.client.types.HighLowValue;
@@ -121,6 +123,199 @@ public class IO16BrickletHandler extends BaseThingHandler implements CallbackLis
                     if (deviceIn.getDeviceType() == DeviceType.io16) {
                         IO16Bricklet device = (IO16Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel gpio0Channel = thing.getChannel("gpio0");
+                        if (gpio0Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio0Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio0.name());
+                            if (tfChannel instanceof Gpio0Channel) {
+                                ((Gpio0Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio1Channel = thing.getChannel("gpio1");
+                        if (gpio1Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio1Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio1.name());
+                            if (tfChannel instanceof Gpio1Channel) {
+                                ((Gpio1Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio2Channel = thing.getChannel("gpio2");
+                        if (gpio2Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio2Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio2.name());
+                            if (tfChannel instanceof Gpio2Channel) {
+                                ((Gpio2Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio3Channel = thing.getChannel("gpio3");
+                        if (gpio3Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio3Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio3.name());
+                            if (tfChannel instanceof Gpio3Channel) {
+                                ((Gpio3Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio4Channel = thing.getChannel("gpio4");
+                        if (gpio4Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio4Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio4.name());
+                            if (tfChannel instanceof Gpio4Channel) {
+                                ((Gpio4Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio5Channel = thing.getChannel("gpio5");
+                        if (gpio5Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio5Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio5.name());
+                            if (tfChannel instanceof Gpio5Channel) {
+                                ((Gpio5Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio6Channel = thing.getChannel("gpio6");
+                        if (gpio6Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio6Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio6.name());
+                            if (tfChannel instanceof Gpio6Channel) {
+                                ((Gpio6Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio7Channel = thing.getChannel("gpio7");
+                        if (gpio7Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio7Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio7.name());
+                            if (tfChannel instanceof Gpio7Channel) {
+                                ((Gpio7Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio8Channel = thing.getChannel("gpio8");
+                        if (gpio8Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio8Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio8.name());
+                            if (tfChannel instanceof Gpio8Channel) {
+                                ((Gpio8Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio9Channel = thing.getChannel("gpio9");
+                        if (gpio9Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio9Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio9.name());
+                            if (tfChannel instanceof Gpio9Channel) {
+                                ((Gpio9Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio10Channel = thing.getChannel("gpio10");
+                        if (gpio10Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio10Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio10.name());
+                            if (tfChannel instanceof Gpio10Channel) {
+                                ((Gpio10Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio11Channel = thing.getChannel("gpio11");
+                        if (gpio11Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio11Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio11.name());
+                            if (tfChannel instanceof Gpio11Channel) {
+                                ((Gpio11Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio12Channel = thing.getChannel("gpio12");
+                        if (gpio12Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio12Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio12.name());
+                            if (tfChannel instanceof Gpio12Channel) {
+                                ((Gpio12Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio13Channel = thing.getChannel("gpio13");
+                        if (gpio13Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio13Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio13.name());
+                            if (tfChannel instanceof Gpio13Channel) {
+                                ((Gpio13Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio14Channel = thing.getChannel("gpio14");
+                        if (gpio14Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio14Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio14.name());
+                            if (tfChannel instanceof Gpio14Channel) {
+                                ((Gpio14Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gpio15Channel = thing.getChannel("gpio15");
+                        if (gpio15Channel != null) {
+
+                            GpioChannelConfig channelConfig = gpio15Channel.getConfiguration()
+                                    .as(GpioChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gpio15.name());
+                            if (tfChannel instanceof Gpio15Channel) {
+                                ((Gpio15Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

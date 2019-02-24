@@ -14,6 +14,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -30,6 +31,7 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.ChannelId;
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.DecibelChannel;
+import org.m1theo.tinkerforge.client.devices.soundpressurelevel.DecibelChannelConfig;
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.SoundPressureLevelBricklet;
 import org.m1theo.tinkerforge.client.devices.soundpressurelevel.SoundPressureLevelDeviceConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
@@ -109,6 +111,19 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler
                     if (deviceIn.getDeviceType() == DeviceType.soundpressurelevel) {
                         SoundPressureLevelBricklet device = (SoundPressureLevelBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel decibelChannel = thing.getChannel("decibel");
+                        if (decibelChannel != null) {
+
+                            DecibelChannelConfig channelConfig = decibelChannel.getConfiguration()
+                                    .as(DecibelChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.decibel.name());
+                            if (tfChannel instanceof DecibelChannel) {
+                                ((DecibelChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

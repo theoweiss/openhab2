@@ -111,6 +111,7 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
                     if (deviceIn.getDeviceType() == DeviceType.motiondetectorV2) {
                         MotionDetectorV2Bricklet device = (MotionDetectorV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

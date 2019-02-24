@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -30,13 +31,18 @@ import org.m1theo.tinkerforge.client.DeviceInfo;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.airquality.AirPressureChannel;
+import org.m1theo.tinkerforge.client.devices.airquality.AirPressureChannelConfig;
 import org.m1theo.tinkerforge.client.devices.airquality.AirQualityBricklet;
 import org.m1theo.tinkerforge.client.devices.airquality.AirQualityDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.airquality.ChannelId;
 import org.m1theo.tinkerforge.client.devices.airquality.HumidityChannel;
+import org.m1theo.tinkerforge.client.devices.airquality.HumidityChannelConfig;
 import org.m1theo.tinkerforge.client.devices.airquality.IAQAccuracyChannel;
+import org.m1theo.tinkerforge.client.devices.airquality.IAQAccuracyChannelConfig;
 import org.m1theo.tinkerforge.client.devices.airquality.IAQIndexChannel;
+import org.m1theo.tinkerforge.client.devices.airquality.IAQIndexChannelConfig;
 import org.m1theo.tinkerforge.client.devices.airquality.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.airquality.TemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
@@ -113,6 +119,67 @@ public class AirQualityBrickletHandler extends BaseThingHandler implements Callb
                     if (deviceIn.getDeviceType() == DeviceType.airquality) {
                         AirQualityBricklet device = (AirQualityBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel iaqIndexChannel = thing.getChannel("iaqIndex");
+                        if (iaqIndexChannel != null) {
+
+                            IAQIndexChannelConfig channelConfig = iaqIndexChannel.getConfiguration()
+                                    .as(IAQIndexChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.iaqIndex.name());
+                            if (tfChannel instanceof IAQIndexChannel) {
+                                ((IAQIndexChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel iaqAccuracyChannel = thing.getChannel("iaqAccuracy");
+                        if (iaqAccuracyChannel != null) {
+
+                            IAQAccuracyChannelConfig channelConfig = iaqAccuracyChannel.getConfiguration()
+                                    .as(IAQAccuracyChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.iaqAccuracy.name());
+                            if (tfChannel instanceof IAQAccuracyChannel) {
+                                ((IAQAccuracyChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel airpressureChannel = thing.getChannel("airpressure");
+                        if (airpressureChannel != null) {
+
+                            AirPressureChannelConfig channelConfig = airpressureChannel.getConfiguration()
+                                    .as(AirPressureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.airpressure.name());
+                            if (tfChannel instanceof AirPressureChannel) {
+                                ((AirPressureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel temperatureChannel = thing.getChannel("temperature");
+                        if (temperatureChannel != null) {
+
+                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                                    .as(TemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperature.name());
+                            if (tfChannel instanceof TemperatureChannel) {
+                                ((TemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel humidityChannel = thing.getChannel("humidity");
+                        if (humidityChannel != null) {
+
+                            HumidityChannelConfig channelConfig = humidityChannel.getConfiguration()
+                                    .as(HumidityChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.humidity.name());
+                            if (tfChannel instanceof HumidityChannel) {
+                                ((HumidityChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

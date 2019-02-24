@@ -14,6 +14,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -29,8 +30,10 @@ import org.m1theo.tinkerforge.client.DeviceInfo;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.temperatureirv2.AmbientTemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.temperatureirv2.AmbientTemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.devices.temperatureirv2.ChannelId;
 import org.m1theo.tinkerforge.client.devices.temperatureirv2.ObjectTemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.temperatureirv2.ObjectTemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.devices.temperatureirv2.TemperatureIRV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.temperatureirv2.TemperatureIRV2DeviceConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
@@ -109,6 +112,31 @@ public class TemperatureIRV2BrickletHandler extends BaseThingHandler implements 
                     if (deviceIn.getDeviceType() == DeviceType.temperatureirv2) {
                         TemperatureIRV2Bricklet device = (TemperatureIRV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel objectTemperatureChannel = thing.getChannel("objectTemperature");
+                        if (objectTemperatureChannel != null) {
+
+                            ObjectTemperatureChannelConfig channelConfig = objectTemperatureChannel.getConfiguration()
+                                    .as(ObjectTemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.objectTemperature.name());
+                            if (tfChannel instanceof ObjectTemperatureChannel) {
+                                ((ObjectTemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel ambientTemperatureChannel = thing.getChannel("ambientTemperature");
+                        if (ambientTemperatureChannel != null) {
+
+                            AmbientTemperatureChannelConfig channelConfig = ambientTemperatureChannel.getConfiguration()
+                                    .as(AmbientTemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.ambientTemperature.name());
+                            if (tfChannel instanceof AmbientTemperatureChannel) {
+                                ((AmbientTemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

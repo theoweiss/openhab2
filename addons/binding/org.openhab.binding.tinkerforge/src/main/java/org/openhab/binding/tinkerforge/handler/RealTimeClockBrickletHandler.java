@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -28,6 +29,7 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.realtimeclock.ChannelId;
 import org.m1theo.tinkerforge.client.devices.realtimeclock.DateTimeChannel;
+import org.m1theo.tinkerforge.client.devices.realtimeclock.DateTimeChannelConfig;
 import org.m1theo.tinkerforge.client.devices.realtimeclock.RealTimeClockBricklet;
 import org.m1theo.tinkerforge.client.devices.realtimeclock.RealTimeClockDeviceConfig;
 import org.m1theo.tinkerforge.client.types.DateTimeValue;
@@ -106,6 +108,19 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
                     if (deviceIn.getDeviceType() == DeviceType.realtimeclock) {
                         RealTimeClockBricklet device = (RealTimeClockBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel datetimeChannel = thing.getChannel("datetime");
+                        if (datetimeChannel != null) {
+
+                            DateTimeChannelConfig channelConfig = datetimeChannel.getConfiguration()
+                                    .as(DateTimeChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.datetime.name());
+                            if (tfChannel instanceof DateTimeChannel) {
+                                ((DateTimeChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -30,11 +31,14 @@ import org.m1theo.tinkerforge.client.DeviceInfo;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.barometerV2.AirPressureChannel;
+import org.m1theo.tinkerforge.client.devices.barometerV2.AirPressureChannelConfig;
 import org.m1theo.tinkerforge.client.devices.barometerV2.AltitudeChannel;
+import org.m1theo.tinkerforge.client.devices.barometerV2.AltitudeChannelConfig;
 import org.m1theo.tinkerforge.client.devices.barometerV2.BarometerV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.barometerV2.BarometerV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.barometerV2.ChannelId;
 import org.m1theo.tinkerforge.client.devices.barometerV2.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.barometerV2.TemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
@@ -111,6 +115,43 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
                     if (deviceIn.getDeviceType() == DeviceType.barometerV2) {
                         BarometerV2Bricklet device = (BarometerV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel airpressureChannel = thing.getChannel("airpressure");
+                        if (airpressureChannel != null) {
+
+                            AirPressureChannelConfig channelConfig = airpressureChannel.getConfiguration()
+                                    .as(AirPressureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.airpressure.name());
+                            if (tfChannel instanceof AirPressureChannel) {
+                                ((AirPressureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel temperatureChannel = thing.getChannel("temperature");
+                        if (temperatureChannel != null) {
+
+                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                                    .as(TemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperature.name());
+                            if (tfChannel instanceof TemperatureChannel) {
+                                ((TemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel altitudeChannel = thing.getChannel("altitude");
+                        if (altitudeChannel != null) {
+
+                            AltitudeChannelConfig channelConfig = altitudeChannel.getConfiguration()
+                                    .as(AltitudeChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.altitude.name());
+                            if (tfChannel instanceof AltitudeChannel) {
+                                ((AltitudeChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

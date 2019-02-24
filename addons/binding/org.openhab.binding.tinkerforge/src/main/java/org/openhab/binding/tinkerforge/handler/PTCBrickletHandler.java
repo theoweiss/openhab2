@@ -14,6 +14,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -32,6 +33,7 @@ import org.m1theo.tinkerforge.client.devices.ptc.ChannelId;
 import org.m1theo.tinkerforge.client.devices.ptc.PTCBricklet;
 import org.m1theo.tinkerforge.client.devices.ptc.PTCDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.ptc.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.ptc.TemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
@@ -108,6 +110,19 @@ public class PTCBrickletHandler extends BaseThingHandler implements CallbackList
                     if (deviceIn.getDeviceType() == DeviceType.ptc) {
                         PTCBricklet device = (PTCBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel temperatureChannel = thing.getChannel("temperature");
+                        if (temperatureChannel != null) {
+
+                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                                    .as(TemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperature.name());
+                            if (tfChannel instanceof TemperatureChannel) {
+                                ((TemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

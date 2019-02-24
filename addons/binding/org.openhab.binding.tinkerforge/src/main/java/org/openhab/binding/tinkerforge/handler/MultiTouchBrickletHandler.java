@@ -105,6 +105,7 @@ public class MultiTouchBrickletHandler extends BaseThingHandler implements Callb
                     if (deviceIn.getDeviceType() == DeviceType.multitouch) {
                         MultiTouchBricklet device = (MultiTouchBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

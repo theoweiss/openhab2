@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -33,7 +34,9 @@ import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.ChannelId;
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.IndustrialDualAnalogInBricklet;
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.IndustrialDualAnalogInDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.Voltage0Channel;
+import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.Voltage0ChannelConfig;
 import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.Voltage1Channel;
+import org.m1theo.tinkerforge.client.devices.industrialdualanalogIn.Voltage1ChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
@@ -111,6 +114,31 @@ public class IndustrialDualAnalogInBrickletHandler extends BaseThingHandler
                     if (deviceIn.getDeviceType() == DeviceType.industrialdualanalogIn) {
                         IndustrialDualAnalogInBricklet device = (IndustrialDualAnalogInBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel voltage0Channel = thing.getChannel("voltage0");
+                        if (voltage0Channel != null) {
+
+                            Voltage0ChannelConfig channelConfig = voltage0Channel.getConfiguration()
+                                    .as(Voltage0ChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.voltage0.name());
+                            if (tfChannel instanceof Voltage0Channel) {
+                                ((Voltage0Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel voltage1Channel = thing.getChannel("voltage1");
+                        if (voltage1Channel != null) {
+
+                            Voltage1ChannelConfig channelConfig = voltage1Channel.getConfiguration()
+                                    .as(Voltage1ChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.voltage1.name());
+                            if (tfChannel instanceof Voltage1Channel) {
+                                ((Voltage1Channel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

@@ -158,6 +158,7 @@ public class IndustrialQuadRelayBrickletHandler extends BaseThingHandler impleme
                     if (deviceIn.getDeviceType() == DeviceType.industrialquadrelay) {
                         IndustrialQuadRelayBricklet device = (IndustrialQuadRelayBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

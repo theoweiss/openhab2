@@ -134,6 +134,7 @@ public class DualRelayBrickletHandler extends BaseThingHandler implements Device
                     if (deviceIn.getDeviceType() == DeviceType.dualrelay) {
                         DualRelayBricklet device = (DualRelayBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

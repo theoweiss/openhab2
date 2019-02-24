@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.CommonTriggerEvents;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -29,6 +30,7 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.ChannelId;
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.CountChannel;
+import org.m1theo.tinkerforge.client.devices.rotaryencoder.CountChannelConfig;
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.RotaryEncoderBricklet;
 import org.m1theo.tinkerforge.client.devices.rotaryencoder.RotaryEncoderDeviceConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
@@ -108,6 +110,19 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
                     if (deviceIn.getDeviceType() == DeviceType.rotaryencoder) {
                         RotaryEncoderBricklet device = (RotaryEncoderBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel countChannel = thing.getChannel("count");
+                        if (countChannel != null) {
+
+                            CountChannelConfig channelConfig = countChannel.getConfiguration()
+                                    .as(CountChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.count.name());
+                            if (tfChannel instanceof CountChannel) {
+                                ((CountChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

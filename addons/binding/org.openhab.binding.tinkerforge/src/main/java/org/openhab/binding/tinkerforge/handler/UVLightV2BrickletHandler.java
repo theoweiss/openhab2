@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -31,8 +32,11 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.ChannelId;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVAChannel;
+import org.m1theo.tinkerforge.client.devices.uvlightv2.UVAChannelConfig;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVBChannel;
+import org.m1theo.tinkerforge.client.devices.uvlightv2.UVBChannelConfig;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVIChannel;
+import org.m1theo.tinkerforge.client.devices.uvlightv2.UVIChannelConfig;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVLightV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.uvlightv2.UVLightV2DeviceConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
@@ -111,6 +115,40 @@ public class UVLightV2BrickletHandler extends BaseThingHandler implements Callba
                     if (deviceIn.getDeviceType() == DeviceType.uvlightv2) {
                         UVLightV2Bricklet device = (UVLightV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel uvaChannel = thing.getChannel("uva");
+                        if (uvaChannel != null) {
+
+                            UVAChannelConfig channelConfig = uvaChannel.getConfiguration().as(UVAChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.uva.name());
+                            if (tfChannel instanceof UVAChannel) {
+                                ((UVAChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel uvbChannel = thing.getChannel("uvb");
+                        if (uvbChannel != null) {
+
+                            UVBChannelConfig channelConfig = uvbChannel.getConfiguration().as(UVBChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.uvb.name());
+                            if (tfChannel instanceof UVBChannel) {
+                                ((UVBChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel uviChannel = thing.getChannel("uvi");
+                        if (uviChannel != null) {
+
+                            UVIChannelConfig channelConfig = uviChannel.getConfiguration().as(UVIChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.uvi.name());
+                            if (tfChannel instanceof UVIChannel) {
+                                ((UVIChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

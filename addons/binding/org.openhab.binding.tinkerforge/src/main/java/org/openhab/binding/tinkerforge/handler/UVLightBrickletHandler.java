@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -32,6 +33,7 @@ import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.uvlight.ChannelId;
 import org.m1theo.tinkerforge.client.devices.uvlight.UVLightBricklet;
 import org.m1theo.tinkerforge.client.devices.uvlight.UVLightChannel;
+import org.m1theo.tinkerforge.client.devices.uvlight.UVLightChannelConfig;
 import org.m1theo.tinkerforge.client.devices.uvlight.UVLightDeviceConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
@@ -109,6 +111,19 @@ public class UVLightBrickletHandler extends BaseThingHandler implements Callback
                     if (deviceIn.getDeviceType() == DeviceType.uvlight) {
                         UVLightBricklet device = (UVLightBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel uvLightChannel = thing.getChannel("uvLight");
+                        if (uvLightChannel != null) {
+
+                            UVLightChannelConfig channelConfig = uvLightChannel.getConfiguration()
+                                    .as(UVLightChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.uvLight.name());
+                            if (tfChannel instanceof UVLightChannel) {
+                                ((UVLightChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

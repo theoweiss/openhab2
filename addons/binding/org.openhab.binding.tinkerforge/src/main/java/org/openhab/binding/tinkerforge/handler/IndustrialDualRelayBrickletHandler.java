@@ -134,6 +134,7 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
                     if (deviceIn.getDeviceType() == DeviceType.industrialdualrelay) {
                         IndustrialDualRelayBricklet device = (IndustrialDualRelayBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

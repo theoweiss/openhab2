@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -31,6 +32,7 @@ import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.distanceir.ChannelId;
 import org.m1theo.tinkerforge.client.devices.distanceir.DistanceChannel;
+import org.m1theo.tinkerforge.client.devices.distanceir.DistanceChannelConfig;
 import org.m1theo.tinkerforge.client.devices.distanceir.DistanceIRBricklet;
 import org.m1theo.tinkerforge.client.devices.distanceir.DistanceIRDeviceConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
@@ -109,6 +111,19 @@ public class DistanceIRBrickletHandler extends BaseThingHandler implements Callb
                     if (deviceIn.getDeviceType() == DeviceType.distanceIR) {
                         DistanceIRBricklet device = (DistanceIRBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel distanceChannel = thing.getChannel("distance");
+                        if (distanceChannel != null) {
+
+                            DistanceChannelConfig channelConfig = distanceChannel.getConfiguration()
+                                    .as(DistanceChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.distance.name());
+                            if (tfChannel instanceof DistanceChannel) {
+                                ((DistanceChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

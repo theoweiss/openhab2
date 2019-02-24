@@ -16,6 +16,7 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -31,19 +32,30 @@ import org.m1theo.tinkerforge.client.DeviceInfo;
 import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.BatteryLowStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.BatteryLowStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.ChannelId;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.GustSpeedStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.GustSpeedStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.HumiditySensorChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.HumiditySensorChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.HumidityStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.HumidityStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.LastChangeSensorChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.LastChangeSensorChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.LastChangeStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.LastChangeStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.OutdoorWeatherBricklet;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.OutdoorWeatherDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.RainStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.RainStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.TemperatureSensorChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.TemperatureSensorChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.TemperatureStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.TemperatureStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.WindDirectionStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.WindDirectionStationChannelConfig;
 import org.m1theo.tinkerforge.client.devices.outdoorweather.WindSpeedStationChannel;
+import org.m1theo.tinkerforge.client.devices.outdoorweather.WindSpeedStationChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.HighLowValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
@@ -121,6 +133,139 @@ public class OutdoorWeatherBrickletHandler extends BaseThingHandler implements C
                     if (deviceIn.getDeviceType() == DeviceType.outdoorweather) {
                         OutdoorWeatherBricklet device = (OutdoorWeatherBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel temperatureStationChannel = thing.getChannel("temperatureStation");
+                        if (temperatureStationChannel != null) {
+
+                            TemperatureStationChannelConfig channelConfig = temperatureStationChannel.getConfiguration()
+                                    .as(TemperatureStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperatureStation.name());
+                            if (tfChannel instanceof TemperatureStationChannel) {
+                                ((TemperatureStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel humidityStationChannel = thing.getChannel("humidityStation");
+                        if (humidityStationChannel != null) {
+
+                            HumidityStationChannelConfig channelConfig = humidityStationChannel.getConfiguration()
+                                    .as(HumidityStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.humidityStation.name());
+                            if (tfChannel instanceof HumidityStationChannel) {
+                                ((HumidityStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel windSpeedStationChannel = thing.getChannel("windSpeedStation");
+                        if (windSpeedStationChannel != null) {
+
+                            WindSpeedStationChannelConfig channelConfig = windSpeedStationChannel.getConfiguration()
+                                    .as(WindSpeedStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.windSpeedStation.name());
+                            if (tfChannel instanceof WindSpeedStationChannel) {
+                                ((WindSpeedStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel gustSpeedStationChannel = thing.getChannel("gustSpeedStation");
+                        if (gustSpeedStationChannel != null) {
+
+                            GustSpeedStationChannelConfig channelConfig = gustSpeedStationChannel.getConfiguration()
+                                    .as(GustSpeedStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.gustSpeedStation.name());
+                            if (tfChannel instanceof GustSpeedStationChannel) {
+                                ((GustSpeedStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel rainStationChannel = thing.getChannel("rainStation");
+                        if (rainStationChannel != null) {
+
+                            RainStationChannelConfig channelConfig = rainStationChannel.getConfiguration()
+                                    .as(RainStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.rainStation.name());
+                            if (tfChannel instanceof RainStationChannel) {
+                                ((RainStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel windDirectionStationChannel = thing.getChannel("windDirectionStation");
+                        if (windDirectionStationChannel != null) {
+
+                            WindDirectionStationChannelConfig channelConfig = windDirectionStationChannel
+                                    .getConfiguration().as(WindDirectionStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.windDirectionStation.name());
+                            if (tfChannel instanceof WindDirectionStationChannel) {
+                                ((WindDirectionStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel lastChangeStationChannel = thing.getChannel("lastChangeStation");
+                        if (lastChangeStationChannel != null) {
+
+                            LastChangeStationChannelConfig channelConfig = lastChangeStationChannel.getConfiguration()
+                                    .as(LastChangeStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.lastChangeStation.name());
+                            if (tfChannel instanceof LastChangeStationChannel) {
+                                ((LastChangeStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel batteryLowStationChannel = thing.getChannel("batteryLowStation");
+                        if (batteryLowStationChannel != null) {
+
+                            BatteryLowStationChannelConfig channelConfig = batteryLowStationChannel.getConfiguration()
+                                    .as(BatteryLowStationChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.batteryLowStation.name());
+                            if (tfChannel instanceof BatteryLowStationChannel) {
+                                ((BatteryLowStationChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel temperatureSensorChannel = thing.getChannel("temperatureSensor");
+                        if (temperatureSensorChannel != null) {
+
+                            TemperatureSensorChannelConfig channelConfig = temperatureSensorChannel.getConfiguration()
+                                    .as(TemperatureSensorChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperatureSensor.name());
+                            if (tfChannel instanceof TemperatureSensorChannel) {
+                                ((TemperatureSensorChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel humiditySensorChannel = thing.getChannel("humiditySensor");
+                        if (humiditySensorChannel != null) {
+
+                            HumiditySensorChannelConfig channelConfig = humiditySensorChannel.getConfiguration()
+                                    .as(HumiditySensorChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.humiditySensor.name());
+                            if (tfChannel instanceof HumiditySensorChannel) {
+                                ((HumiditySensorChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel lastChangeSensorChannel = thing.getChannel("lastChangeSensor");
+                        if (lastChangeSensorChannel != null) {
+
+                            LastChangeSensorChannelConfig channelConfig = lastChangeSensorChannel.getConfiguration()
+                                    .as(LastChangeSensorChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.lastChangeSensor.name());
+                            if (tfChannel instanceof LastChangeSensorChannel) {
+                                ((LastChangeSensorChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

@@ -122,6 +122,7 @@ public class SolidStateRelayBrickletHandler extends BaseThingHandler implements 
                     if (deviceIn.getDeviceType() == DeviceType.solidstaterelay) {
                         SolidStateRelayBricklet device = (SolidStateRelayBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

@@ -15,6 +15,7 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -34,6 +35,7 @@ import org.m1theo.tinkerforge.client.devices.loadcell.LedChannel;
 import org.m1theo.tinkerforge.client.devices.loadcell.LoadCellBricklet;
 import org.m1theo.tinkerforge.client.devices.loadcell.LoadCellDeviceConfig;
 import org.m1theo.tinkerforge.client.devices.loadcell.WeightChannel;
+import org.m1theo.tinkerforge.client.devices.loadcell.WeightChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.OnOffValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
@@ -111,6 +113,19 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
                     if (deviceIn.getDeviceType() == DeviceType.loadcell) {
                         LoadCellBricklet device = (LoadCellBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel weightChannel = thing.getChannel("weight");
+                        if (weightChannel != null) {
+
+                            WeightChannelConfig channelConfig = weightChannel.getConfiguration()
+                                    .as(WeightChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.weight.name());
+                            if (tfChannel instanceof WeightChannel) {
+                                ((WeightChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;

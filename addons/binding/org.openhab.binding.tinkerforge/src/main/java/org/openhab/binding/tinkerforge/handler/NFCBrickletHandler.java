@@ -105,6 +105,7 @@ public class NFCBrickletHandler extends BaseThingHandler implements CallbackList
                     if (deviceIn.getDeviceType() == DeviceType.nfc) {
                         NFCBricklet device = (NFCBricklet) deviceIn;
                         device.setDeviceConfig(config);
+
                         device.enable();
                         this.device = device;
                         enabled = true;

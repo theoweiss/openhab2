@@ -14,6 +14,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -32,7 +33,9 @@ import org.m1theo.tinkerforge.client.devices.ptcV2.ChannelId;
 import org.m1theo.tinkerforge.client.devices.ptcV2.PTCV2Bricklet;
 import org.m1theo.tinkerforge.client.devices.ptcV2.PTCV2DeviceConfig;
 import org.m1theo.tinkerforge.client.devices.ptcV2.ResistanceChannel;
+import org.m1theo.tinkerforge.client.devices.ptcV2.ResistanceChannelConfig;
 import org.m1theo.tinkerforge.client.devices.ptcV2.TemperatureChannel;
+import org.m1theo.tinkerforge.client.devices.ptcV2.TemperatureChannelConfig;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.slf4j.Logger;
@@ -109,6 +112,31 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
                     if (deviceIn.getDeviceType() == DeviceType.ptcV2) {
                         PTCV2Bricklet device = (PTCV2Bricklet) deviceIn;
                         device.setDeviceConfig(config);
+
+                        Channel temperatureChannel = thing.getChannel("temperature");
+                        if (temperatureChannel != null) {
+
+                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                                    .as(TemperatureChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.temperature.name());
+                            if (tfChannel instanceof TemperatureChannel) {
+                                ((TemperatureChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
+                        Channel resistanceChannel = thing.getChannel("resistance");
+                        if (resistanceChannel != null) {
+
+                            ResistanceChannelConfig channelConfig = resistanceChannel.getConfiguration()
+                                    .as(ResistanceChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.resistance.name());
+                            if (tfChannel instanceof ResistanceChannel) {
+                                ((ResistanceChannel) tfChannel).setConfig(channelConfig);
+                            }
+                        }
+
                         device.enable();
                         this.device = device;
                         enabled = true;
