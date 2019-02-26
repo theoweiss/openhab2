@@ -113,14 +113,16 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
 
                         Channel humidityChannel = thing.getChannel("humidity");
                         if (humidityChannel != null) {
+                            Channel currChannel = humidityChannel;
 
-                            HumidityChannelConfig channelConfig = humidityChannel.getConfiguration()
+                            HumidityChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(HumidityChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.humidity.name());
                             if (tfChannel instanceof HumidityChannel) {
                                 ((HumidityChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -238,6 +240,7 @@ public class HumidityBrickletHandler extends BaseThingHandler implements Callbac
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

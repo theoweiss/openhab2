@@ -249,6 +249,7 @@ public class IndustrialDualRelayBrickletHandler extends BaseThingHandler impleme
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

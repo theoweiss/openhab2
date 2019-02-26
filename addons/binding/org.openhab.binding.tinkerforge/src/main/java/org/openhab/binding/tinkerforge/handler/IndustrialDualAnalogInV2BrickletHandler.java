@@ -116,26 +116,30 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler
 
                         Channel voltage0Channel = thing.getChannel("voltage0");
                         if (voltage0Channel != null) {
+                            Channel currChannel = voltage0Channel;
 
-                            VoltageChannelConfig channelConfig = voltage0Channel.getConfiguration()
+                            VoltageChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(VoltageChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.voltage0.name());
                             if (tfChannel instanceof Voltage0Channel) {
                                 ((Voltage0Channel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel voltage1Channel = thing.getChannel("voltage1");
                         if (voltage1Channel != null) {
+                            Channel currChannel = voltage1Channel;
 
-                            VoltageChannelConfig channelConfig = voltage1Channel.getConfiguration()
+                            VoltageChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(VoltageChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.voltage1.name());
                             if (tfChannel instanceof Voltage1Channel) {
                                 ((Voltage1Channel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -298,6 +302,7 @@ public class IndustrialDualAnalogInV2BrickletHandler extends BaseThingHandler
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

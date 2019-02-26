@@ -116,14 +116,16 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
 
                         Channel weightChannel = thing.getChannel("weight");
                         if (weightChannel != null) {
+                            Channel currChannel = weightChannel;
 
-                            WeightChannelConfig channelConfig = weightChannel.getConfiguration()
+                            WeightChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(WeightChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.weight.name());
                             if (tfChannel instanceof WeightChannel) {
                                 ((WeightChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -269,6 +271,7 @@ public class LoadCellBrickletHandler extends BaseThingHandler implements Callbac
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

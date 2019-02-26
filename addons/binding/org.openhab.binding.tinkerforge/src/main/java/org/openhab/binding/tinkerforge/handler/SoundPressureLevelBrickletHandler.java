@@ -114,14 +114,16 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler
 
                         Channel decibelChannel = thing.getChannel("decibel");
                         if (decibelChannel != null) {
+                            Channel currChannel = decibelChannel;
 
-                            DecibelChannelConfig channelConfig = decibelChannel.getConfiguration()
+                            DecibelChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(DecibelChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.decibel.name());
                             if (tfChannel instanceof DecibelChannel) {
                                 ((DecibelChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -239,6 +241,7 @@ public class SoundPressureLevelBrickletHandler extends BaseThingHandler
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

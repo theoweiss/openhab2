@@ -115,26 +115,30 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
 
                         Channel temperatureChannel = thing.getChannel("temperature");
                         if (temperatureChannel != null) {
+                            Channel currChannel = temperatureChannel;
 
-                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                            TemperatureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(TemperatureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.temperature.name());
                             if (tfChannel instanceof TemperatureChannel) {
                                 ((TemperatureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel resistanceChannel = thing.getChannel("resistance");
                         if (resistanceChannel != null) {
+                            Channel currChannel = resistanceChannel;
 
-                            ResistanceChannelConfig channelConfig = resistanceChannel.getConfiguration()
+                            ResistanceChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(ResistanceChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.resistance.name());
                             if (tfChannel instanceof ResistanceChannel) {
                                 ((ResistanceChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -290,6 +294,7 @@ public class PTCV2BrickletHandler extends BaseThingHandler implements CallbackLi
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

@@ -209,6 +209,7 @@ public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implement
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

@@ -118,38 +118,44 @@ public class VoltageCurrentBrickletHandler extends BaseThingHandler implements C
 
                         Channel voltageChannel = thing.getChannel("voltage");
                         if (voltageChannel != null) {
+                            Channel currChannel = voltageChannel;
 
-                            VoltageChannelConfig channelConfig = voltageChannel.getConfiguration()
+                            VoltageChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(VoltageChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.voltage.name());
                             if (tfChannel instanceof VoltageChannel) {
                                 ((VoltageChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel currentChannel = thing.getChannel("current");
                         if (currentChannel != null) {
+                            Channel currChannel = currentChannel;
 
-                            CurrentChannelConfig channelConfig = currentChannel.getConfiguration()
+                            CurrentChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(CurrentChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.current.name());
                             if (tfChannel instanceof CurrentChannel) {
                                 ((CurrentChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel powerChannel = thing.getChannel("power");
                         if (powerChannel != null) {
+                            Channel currChannel = powerChannel;
 
-                            PowerChannelConfig channelConfig = powerChannel.getConfiguration()
+                            PowerChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(PowerChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.power.name());
                             if (tfChannel instanceof PowerChannel) {
                                 ((PowerChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -355,6 +361,7 @@ public class VoltageCurrentBrickletHandler extends BaseThingHandler implements C
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

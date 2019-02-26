@@ -115,26 +115,30 @@ public class TemperatureIRV2BrickletHandler extends BaseThingHandler implements 
 
                         Channel objectTemperatureChannel = thing.getChannel("objectTemperature");
                         if (objectTemperatureChannel != null) {
+                            Channel currChannel = objectTemperatureChannel;
 
-                            ObjectTemperatureChannelConfig channelConfig = objectTemperatureChannel.getConfiguration()
+                            ObjectTemperatureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(ObjectTemperatureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.objectTemperature.name());
                             if (tfChannel instanceof ObjectTemperatureChannel) {
                                 ((ObjectTemperatureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel ambientTemperatureChannel = thing.getChannel("ambientTemperature");
                         if (ambientTemperatureChannel != null) {
+                            Channel currChannel = ambientTemperatureChannel;
 
-                            AmbientTemperatureChannelConfig channelConfig = ambientTemperatureChannel.getConfiguration()
+                            AmbientTemperatureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(AmbientTemperatureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.ambientTemperature.name());
                             if (tfChannel instanceof AmbientTemperatureChannel) {
                                 ((AmbientTemperatureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -294,6 +298,7 @@ public class TemperatureIRV2BrickletHandler extends BaseThingHandler implements 
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

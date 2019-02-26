@@ -111,14 +111,16 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
 
                         Channel datetimeChannel = thing.getChannel("datetime");
                         if (datetimeChannel != null) {
+                            Channel currChannel = datetimeChannel;
 
-                            DateTimeChannelConfig channelConfig = datetimeChannel.getConfiguration()
+                            DateTimeChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(DateTimeChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.datetime.name());
                             if (tfChannel instanceof DateTimeChannel) {
                                 ((DateTimeChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -234,6 +236,7 @@ public class RealTimeClockBrickletHandler extends BaseThingHandler implements Ca
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

@@ -118,38 +118,44 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
 
                         Channel airpressureChannel = thing.getChannel("airpressure");
                         if (airpressureChannel != null) {
+                            Channel currChannel = airpressureChannel;
 
-                            AirPressureChannelConfig channelConfig = airpressureChannel.getConfiguration()
+                            AirPressureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(AirPressureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.airpressure.name());
                             if (tfChannel instanceof AirPressureChannel) {
                                 ((AirPressureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel temperatureChannel = thing.getChannel("temperature");
                         if (temperatureChannel != null) {
+                            Channel currChannel = temperatureChannel;
 
-                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                            TemperatureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(TemperatureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.temperature.name());
                             if (tfChannel instanceof TemperatureChannel) {
                                 ((TemperatureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel altitudeChannel = thing.getChannel("altitude");
                         if (altitudeChannel != null) {
+                            Channel currChannel = altitudeChannel;
 
-                            AltitudeChannelConfig channelConfig = altitudeChannel.getConfiguration()
+                            AltitudeChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(AltitudeChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.altitude.name());
                             if (tfChannel instanceof AltitudeChannel) {
                                 ((AltitudeChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -351,6 +357,7 @@ public class BarometerV2BrickletHandler extends BaseThingHandler implements Call
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

@@ -118,35 +118,41 @@ public class UVLightV2BrickletHandler extends BaseThingHandler implements Callba
 
                         Channel uvaChannel = thing.getChannel("uva");
                         if (uvaChannel != null) {
+                            Channel currChannel = uvaChannel;
 
-                            UVAChannelConfig channelConfig = uvaChannel.getConfiguration().as(UVAChannelConfig.class);
+                            UVAChannelConfig channelConfig = currChannel.getConfiguration().as(UVAChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.uva.name());
                             if (tfChannel instanceof UVAChannel) {
                                 ((UVAChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel uvbChannel = thing.getChannel("uvb");
                         if (uvbChannel != null) {
+                            Channel currChannel = uvbChannel;
 
-                            UVBChannelConfig channelConfig = uvbChannel.getConfiguration().as(UVBChannelConfig.class);
+                            UVBChannelConfig channelConfig = currChannel.getConfiguration().as(UVBChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.uvb.name());
                             if (tfChannel instanceof UVBChannel) {
                                 ((UVBChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel uviChannel = thing.getChannel("uvi");
                         if (uviChannel != null) {
+                            Channel currChannel = uviChannel;
 
-                            UVIChannelConfig channelConfig = uviChannel.getConfiguration().as(UVIChannelConfig.class);
+                            UVIChannelConfig channelConfig = currChannel.getConfiguration().as(UVIChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.uvi.name());
                             if (tfChannel instanceof UVIChannel) {
                                 ((UVIChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -346,6 +352,7 @@ public class UVLightV2BrickletHandler extends BaseThingHandler implements Callba
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

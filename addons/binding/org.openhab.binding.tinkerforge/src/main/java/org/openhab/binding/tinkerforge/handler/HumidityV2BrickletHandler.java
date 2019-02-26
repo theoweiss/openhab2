@@ -119,26 +119,30 @@ public class HumidityV2BrickletHandler extends BaseThingHandler implements Callb
 
                         Channel humidityChannel = thing.getChannel("humidity");
                         if (humidityChannel != null) {
+                            Channel currChannel = humidityChannel;
 
-                            HumidityChannelConfig channelConfig = humidityChannel.getConfiguration()
+                            HumidityChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(HumidityChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.humidity.name());
                             if (tfChannel instanceof HumidityChannel) {
                                 ((HumidityChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel temperatureChannel = thing.getChannel("temperature");
                         if (temperatureChannel != null) {
+                            Channel currChannel = temperatureChannel;
 
-                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                            TemperatureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(TemperatureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.temperature.name());
                             if (tfChannel instanceof TemperatureChannel) {
                                 ((TemperatureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -325,6 +329,7 @@ public class HumidityV2BrickletHandler extends BaseThingHandler implements Callb
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

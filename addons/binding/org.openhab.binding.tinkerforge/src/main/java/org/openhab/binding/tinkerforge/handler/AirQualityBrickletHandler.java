@@ -122,62 +122,72 @@ public class AirQualityBrickletHandler extends BaseThingHandler implements Callb
 
                         Channel iaqIndexChannel = thing.getChannel("iaqIndex");
                         if (iaqIndexChannel != null) {
+                            Channel currChannel = iaqIndexChannel;
 
-                            IAQIndexChannelConfig channelConfig = iaqIndexChannel.getConfiguration()
+                            IAQIndexChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(IAQIndexChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.iaqIndex.name());
                             if (tfChannel instanceof IAQIndexChannel) {
                                 ((IAQIndexChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel iaqAccuracyChannel = thing.getChannel("iaqAccuracy");
                         if (iaqAccuracyChannel != null) {
+                            Channel currChannel = iaqAccuracyChannel;
 
-                            IAQAccuracyChannelConfig channelConfig = iaqAccuracyChannel.getConfiguration()
+                            IAQAccuracyChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(IAQAccuracyChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.iaqAccuracy.name());
                             if (tfChannel instanceof IAQAccuracyChannel) {
                                 ((IAQAccuracyChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel airpressureChannel = thing.getChannel("airpressure");
                         if (airpressureChannel != null) {
+                            Channel currChannel = airpressureChannel;
 
-                            AirPressureChannelConfig channelConfig = airpressureChannel.getConfiguration()
+                            AirPressureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(AirPressureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.airpressure.name());
                             if (tfChannel instanceof AirPressureChannel) {
                                 ((AirPressureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel temperatureChannel = thing.getChannel("temperature");
                         if (temperatureChannel != null) {
+                            Channel currChannel = temperatureChannel;
 
-                            TemperatureChannelConfig channelConfig = temperatureChannel.getConfiguration()
+                            TemperatureChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(TemperatureChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.temperature.name());
                             if (tfChannel instanceof TemperatureChannel) {
                                 ((TemperatureChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         Channel humidityChannel = thing.getChannel("humidity");
                         if (humidityChannel != null) {
+                            Channel currChannel = humidityChannel;
 
-                            HumidityChannelConfig channelConfig = humidityChannel.getConfiguration()
+                            HumidityChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(HumidityChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.humidity.name());
                             if (tfChannel instanceof HumidityChannel) {
                                 ((HumidityChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -453,6 +463,7 @@ public class AirQualityBrickletHandler extends BaseThingHandler implements Callb
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

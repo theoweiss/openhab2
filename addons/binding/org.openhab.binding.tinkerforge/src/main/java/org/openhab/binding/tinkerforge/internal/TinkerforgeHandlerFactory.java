@@ -71,6 +71,7 @@ import org.openhab.binding.tinkerforge.handler.VoltageCurrentV2BrickletHandler;
 import org.openhab.binding.tinkerforge.internal.discovery.TinkerforgeDiscoveryService;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,6 +87,9 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
     private final Logger logger = LoggerFactory.getLogger(TinkerforgeHandlerFactory.class);
     private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
+
+    @NonNullByDefault({})
+    private TFDynamicStateDescriptionProvider dynamicStateDescriptionProvider;
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -291,7 +295,9 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
 
         if (thingTypeUID.equals(THING_TYPE_IO16)) {
-            return new IO16BrickletHandler(thing);
+
+            return new IO16BrickletHandler(thing, dynamicStateDescriptionProvider);
+
         }
 
         return null;
@@ -322,4 +328,12 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         }
     }
 
+    @Reference
+    protected void setDynamicStateDescriptionProvider(TFDynamicStateDescriptionProvider provider) {
+        this.dynamicStateDescriptionProvider = provider;
+    }
+
+    protected void unsetDynamicStateDescriptionProvider(TFDynamicStateDescriptionProvider provider) {
+        this.dynamicStateDescriptionProvider = null;
+    }
 }

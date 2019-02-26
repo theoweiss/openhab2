@@ -114,14 +114,16 @@ public class UVLightBrickletHandler extends BaseThingHandler implements Callback
 
                         Channel uvLightChannel = thing.getChannel("uvLight");
                         if (uvLightChannel != null) {
+                            Channel currChannel = uvLightChannel;
 
-                            UVLightChannelConfig channelConfig = uvLightChannel.getConfiguration()
+                            UVLightChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(UVLightChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.uvLight.name());
                             if (tfChannel instanceof UVLightChannel) {
                                 ((UVLightChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -241,6 +243,7 @@ public class UVLightBrickletHandler extends BaseThingHandler implements Callback
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

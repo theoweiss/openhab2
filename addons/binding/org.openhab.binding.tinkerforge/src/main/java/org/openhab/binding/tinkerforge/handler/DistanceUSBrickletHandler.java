@@ -111,14 +111,16 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
 
                         Channel distanceChannel = thing.getChannel("distance");
                         if (distanceChannel != null) {
+                            Channel currChannel = distanceChannel;
 
-                            DistanceChannelConfig channelConfig = distanceChannel.getConfiguration()
+                            DistanceChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(DistanceChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.distance.name());
                             if (tfChannel instanceof DistanceChannel) {
                                 ((DistanceChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -233,6 +235,7 @@ public class DistanceUSBrickletHandler extends BaseThingHandler implements Callb
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

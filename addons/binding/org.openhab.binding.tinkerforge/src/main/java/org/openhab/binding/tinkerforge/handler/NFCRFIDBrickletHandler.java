@@ -174,6 +174,7 @@ public class NFCRFIDBrickletHandler extends BaseThingHandler implements Callback
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

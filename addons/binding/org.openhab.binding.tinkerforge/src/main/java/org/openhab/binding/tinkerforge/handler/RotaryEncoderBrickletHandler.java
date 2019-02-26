@@ -113,14 +113,16 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
 
                         Channel countChannel = thing.getChannel("count");
                         if (countChannel != null) {
+                            Channel currChannel = countChannel;
 
-                            CountChannelConfig channelConfig = countChannel.getConfiguration()
+                            CountChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(CountChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.count.name());
                             if (tfChannel instanceof CountChannel) {
                                 ((CountChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -248,6 +250,7 @@ public class RotaryEncoderBrickletHandler extends BaseThingHandler implements Ca
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

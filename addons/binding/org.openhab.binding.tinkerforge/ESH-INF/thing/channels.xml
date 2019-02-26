@@ -391,7 +391,7 @@
 	</channel-type>
 
 	<channel-type id="led">
-		<item-type>Contact</item-type>
+		<item-type>Switch</item-type>
 		<label>LED</label>
 		<description>LED status.</description>
 		
@@ -403,7 +403,7 @@
 	</channel-type>
 
 	<channel-type id="heater">
-		<item-type>Contact</item-type>
+		<item-type>Switch</item-type>
 		<label>Heater</label>
 		<description>Heater status.</description>
 		
@@ -605,13 +605,27 @@
 				<limitToOptions>true</limitToOptions>
 			</parameter>
 			<parameter name="logic" type="text">
-				<label>Channel logic</label>
+				<label>logic</label>
 				<options>
 					<option value="normal">normal</option>
 					<option value="inverted">inverted</option>
 				</options>
 				<default>normal</default>
 				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="defaultState" type="text">
+				<label>default state</label>
+				<options>
+					<option value="HIGH">HIGH</option>
+					<option value="LOW">LOW</option>
+					<option value="keep">keep</option>
+				</options>
+				<default>LOW</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="pullUpResistorEnabled" type="boolean">
+				<label>pullup resistor</label>
+				<default>false</default>
 			</parameter>
 
 		</config-description>

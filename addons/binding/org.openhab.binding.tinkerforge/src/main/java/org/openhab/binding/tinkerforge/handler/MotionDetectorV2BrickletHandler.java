@@ -311,6 +311,7 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

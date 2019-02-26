@@ -113,14 +113,16 @@ public class AmbientLightV2BrickletHandler extends BaseThingHandler implements C
 
                         Channel illuminanceChannel = thing.getChannel("illuminance");
                         if (illuminanceChannel != null) {
+                            Channel currChannel = illuminanceChannel;
 
-                            IlluminanceChannelConfig channelConfig = illuminanceChannel.getConfiguration()
+                            IlluminanceChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(IlluminanceChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.illuminance.name());
                             if (tfChannel instanceof IlluminanceChannel) {
                                 ((IlluminanceChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -238,6 +240,7 @@ public class AmbientLightV2BrickletHandler extends BaseThingHandler implements C
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

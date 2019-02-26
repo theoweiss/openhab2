@@ -20,6 +20,8 @@ import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.StateDescription;
+import org.m1theo.tinkerforge.client.ActuatorChannel;
 import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
@@ -49,6 +51,8 @@ import org.m1theo.tinkerforge.client.devices.io16.IO16Bricklet;
 import org.m1theo.tinkerforge.client.devices.io16.IO16DeviceConfig;
 import org.m1theo.tinkerforge.client.types.HighLowValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
+import org.openhab.binding.tinkerforge.internal.CommandConverter;
+import org.openhab.binding.tinkerforge.internal.TFDynamicStateDescriptionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,12 +73,198 @@ public class IO16BrickletHandler extends BaseThingHandler implements CallbackLis
     private @Nullable String uid;
     private boolean enabled = false;
 
-    public IO16BrickletHandler(Thing thing) {
+    @NonNullByDefault({})
+    private TFDynamicStateDescriptionProvider dynamicStateDescriptionProvider;
+
+    public IO16BrickletHandler(Thing thing, TFDynamicStateDescriptionProvider dynamicStateDescriptionProvider) {
         super(thing);
+        this.dynamicStateDescriptionProvider = dynamicStateDescriptionProvider;
     }
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
+
+        switch (channelUID.getId()) {
+
+            case "gpio0":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio1":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio2":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio3":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio4":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio5":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio6":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio7":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio8":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio9":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio10":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio11":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio12":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio13":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio14":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "gpio15":
+
+                if (command instanceof OnOffType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            default:
+                break;
+        }
 
     }
 
@@ -126,193 +316,305 @@ public class IO16BrickletHandler extends BaseThingHandler implements CallbackLis
 
                         Channel gpio0Channel = thing.getChannel("gpio0");
                         if (gpio0Channel != null) {
+                            Channel currChannel = gpio0Channel;
 
-                            GpioChannelConfig channelConfig = gpio0Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio0.name());
                             if (tfChannel instanceof Gpio0Channel) {
                                 ((Gpio0Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio1Channel = thing.getChannel("gpio1");
                         if (gpio1Channel != null) {
+                            Channel currChannel = gpio1Channel;
 
-                            GpioChannelConfig channelConfig = gpio1Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio1.name());
                             if (tfChannel instanceof Gpio1Channel) {
                                 ((Gpio1Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio2Channel = thing.getChannel("gpio2");
                         if (gpio2Channel != null) {
+                            Channel currChannel = gpio2Channel;
 
-                            GpioChannelConfig channelConfig = gpio2Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio2.name());
                             if (tfChannel instanceof Gpio2Channel) {
                                 ((Gpio2Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio3Channel = thing.getChannel("gpio3");
                         if (gpio3Channel != null) {
+                            Channel currChannel = gpio3Channel;
 
-                            GpioChannelConfig channelConfig = gpio3Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio3.name());
                             if (tfChannel instanceof Gpio3Channel) {
                                 ((Gpio3Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio4Channel = thing.getChannel("gpio4");
                         if (gpio4Channel != null) {
+                            Channel currChannel = gpio4Channel;
 
-                            GpioChannelConfig channelConfig = gpio4Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio4.name());
                             if (tfChannel instanceof Gpio4Channel) {
                                 ((Gpio4Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio5Channel = thing.getChannel("gpio5");
                         if (gpio5Channel != null) {
+                            Channel currChannel = gpio5Channel;
 
-                            GpioChannelConfig channelConfig = gpio5Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio5.name());
                             if (tfChannel instanceof Gpio5Channel) {
                                 ((Gpio5Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio6Channel = thing.getChannel("gpio6");
                         if (gpio6Channel != null) {
+                            Channel currChannel = gpio6Channel;
 
-                            GpioChannelConfig channelConfig = gpio6Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio6.name());
                             if (tfChannel instanceof Gpio6Channel) {
                                 ((Gpio6Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio7Channel = thing.getChannel("gpio7");
                         if (gpio7Channel != null) {
+                            Channel currChannel = gpio7Channel;
 
-                            GpioChannelConfig channelConfig = gpio7Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio7.name());
                             if (tfChannel instanceof Gpio7Channel) {
                                 ((Gpio7Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio8Channel = thing.getChannel("gpio8");
                         if (gpio8Channel != null) {
+                            Channel currChannel = gpio8Channel;
 
-                            GpioChannelConfig channelConfig = gpio8Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio8.name());
                             if (tfChannel instanceof Gpio8Channel) {
                                 ((Gpio8Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio9Channel = thing.getChannel("gpio9");
                         if (gpio9Channel != null) {
+                            Channel currChannel = gpio9Channel;
 
-                            GpioChannelConfig channelConfig = gpio9Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio9.name());
                             if (tfChannel instanceof Gpio9Channel) {
                                 ((Gpio9Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio10Channel = thing.getChannel("gpio10");
                         if (gpio10Channel != null) {
+                            Channel currChannel = gpio10Channel;
 
-                            GpioChannelConfig channelConfig = gpio10Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio10.name());
                             if (tfChannel instanceof Gpio10Channel) {
                                 ((Gpio10Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio11Channel = thing.getChannel("gpio11");
                         if (gpio11Channel != null) {
+                            Channel currChannel = gpio11Channel;
 
-                            GpioChannelConfig channelConfig = gpio11Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio11.name());
                             if (tfChannel instanceof Gpio11Channel) {
                                 ((Gpio11Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio12Channel = thing.getChannel("gpio12");
                         if (gpio12Channel != null) {
+                            Channel currChannel = gpio12Channel;
 
-                            GpioChannelConfig channelConfig = gpio12Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio12.name());
                             if (tfChannel instanceof Gpio12Channel) {
                                 ((Gpio12Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio13Channel = thing.getChannel("gpio13");
                         if (gpio13Channel != null) {
+                            Channel currChannel = gpio13Channel;
 
-                            GpioChannelConfig channelConfig = gpio13Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio13.name());
                             if (tfChannel instanceof Gpio13Channel) {
                                 ((Gpio13Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio14Channel = thing.getChannel("gpio14");
                         if (gpio14Channel != null) {
+                            Channel currChannel = gpio14Channel;
 
-                            GpioChannelConfig channelConfig = gpio14Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio14.name());
                             if (tfChannel instanceof Gpio14Channel) {
                                 ((Gpio14Channel) tfChannel).setConfig(channelConfig);
                             }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
+                            }
                         }
 
                         Channel gpio15Channel = thing.getChannel("gpio15");
                         if (gpio15Channel != null) {
+                            Channel currChannel = gpio15Channel;
 
-                            GpioChannelConfig channelConfig = gpio15Channel.getConfiguration()
+                            GpioChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(GpioChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.gpio15.name());
                             if (tfChannel instanceof Gpio15Channel) {
                                 ((Gpio15Channel) tfChannel).setConfig(channelConfig);
+                            }
+                            if (dynamicStateDescriptionProvider != null) {
+                                logger.debug("mode theox {}", channelConfig.getMode());
+                                boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
+                                dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
+                                        new StateDescription(null, null, null, null, readOnly, null));
                             }
                         }
 
@@ -1046,6 +1348,8 @@ public class IO16BrickletHandler extends BaseThingHandler implements CallbackLis
 
     @Override
     public void dispose() {
+
+        dynamicStateDescriptionProvider.removeDescriptionsForThing(thing.getUID());
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);

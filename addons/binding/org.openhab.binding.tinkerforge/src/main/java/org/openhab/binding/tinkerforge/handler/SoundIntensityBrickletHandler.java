@@ -111,14 +111,16 @@ public class SoundIntensityBrickletHandler extends BaseThingHandler implements C
 
                         Channel intensityChannel = thing.getChannel("intensity");
                         if (intensityChannel != null) {
+                            Channel currChannel = intensityChannel;
 
-                            IntensityChannelConfig channelConfig = intensityChannel.getConfiguration()
+                            IntensityChannelConfig channelConfig = currChannel.getConfiguration()
                                     .as(IntensityChannelConfig.class);
                             org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
                                     .getChannel(ChannelId.intensity.name());
                             if (tfChannel instanceof IntensityChannel) {
                                 ((IntensityChannel) tfChannel).setConfig(channelConfig);
                             }
+
                         }
 
                         device.enable();
@@ -233,6 +235,7 @@ public class SoundIntensityBrickletHandler extends BaseThingHandler implements C
 
     @Override
     public void dispose() {
+
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);
