@@ -13,11 +13,11 @@
 
 		<channels>
 		
-			<channel id="uva" typeId="uvaintensity"/>
+		<channel id="uva" typeId="uvaintensity"/>
 		
-			<channel id="uvb" typeId="uvbintensity"/>
+		<channel id="uvb" typeId="uvbintensity"/>
 		
-			<channel id="uvi" typeId="uvindex"/>
+		<channel id="uvi" typeId="uvindex"/>
 		
 		</channels>
 

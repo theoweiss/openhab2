@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="uvLight" typeId="uvaintensity"/>
+		<channel id="uvLight" typeId="uvaintensity"/>
 		
 		</channels>
 

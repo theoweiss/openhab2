@@ -13,9 +13,9 @@
 
 		<channels>
 		
-			<channel id="voltage0" typeId="voltage"/>
+		<channel id="voltage0" typeId="voltage"/>
 		
-			<channel id="voltage1" typeId="voltage"/>
+		<channel id="voltage1" typeId="voltage"/>
 		
 		</channels>
 

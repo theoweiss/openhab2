@@ -13,9 +13,9 @@
 
 		<channels>
 		
-			<channel id="temperature" typeId="temperature"/>
+		<channel id="temperature" typeId="temperature"/>
 		
-			<channel id="resistance" typeId="resistance"/>
+		<channel id="resistance" typeId="resistance"/>
 		
 		</channels>
 

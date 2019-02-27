@@ -13,15 +13,15 @@
 
 		<channels>
 		
-			<channel id="iaqIndex" typeId="iaqindex"/>
+		<channel id="iaqIndex" typeId="iaqindex"/>
 		
-			<channel id="iaqAccuracy" typeId="iaqaccuracy"/>
+		<channel id="iaqAccuracy" typeId="iaqaccuracy"/>
 		
-			<channel id="airpressure" typeId="airpressure"/>
+		<channel id="airpressure" typeId="airpressure"/>
 		
-			<channel id="temperature" typeId="temperature"/>
+		<channel id="temperature" typeId="temperature"/>
 		
-			<channel id="humidity" typeId="humidity"/>
+		<channel id="humidity" typeId="humidity"/>
 		
 		</channels>
 

@@ -13,9 +13,9 @@
 
 		<channels>
 		
-			<channel id="count" typeId="count"/>
+		<channel id="count" typeId="count"/>
 		
-			<channel id="buttonpressed" typeId="system.rawbutton"/>
+		<channel id="buttonpressed" typeId="system.rawbutton"/>
 		
 		</channels>
 

@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="humidity" typeId="humidity"/>
+		<channel id="humidity" typeId="humidity"/>
 		
 		</channels>
 

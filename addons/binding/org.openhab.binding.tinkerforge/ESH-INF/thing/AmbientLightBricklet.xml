@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="illuminance" typeId="illuminance"/>
+		<channel id="illuminance" typeId="illuminance"/>
 		
 		</channels>
 

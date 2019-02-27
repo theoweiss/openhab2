@@ -13,11 +13,11 @@
 
 		<channels>
 		
-			<channel id="airpressure" typeId="airpressure"/>
+		<channel id="airpressure" typeId="airpressure"/>
 		
-			<channel id="temperature" typeId="temperature"/>
+		<channel id="temperature" typeId="temperature"/>
 		
-			<channel id="altitude" typeId="altitude"/>
+		<channel id="altitude" typeId="altitude"/>
 		
 		</channels>
 

@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="relay" typeId="system.power"/>
+		<channel id="relay" typeId="system.power"/>
 		
 		</channels>
 

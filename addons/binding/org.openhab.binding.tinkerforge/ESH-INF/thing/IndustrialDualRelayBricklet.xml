@@ -13,9 +13,11 @@
 
 		<channels>
 		
-			<channel id="relay0" typeId="system.power"/>
+		<channel id="relay0" typeId="system.power">
+		<label>Relay 0</label></channel>
 		
-			<channel id="relay1" typeId="system.power"/>
+		<channel id="relay1" typeId="system.power">
+		<label>Relay 1</label></channel>
 		
 		</channels>
 

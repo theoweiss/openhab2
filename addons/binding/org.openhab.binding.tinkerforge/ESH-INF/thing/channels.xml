@@ -590,7 +590,7 @@
 
 	<channel-type id="gpio">
 		<item-type>Switch</item-type>
-		<label>GPIO Sensor</label>
+		<label>GPIO Pin</label>
 		<description>GPIO Pin</description>
 		
 		<state readOnly="true" />
@@ -626,6 +626,10 @@
 			<parameter name="pullUpResistorEnabled" type="boolean">
 				<label>pullup resistor</label>
 				<default>false</default>
+			</parameter>
+			<parameter name="keepOnReconnect" type="boolean">
+				<label>keep state on reconnect</label>
+				<default>true</default>
 			</parameter>
 
 		</config-description>

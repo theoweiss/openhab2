@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="datetime" typeId="datetime"/>
+		<channel id="datetime" typeId="datetime"/>
 		
 		</channels>
 

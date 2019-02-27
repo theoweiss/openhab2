@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="intensity" typeId="intensity"/>
+		<channel id="intensity" typeId="intensity"/>
 		
 		</channels>
 

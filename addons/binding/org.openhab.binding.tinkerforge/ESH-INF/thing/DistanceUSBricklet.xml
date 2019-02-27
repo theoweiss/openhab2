@@ -13,7 +13,7 @@
 
 		<channels>
 		
-			<channel id="distance" typeId="distanceus"/>
+		<channel id="distance" typeId="distanceus"/>
 		
 		</channels>
 

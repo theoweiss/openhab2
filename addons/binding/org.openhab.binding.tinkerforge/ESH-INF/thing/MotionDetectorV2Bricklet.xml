@@ -13,13 +13,13 @@
 
 		<channels>
 		
-			<channel id="motiondetected" typeId="system.motion"/>
+		<channel id="motiondetected" typeId="system.motion"/>
 		
-			<channel id="topLeftled" typeId="led"/>
+		<channel id="topLeftled" typeId="led"/>
 		
-			<channel id="topRightled" typeId="led"/>
+		<channel id="topRightled" typeId="led"/>
 		
-			<channel id="bottomled" typeId="led"/>
+		<channel id="bottomled" typeId="led"/>
 		
 		</channels>
 

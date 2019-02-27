@@ -13,11 +13,11 @@
 
 		<channels>
 		
-			<channel id="humidity" typeId="humidity"/>
+		<channel id="humidity" typeId="humidity"/>
 		
-			<channel id="temperature" typeId="temperature"/>
+		<channel id="temperature" typeId="temperature"/>
 		
-			<channel id="heater" typeId="heater"/>
+		<channel id="heater" typeId="heater"/>
 		
 		</channels>
 

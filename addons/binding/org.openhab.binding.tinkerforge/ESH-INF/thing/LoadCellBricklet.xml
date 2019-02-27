@@ -13,9 +13,9 @@
 
 		<channels>
 		
-			<channel id="weight" typeId="weight"/>
+		<channel id="weight" typeId="weight"/>
 		
-			<channel id="led" typeId="led"/>
+		<channel id="led" typeId="led"/>
 		
 		</channels>
 

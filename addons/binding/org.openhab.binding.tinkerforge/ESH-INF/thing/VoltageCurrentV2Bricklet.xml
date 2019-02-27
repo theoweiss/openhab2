@@ -13,11 +13,11 @@
 
 		<channels>
 		
-			<channel id="voltage" typeId="voltage"/>
+		<channel id="voltage" typeId="voltage"/>
 		
-			<channel id="current" typeId="current"/>
+		<channel id="current" typeId="current"/>
 		
-			<channel id="power" typeId="power"/>
+		<channel id="power" typeId="power"/>
 		
 		</channels>
 

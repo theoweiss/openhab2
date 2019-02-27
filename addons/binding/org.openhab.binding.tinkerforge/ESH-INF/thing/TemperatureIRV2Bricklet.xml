@@ -13,9 +13,9 @@
 
 		<channels>
 		
-			<channel id="objectTemperature" typeId="temperature"/>
+		<channel id="objectTemperature" typeId="temperature"/>
 		
-			<channel id="ambientTemperature" typeId="temperature"/>
+		<channel id="ambientTemperature" typeId="temperature"/>
 		
 		</channels>
 
