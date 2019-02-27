@@ -15,11 +15,11 @@
 		
 		<channel id="motiondetected" typeId="system.motion"/>
 		
-		<channel id="topLeftled" typeId="led"/>
+		<channel id="topLeftled" typeId="system.brightness"/>
 		
-		<channel id="topRightled" typeId="led"/>
+		<channel id="topRightled" typeId="system.brightness"/>
 		
-		<channel id="bottomled" typeId="led"/>
+		<channel id="bottomled" typeId="system.brightness"/>
 		
 		</channels>
 

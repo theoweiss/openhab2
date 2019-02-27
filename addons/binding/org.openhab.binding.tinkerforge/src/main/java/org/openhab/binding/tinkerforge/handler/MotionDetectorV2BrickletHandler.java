@@ -64,6 +64,27 @@ public class MotionDetectorV2BrickletHandler extends BaseThingHandler implements
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
 
+        switch (channelUID.getId()) {
+
+            case "topLeftled":
+
+                // TODO do something
+                break;
+
+            case "topRightled":
+
+                // TODO do something
+                break;
+
+            case "bottomled":
+
+                // TODO do something
+                break;
+
+            default:
+                break;
+        }
+
     }
 
     @Override
