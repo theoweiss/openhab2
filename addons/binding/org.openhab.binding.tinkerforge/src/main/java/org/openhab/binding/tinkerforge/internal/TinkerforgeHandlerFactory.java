@@ -39,6 +39,7 @@ import org.openhab.binding.tinkerforge.handler.DualRelayBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.HumidityBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.HumidityV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IO16BrickletHandler;
+import org.openhab.binding.tinkerforge.handler.IO16V2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialDualRelayBrickletHandler;
@@ -297,6 +298,12 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
         if (thingTypeUID.equals(THING_TYPE_IO16)) {
 
             return new IO16BrickletHandler(thing, dynamicStateDescriptionProvider);
+
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_IO16V2)) {
+
+            return new IO16V2BrickletHandler(thing, dynamicStateDescriptionProvider);
 
         }
 

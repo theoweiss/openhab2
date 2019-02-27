@@ -604,15 +604,6 @@
 				<default>input</default>
 				<limitToOptions>true</limitToOptions>
 			</parameter>
-			<parameter name="logic" type="text">
-				<label>logic</label>
-				<options>
-					<option value="normal">normal</option>
-					<option value="inverted">inverted</option>
-				</options>
-				<default>normal</default>
-				<limitToOptions>true</limitToOptions>
-			</parameter>
 			<parameter name="defaultState" type="text">
 				<label>default state</label>
 				<options>
@@ -625,7 +616,7 @@
 			</parameter>
 			<parameter name="pullUpResistorEnabled" type="boolean">
 				<label>pullup resistor</label>
-				<default>false</default>
+				<default>true</default>
 			</parameter>
 			<parameter name="keepOnReconnect" type="boolean">
 				<label>keep state on reconnect</label>

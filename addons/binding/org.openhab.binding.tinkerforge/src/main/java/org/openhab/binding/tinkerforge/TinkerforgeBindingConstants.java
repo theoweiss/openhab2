@@ -119,6 +119,8 @@ public class TinkerforgeBindingConstants {
 
     public static final ThingTypeUID THING_TYPE_IO16 = new ThingTypeUID(BINDING_ID, "io16");
 
+    public static final ThingTypeUID THING_TYPE_IO16V2 = new ThingTypeUID(BINDING_ID, "io16v2");
+
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] { THING_TYPE_BRICKD,
 
             THING_TYPE_OUTDOORWEATHER,
@@ -203,7 +205,9 @@ public class TinkerforgeBindingConstants {
 
             THING_TYPE_NFC,
 
-            THING_TYPE_IO16 };
+            THING_TYPE_IO16,
+
+            THING_TYPE_IO16V2 };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(
             Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 
