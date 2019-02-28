@@ -13,16 +13,16 @@
 
 		<channels>
 		
-		<channel id="gpio0" typeId="gpio">
+		<channel id="gpio0" typeId="gpiov2">
 		<label>GPIO 0</label></channel>
 		
-		<channel id="gpio1" typeId="gpio">
+		<channel id="gpio1" typeId="gpiov2">
 		<label>GPIO 1</label></channel>
 		
-		<channel id="gpio2" typeId="gpio">
+		<channel id="gpio2" typeId="gpiov2">
 		<label>GPIO 2</label></channel>
 		
-		<channel id="gpio3" typeId="gpio">
+		<channel id="gpio3" typeId="gpiov2">
 		<label>GPIO 3</label></channel>
 		
 		</channels>

@@ -182,7 +182,7 @@ public class IO4BrickletHandler extends BaseThingHandler implements CallbackList
                                 ((Gpio0Channel) tfChannel).setConfig(channelConfig);
                             }
                             if (dynamicStateDescriptionProvider != null) {
-                                logger.debug("mode theox {}", channelConfig.getMode());
+                                logger.debug("mode {}", channelConfig.getMode());
                                 boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
                                 dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
                                         new StateDescription(null, null, null, null, readOnly, null));
@@ -201,7 +201,7 @@ public class IO4BrickletHandler extends BaseThingHandler implements CallbackList
                                 ((Gpio1Channel) tfChannel).setConfig(channelConfig);
                             }
                             if (dynamicStateDescriptionProvider != null) {
-                                logger.debug("mode theox {}", channelConfig.getMode());
+                                logger.debug("mode {}", channelConfig.getMode());
                                 boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
                                 dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
                                         new StateDescription(null, null, null, null, readOnly, null));
@@ -220,7 +220,7 @@ public class IO4BrickletHandler extends BaseThingHandler implements CallbackList
                                 ((Gpio2Channel) tfChannel).setConfig(channelConfig);
                             }
                             if (dynamicStateDescriptionProvider != null) {
-                                logger.debug("mode theox {}", channelConfig.getMode());
+                                logger.debug("mode {}", channelConfig.getMode());
                                 boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
                                 dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
                                         new StateDescription(null, null, null, null, readOnly, null));
@@ -239,7 +239,7 @@ public class IO4BrickletHandler extends BaseThingHandler implements CallbackList
                                 ((Gpio3Channel) tfChannel).setConfig(channelConfig);
                             }
                             if (dynamicStateDescriptionProvider != null) {
-                                logger.debug("mode theox {}", channelConfig.getMode());
+                                logger.debug("mode {}", channelConfig.getMode());
                                 boolean readOnly = channelConfig.getMode().equals("input") ? true : false;
                                 dynamicStateDescriptionProvider.setDescription(currChannel.getUID(),
                                         new StateDescription(null, null, null, null, readOnly, null));

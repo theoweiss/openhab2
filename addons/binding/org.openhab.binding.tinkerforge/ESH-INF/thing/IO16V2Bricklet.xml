@@ -13,52 +13,52 @@
 
 		<channels>
 		
-		<channel id="gpio0" typeId="gpio">
+		<channel id="gpio0" typeId="gpiov2">
 		<label>GPIO 0</label></channel>
 		
-		<channel id="gpio1" typeId="gpio">
+		<channel id="gpio1" typeId="gpiov2">
 		<label>GPIO 1</label></channel>
 		
-		<channel id="gpio2" typeId="gpio">
+		<channel id="gpio2" typeId="gpiov2">
 		<label>GPIO 2</label></channel>
 		
-		<channel id="gpio3" typeId="gpio">
+		<channel id="gpio3" typeId="gpiov2">
 		<label>GPIO 3</label></channel>
 		
-		<channel id="gpio4" typeId="gpio">
+		<channel id="gpio4" typeId="gpiov2">
 		<label>GPIO 4</label></channel>
 		
-		<channel id="gpio5" typeId="gpio">
+		<channel id="gpio5" typeId="gpiov2">
 		<label>GPIO 5</label></channel>
 		
-		<channel id="gpio6" typeId="gpio">
+		<channel id="gpio6" typeId="gpiov2">
 		<label>GPIO 6</label></channel>
 		
-		<channel id="gpio7" typeId="gpio">
+		<channel id="gpio7" typeId="gpiov2">
 		<label>GPIO 7</label></channel>
 		
-		<channel id="gpio8" typeId="gpio">
+		<channel id="gpio8" typeId="gpiov2">
 		<label>GPIO 8</label></channel>
 		
-		<channel id="gpio9" typeId="gpio">
+		<channel id="gpio9" typeId="gpiov2">
 		<label>GPIO 9</label></channel>
 		
-		<channel id="gpio10" typeId="gpio">
+		<channel id="gpio10" typeId="gpiov2">
 		<label>GPIO 10</label></channel>
 		
-		<channel id="gpio11" typeId="gpio">
+		<channel id="gpio11" typeId="gpiov2">
 		<label>GPIO 11</label></channel>
 		
-		<channel id="gpio12" typeId="gpio">
+		<channel id="gpio12" typeId="gpiov2">
 		<label>GPIO 12</label></channel>
 		
-		<channel id="gpio13" typeId="gpio">
+		<channel id="gpio13" typeId="gpiov2">
 		<label>GPIO 13</label></channel>
 		
-		<channel id="gpio14" typeId="gpio">
+		<channel id="gpio14" typeId="gpiov2">
 		<label>GPIO 14</label></channel>
 		
-		<channel id="gpio15" typeId="gpio">
+		<channel id="gpio15" typeId="gpiov2">
 		<label>GPIO 15</label></channel>
 		
 		</channels>

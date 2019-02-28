@@ -626,4 +626,48 @@
 		</config-description>
 	</channel-type>
 
+	<channel-type id="gpiov2">
+		<item-type>Switch</item-type>
+		<label>GPIO Pin</label>
+		<description>GPIO Pin</description>
+		
+		<state readOnly="true" />
+		<config-description>
+			<parameter name="mode" type="text">
+				<label>Mode</label>
+				<options>
+					<option value="input">Input</option>
+					<option value="output">Output</option>
+				</options>
+				<default>input</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="defaultState" type="text">
+				<label>default state</label>
+				<options>
+					<option value="HIGH">HIGH</option>
+					<option value="LOW">LOW</option>
+					<option value="keep">keep</option>
+				</options>
+				<default>LOW</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="pullUpResistorEnabled" type="boolean">
+				<label>pullup resistor</label>
+				<default>true</default>
+			</parameter>
+			<parameter name="keepOnReconnect" type="boolean">
+				<label>keep state on reconnect</label>
+				<default>true</default>
+			</parameter>
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>500</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
 </thing:thing-descriptions>
