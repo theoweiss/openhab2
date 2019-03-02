@@ -42,6 +42,8 @@ public class TinkerforgeBindingConstants {
 
     public static final ThingTypeUID THING_TYPE_LOADCELL = new ThingTypeUID(BINDING_ID, "loadcell");
 
+    public static final ThingTypeUID THING_TYPE_LOADCELLV2 = new ThingTypeUID(BINDING_ID, "loadcellv2");
+
     public static final ThingTypeUID THING_TYPE_SOUNDINTENSITY = new ThingTypeUID(BINDING_ID, "soundintensity");
 
     public static final ThingTypeUID THING_TYPE_SOUNDPRESSURELEVEL = new ThingTypeUID(BINDING_ID, "soundpressurelevel");
@@ -138,6 +140,8 @@ public class TinkerforgeBindingConstants {
             THING_TYPE_TEMPERATUREIRV2,
 
             THING_TYPE_LOADCELL,
+
+            THING_TYPE_LOADCELLV2,
 
             THING_TYPE_SOUNDINTENSITY,
 

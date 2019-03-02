@@ -48,6 +48,7 @@ import org.openhab.binding.tinkerforge.handler.IndustrialDualRelayBrickletHandle
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletV2Handler;
 import org.openhab.binding.tinkerforge.handler.LoadCellBrickletHandler;
+import org.openhab.binding.tinkerforge.handler.LoadCellV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MotionDetectorBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MotionDetectorV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MultiTouchBrickletHandler;
@@ -155,6 +156,10 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
         if (thingTypeUID.equals(THING_TYPE_LOADCELL)) {
             return new LoadCellBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_LOADCELLV2)) {
+            return new LoadCellV2BrickletHandler(thing);
         }
 
         if (thingTypeUID.equals(THING_TYPE_SOUNDINTENSITY)) {

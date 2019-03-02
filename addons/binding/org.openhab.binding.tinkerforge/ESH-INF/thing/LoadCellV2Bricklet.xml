@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="loadcellv2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletLoadCellV2</label>
+		<description>Tinkerforge BrickletLoadCellV2</description>
+
+		<channels>
+		
+		<channel id="weight" typeId="weight"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>STATUS; default is 3=>STATUS..</description>
+			</parameter>
+
+			<parameter name="infoLEDConfig" type="integer" min="0" max="2" multiple="false" required="false">
+				<label>infoLEDConfig</label>
+				
+				<default>2</default>
+				
+				<description>Info LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT; default is 2=>HEARTBEAT..</description>
+			</parameter>
+
+			<parameter name="movingAverage" type="integer" min="1" max="1000" multiple="false" required="false">
+				<label>movingAverage</label>
+				
+				<default>100</default>
+				
+				<description>Length of a moving averaging of pressure<![CDATA[<br>]]>default 100; 1 will turn off the averaging.</description>
+			</parameter>
+
+			<parameter name="rate" type="integer" min="0" max="1" multiple="false" required="false">
+				<label>rate</label>
+				
+				<default>0</default>
+				
+				<description>Rate <![CDATA[<br>]]>Between 0=>10Hz), 1=>80Hz; default is 2=>10Hz..</description>
+			</parameter>
+
+			<parameter name="gain" type="integer" min="0" max="2" multiple="false" required="false">
+				<label>gain</label>
+				
+				<default>0</default>
+				
+				<description>Gain<![CDATA[<br>]]>Between 0=>128x), 1=>64x, 2=>32x; default is 2=>128x..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>
