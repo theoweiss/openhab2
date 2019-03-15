@@ -588,6 +588,18 @@
 		</config-description>
 	</channel-type>
 
+	<channel-type id="textcommand">
+		<item-type>String</item-type>
+		<label>Text</label>
+		<description>Text command for displays.</description>
+		
+		<state readOnly="false" />
+
+
+
+
+	</channel-type>
+
 	<channel-type id="gpio">
 		<item-type>Switch</item-type>
 		<label>GPIO Pin</label>

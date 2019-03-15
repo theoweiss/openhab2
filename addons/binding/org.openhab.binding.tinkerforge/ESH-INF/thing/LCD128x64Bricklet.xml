@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="lcd128x64">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletLCD128x64</label>
+		<description>Tinkerforge BrickletLCD128x64</description>
+
+		<channels>
+		
+		<channel id="display" typeId="textcommand"/>
+		
+		<channel id="button0" typeId="system.rawbutton">
+		<label>Button 0</label></channel>
+		
+		<channel id="button1" typeId="system.rawbutton">
+		<label>Button 1</label></channel>
+		
+		<channel id="button2" typeId="system.rawbutton">
+		<label>Button 2</label></channel>
+		
+		<channel id="button3" typeId="system.rawbutton">
+		<label>Button 3</label></channel>
+		
+		<channel id="button4" typeId="system.rawbutton">
+		<label>Button 4</label></channel>
+		
+		<channel id="button5" typeId="system.rawbutton">
+		<label>Button 5</label></channel>
+		
+		<channel id="button6" typeId="system.rawbutton">
+		<label>Button 6</label></channel>
+		
+		<channel id="button7" typeId="system.rawbutton">
+		<label>Button 7</label></channel>
+		
+		<channel id="button8" typeId="system.rawbutton">
+		<label>Button 8</label></channel>
+		
+		<channel id="button9" typeId="system.rawbutton">
+		<label>Button 9</label></channel>
+		
+		<channel id="button10" typeId="system.rawbutton">
+		<label>Button 10</label></channel>
+		
+		<channel id="button11" typeId="system.rawbutton">
+		<label>Button 11</label></channel>
+		
+		<channel id="slider0" typeId="system.rawrocker">
+		<label>Slider 0</label></channel>
+		
+		<channel id="slider1" typeId="system.rawrocker">
+		<label>Slider 1</label></channel>
+		
+		<channel id="slider2" typeId="system.rawrocker">
+		<label>Slider 2</label></channel>
+		
+		<channel id="slider3" typeId="system.rawrocker">
+		<label>Slider 3</label></channel>
+		
+		<channel id="slider4" typeId="system.rawrocker">
+		<label>Slider 4</label></channel>
+		
+		<channel id="slider5" typeId="system.rawrocker">
+		<label>Slider 5</label></channel>
+		
+		<channel id="tab0" typeId="system.rawrocker">
+		<label>Tab 0</label></channel>
+		
+		<channel id="tab1" typeId="system.rawrocker">
+		<label>Tab 1</label></channel>
+		
+		<channel id="tab2" typeId="system.rawrocker">
+		<label>Tab 2</label></channel>
+		
+		<channel id="tab3" typeId="system.rawrocker">
+		<label>Tab 3</label></channel>
+		
+		<channel id="tab4" typeId="system.rawrocker">
+		<label>Tab 4</label></channel>
+		
+		<channel id="tab5" typeId="system.rawrocker">
+		<label>Tab 5</label></channel>
+		
+		<channel id="tab6" typeId="system.rawrocker">
+		<label>Tab 6</label></channel>
+		
+		<channel id="tab7" typeId="system.rawrocker">
+		<label>Tab 7</label></channel>
+		
+		<channel id="tab8" typeId="system.rawrocker">
+		<label>Tab 8</label></channel>
+		
+		<channel id="tab9" typeId="system.rawrocker">
+		<label>Tab 9</label></channel>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="contrast" type="integer" min="0" max="63" multiple="false" required="false">
+				<label>contrast</label>
+				
+				<default>14</default>
+				
+				<description>Contrast between 0 - 63..</description>
+			</parameter>
+
+			<parameter name="backlight" type="integer" min="0" max="100" multiple="false" required="false">
+				<label>backlight</label>
+				
+				<default>100</default>
+				
+				<description>Backlight intensity between 0 - 100..</description>
+			</parameter>
+
+			<parameter name="invert" type="boolean"   multiple="false" required="false">
+				<label>invert</label>
+				
+				<default>false</default>
+				
+				<description>Invert color scheme..</description>
+			</parameter>
+
+			<parameter name="automaticDraw" type="boolean"   multiple="false" required="false">
+				<label>automaticDraw</label>
+				
+				<default>true</default>
+				
+				<description>Buffer UI changes..</description>
+			</parameter>
+
+			<parameter name="tabgesture" type="integer" min="1" max="3" multiple="false" required="false">
+				<label>tabgesture</label>
+				
+				<default>3</default>
+				
+				<description>0 = on click, 1 = on swipe, 3 = on click and on swipe.</description>
+			</parameter>
+
+			<parameter name="tabclears" type="boolean"   multiple="false" required="false">
+				<label>tabclears</label>
+				
+				<default>true</default>
+				
+				<description>Automatically remove GUI elements on tab change..</description>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>STATUS; default is 3=>STATUS..</description>
+			</parameter>
+
+			<parameter name="touchLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>touchLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>Show Touch; default is 3=>Show Touch..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

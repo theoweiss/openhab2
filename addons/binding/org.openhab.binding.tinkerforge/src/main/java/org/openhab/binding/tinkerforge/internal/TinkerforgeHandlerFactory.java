@@ -47,6 +47,7 @@ import org.openhab.binding.tinkerforge.handler.IndustrialDualAnalogInV2BrickletH
 import org.openhab.binding.tinkerforge.handler.IndustrialDualRelayBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletV2Handler;
+import org.openhab.binding.tinkerforge.handler.LCD128x64BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.LoadCellBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.LoadCellV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MotionDetectorBrickletHandler;
@@ -324,6 +325,10 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
             return new IO4V2BrickletHandler(thing, dynamicStateDescriptionProvider);
 
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_LCD128X64)) {
+            return new LCD128x64BrickletHandler(thing);
         }
 
         return null;

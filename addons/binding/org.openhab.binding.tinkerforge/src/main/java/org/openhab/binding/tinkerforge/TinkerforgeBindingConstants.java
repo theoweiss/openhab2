@@ -127,6 +127,8 @@ public class TinkerforgeBindingConstants {
 
     public static final ThingTypeUID THING_TYPE_IO4V2 = new ThingTypeUID(BINDING_ID, "io4v2");
 
+    public static final ThingTypeUID THING_TYPE_LCD128X64 = new ThingTypeUID(BINDING_ID, "lcd128x64");
+
     private static final ThingTypeUID[] SUPPORTED_THING_TYPES_UIDS_ARRAY = new ThingTypeUID[] { THING_TYPE_BRICKD,
 
             THING_TYPE_OUTDOORWEATHER,
@@ -219,7 +221,9 @@ public class TinkerforgeBindingConstants {
 
             THING_TYPE_IO16V2,
 
-            THING_TYPE_IO4V2 };
+            THING_TYPE_IO4V2,
+
+            THING_TYPE_LCD128X64 };
     public static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = new HashSet<>(
             Arrays.asList(SUPPORTED_THING_TYPES_UIDS_ARRAY));
 
