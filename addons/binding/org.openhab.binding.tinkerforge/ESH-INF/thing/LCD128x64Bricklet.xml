@@ -51,22 +51,22 @@
 		<channel id="button11" typeId="system.rawbutton">
 		<label>Button 11</label></channel>
 		
-		<channel id="slider0" typeId="system.rawrocker">
+		<channel id="slider0" typeId="slider">
 		<label>Slider 0</label></channel>
 		
-		<channel id="slider1" typeId="system.rawrocker">
+		<channel id="slider1" typeId="slider">
 		<label>Slider 1</label></channel>
 		
-		<channel id="slider2" typeId="system.rawrocker">
+		<channel id="slider2" typeId="slider">
 		<label>Slider 2</label></channel>
 		
-		<channel id="slider3" typeId="system.rawrocker">
+		<channel id="slider3" typeId="slider">
 		<label>Slider 3</label></channel>
 		
-		<channel id="slider4" typeId="system.rawrocker">
+		<channel id="slider4" typeId="slider">
 		<label>Slider 4</label></channel>
 		
-		<channel id="slider5" typeId="system.rawrocker">
+		<channel id="slider5" typeId="slider">
 		<label>Slider 5</label></channel>
 		
 		<channel id="tab0" typeId="system.rawrocker">

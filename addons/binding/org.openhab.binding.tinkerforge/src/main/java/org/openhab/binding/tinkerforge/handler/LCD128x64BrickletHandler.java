@@ -11,8 +11,10 @@ package org.openhab.binding.tinkerforge.handler;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Channel;
@@ -68,15 +70,14 @@ import org.m1theo.tinkerforge.client.devices.lcd128x64.Tab7Channel;
 import org.m1theo.tinkerforge.client.devices.lcd128x64.Tab8Channel;
 import org.m1theo.tinkerforge.client.devices.lcd128x64.Tab9Channel;
 import org.m1theo.tinkerforge.client.devices.lcd128x64.TabChannelConfig;
+import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.HighLowValue;
 import org.m1theo.tinkerforge.client.types.StringValue;
 import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
-import org.openhab.binding.tinkerforge.action.LCD128x64Actions;
+import org.openhab.binding.tinkerforge.action.LCD128x64BrickletActions;
 import org.openhab.binding.tinkerforge.internal.CommandConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import afu.org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * The {@link LCD128x64BrickletHandler} is responsible for handling commands, which are
@@ -97,11 +98,6 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
 
     public LCD128x64BrickletHandler(Thing thing) {
         super(thing);
-    }
-
-    @Override
-    public Collection<@NonNull Class<? extends @NonNull ThingHandlerService>> getServices() {
-        return Collections.singleton(LCD128x64Actions.class);
     }
 
     @Override
@@ -579,6 +575,24 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
     }
 
     @Override
+    public Collection<@NonNull Class<? extends @NonNull ThingHandlerService>> getServices() {
+        return Collections.singleton(LCD128x64BrickletActions.class);
+    }
+
+    public @Nullable DisplayChannel getDisplayChannel() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                DisplayChannel channel = (DisplayChannel) device2.getChannel("display");
+                return channel;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
             @Nullable TinkerforgeValue newValue) {
         if (notifier == null) {
@@ -761,43 +775,61 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
 
             if (notifier.getChannelId().equals(ChannelId.slider0.name())) {
 
-                // TODO
-                return;
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
 
             }
 
             if (notifier.getChannelId().equals(ChannelId.slider1.name())) {
 
-                // TODO
-                return;
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
 
             }
 
             if (notifier.getChannelId().equals(ChannelId.slider2.name())) {
 
-                // TODO
-                return;
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
 
             }
 
             if (notifier.getChannelId().equals(ChannelId.slider3.name())) {
 
-                // TODO
-                return;
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
 
             }
 
             if (notifier.getChannelId().equals(ChannelId.slider4.name())) {
 
-                // TODO
-                return;
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
 
             }
 
             if (notifier.getChannelId().equals(ChannelId.slider5.name())) {
 
-                // TODO
-                return;
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
 
             }
 
@@ -970,6 +1002,30 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
                     getdisplay();
                     break;
 
+                case "slider0":
+                    getslider0();
+                    break;
+
+                case "slider1":
+                    getslider1();
+                    break;
+
+                case "slider2":
+                    getslider2();
+                    break;
+
+                case "slider3":
+                    getslider3();
+                    break;
+
+                case "slider4":
+                    getslider4();
+                    break;
+
+                case "slider5":
+                    getslider5();
+                    break;
+
                 default:
                     break;
             }
@@ -980,6 +1036,30 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
 
         if (isLinked("display")) {
             getdisplay();
+        }
+
+        if (isLinked("slider0")) {
+            getslider0();
+        }
+
+        if (isLinked("slider1")) {
+            getslider1();
+        }
+
+        if (isLinked("slider2")) {
+            getslider2();
+        }
+
+        if (isLinked("slider3")) {
+            getslider3();
+        }
+
+        if (isLinked("slider4")) {
+            getslider4();
+        }
+
+        if (isLinked("slider5")) {
+            getslider5();
         }
 
     }
@@ -1003,17 +1083,118 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
         }
     }
 
-    public @Nullable DisplayChannel getDisplayChannel() {
+    private void getslider0() {
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
             if (device != null) {
                 LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
-                DisplayChannel channel = (DisplayChannel) device2.getChannel("display");
-                return channel;
+                Slider0Channel channel = (Slider0Channel) device2.getChannel("slider0");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.slider0.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+
             }
         }
-        return null;
+    }
+
+    private void getslider1() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                Slider1Channel channel = (Slider1Channel) device2.getChannel("slider1");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.slider1.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+
+            }
+        }
+    }
+
+    private void getslider2() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                Slider2Channel channel = (Slider2Channel) device2.getChannel("slider2");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.slider2.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+
+            }
+        }
+    }
+
+    private void getslider3() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                Slider3Channel channel = (Slider3Channel) device2.getChannel("slider3");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.slider3.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+
+            }
+        }
+    }
+
+    private void getslider4() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                Slider4Channel channel = (Slider4Channel) device2.getChannel("slider4");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.slider4.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+
+            }
+        }
+    }
+
+    private void getslider5() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                Slider5Channel channel = (Slider5Channel) device2.getChannel("slider5");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.slider5.name(), new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
+                    return;
+                }
+
+            }
+        }
     }
 
     @Override

@@ -682,4 +682,16 @@
 		</config-description>
 	</channel-type>
 
+	<channel-type id="slider">
+		<item-type>Number</item-type>
+		<label>Slider Value</label>
+		<description>Slider Position.</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
 </thing:thing-descriptions>
