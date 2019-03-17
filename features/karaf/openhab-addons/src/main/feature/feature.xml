@@ -780,6 +780,11 @@
         <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.toon/${project.version}</bundle>
     </feature>
 
+    <feature name="openhab-binding-tinkerforge" description="Tinkerforge Binding" version="${project.version}">
+        <feature>openhab-runtime-base</feature>
+        <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.tinkerforge/${project.version}</bundle>
+    </feature>
+
     <feature name="openhab-binding-tplinksmarthome" description="TP-Link Smart Home Binding" version="${project.version}">
         <feature>openhab-runtime-base</feature>
         <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.tplinksmarthome/${project.version}</bundle>

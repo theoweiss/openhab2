@@ -11,6 +11,7 @@ Bundle-Vendor: openHAB
 Bundle-Version: 2.5.0.qualifier
 Export-Package: 
  org.openhab.binding.tinkerforge,
+ org.openhab.binding.tinkerforge.action,
  org.openhab.binding.tinkerforge.handler
 Import-Package: 
  javax.measure,

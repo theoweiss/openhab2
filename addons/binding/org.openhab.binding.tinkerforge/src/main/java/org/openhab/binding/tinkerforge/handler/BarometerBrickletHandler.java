@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2010-2018 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.tinkerforge.handler;
 
@@ -17,6 +21,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.unit.MetricPrefix;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
+import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -205,7 +210,7 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(notifier.getChannelId(), new QuantityType<>(
-                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.MILLIBAR));
+                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.MILLIBAR));
 
                     return;
                 }
@@ -296,7 +301,7 @@ public class BarometerBrickletHandler extends BaseThingHandler implements Callba
                 if (newValue instanceof DecimalValue) {
                     logger.debug("new value {}", newValue);
                     updateState(ChannelId.airpressure.name(), new QuantityType<>(
-                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SIUnits.MILLIBAR));
+                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.MILLIBAR));
 
                     return;
                 }
