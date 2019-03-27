@@ -52,6 +52,7 @@ import org.openhab.binding.tinkerforge.handler.IndustrialDualRelayBrickletHandle
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.IndustrialQuadRelayBrickletV2Handler;
 import org.openhab.binding.tinkerforge.handler.LCD128x64BrickletHandler;
+import org.openhab.binding.tinkerforge.handler.LCD20x4BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.LoadCellBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.LoadCellV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MotionDetectorBrickletHandler;
@@ -59,6 +60,9 @@ import org.openhab.binding.tinkerforge.handler.MotionDetectorV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.MultiTouchBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.NFCBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.NFCRFIDBrickletHandler;
+import org.openhab.binding.tinkerforge.handler.OLED128x64BrickletHandler;
+import org.openhab.binding.tinkerforge.handler.OLED128x64V2BrickletHandler;
+import org.openhab.binding.tinkerforge.handler.OLED64x48BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.OutdoorWeatherBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.PTCBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.PTCV2BrickletHandler;
@@ -333,6 +337,22 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
         if (thingTypeUID.equals(THING_TYPE_LCD128X64)) {
             return new LCD128x64BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_LCD20X4)) {
+            return new LCD20x4BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_OLED128X64V2)) {
+            return new OLED128x64V2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_OLED128X64)) {
+            return new OLED128x64BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_OLED64X48)) {
+            return new OLED64x48BrickletHandler(thing);
         }
 
         return null;

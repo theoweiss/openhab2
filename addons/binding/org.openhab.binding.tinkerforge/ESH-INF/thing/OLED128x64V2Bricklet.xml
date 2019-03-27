@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="oled128x64v2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletOLED128x64V2</label>
+		<description>Tinkerforge BrickletOLED128x64V2</description>
+
+		<channels>
+		
+		<channel id="display" typeId="textcommand"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="contrast" type="integer" min="0" max="255" multiple="false" required="false">
+				<label>contrast</label>
+				
+				<default>143</default>
+				
+				<description>Contrast between 0 - 255..</description>
+			</parameter>
+
+			<parameter name="invert" type="boolean"   multiple="false" required="false">
+				<label>invert</label>
+				
+				<default>false</default>
+				
+				<description>Invert color scheme..</description>
+			</parameter>
+
+			<parameter name="automaticDraw" type="boolean"   multiple="false" required="false">
+				<label>automaticDraw</label>
+				
+				<default>true</default>
+				
+				<description>Buffer UI changes..</description>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>STATUS; default is 3=>STATUS..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>
