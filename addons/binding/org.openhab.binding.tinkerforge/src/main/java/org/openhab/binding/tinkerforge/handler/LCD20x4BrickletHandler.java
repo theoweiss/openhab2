@@ -18,6 +18,7 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.CommonTriggerEvents;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
@@ -25,18 +26,22 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.m1theo.tinkerforge.client.ActuatorChannel;
+import org.m1theo.tinkerforge.client.CallbackListener;
 import org.m1theo.tinkerforge.client.Device;
 import org.m1theo.tinkerforge.client.DeviceAdminListener;
 import org.m1theo.tinkerforge.client.DeviceChangeType;
 import org.m1theo.tinkerforge.client.DeviceInfo;
+import org.m1theo.tinkerforge.client.Notifier;
 import org.m1theo.tinkerforge.client.devices.DeviceType;
 import org.m1theo.tinkerforge.client.devices.lcd20x4.BacklightChannel;
 import org.m1theo.tinkerforge.client.devices.lcd20x4.ChannelId;
 import org.m1theo.tinkerforge.client.devices.lcd20x4.DisplayChannel;
 import org.m1theo.tinkerforge.client.devices.lcd20x4.LCD20x4Bricklet;
 import org.m1theo.tinkerforge.client.devices.lcd20x4.LCD20x4Config;
+import org.m1theo.tinkerforge.client.types.HighLowValue;
 import org.m1theo.tinkerforge.client.types.OnOffValue;
 import org.m1theo.tinkerforge.client.types.StringValue;
+import org.m1theo.tinkerforge.client.types.TinkerforgeValue;
 import org.openhab.binding.tinkerforge.internal.CommandConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +54,7 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 
-public class LCD20x4BrickletHandler extends BaseThingHandler implements DeviceAdminListener {
+public class LCD20x4BrickletHandler extends BaseThingHandler implements CallbackListener, DeviceAdminListener {
 
     private final Logger logger = LoggerFactory.getLogger(LCD20x4BrickletHandler.class);
     private @Nullable LCD20x4Config config;
@@ -133,7 +138,7 @@ public class LCD20x4BrickletHandler extends BaseThingHandler implements DeviceAd
         ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
-
+            brickdBridgeHandler.registerCallbackListener(this, uid);
             if (bridgeStatus == ThingStatus.ONLINE) {
                 Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
                 if (deviceIn != null) {
@@ -162,6 +167,78 @@ public class LCD20x4BrickletHandler extends BaseThingHandler implements DeviceAd
         } else {
             logger.error("brickdBridgeHandler is null");
             updateStatus(ThingStatus.OFFLINE);
+        }
+    }
+
+    @Override
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
+        if (notifier == null) {
+            return;
+        }
+        if (!notifier.getDeviceId().equals(uid)) {
+            return;
+        }
+        if (notifier.getExternalDeviceId() != null) {
+            // TODO
+        } else {
+
+            if (notifier.getChannelId().equals(ChannelId.button0.name())) {
+
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
+                    triggerChannel(notifier.getChannelId(), value);
+
+                    return;
+                }
+
+            }
+
+            if (notifier.getChannelId().equals(ChannelId.button1.name())) {
+
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
+                    triggerChannel(notifier.getChannelId(), value);
+
+                    return;
+                }
+
+            }
+
+            if (notifier.getChannelId().equals(ChannelId.button2.name())) {
+
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
+                    triggerChannel(notifier.getChannelId(), value);
+
+                    return;
+                }
+
+            }
+
+            if (notifier.getChannelId().equals(ChannelId.button3.name())) {
+
+                if (newValue instanceof HighLowValue) {
+                    logger.debug("new value {}", newValue);
+
+                    String value = newValue == HighLowValue.HIGH ? CommonTriggerEvents.PRESSED
+                            : CommonTriggerEvents.RELEASED;
+                    triggerChannel(notifier.getChannelId(), value);
+
+                    return;
+                }
+
+            }
+
         }
     }
 
@@ -258,7 +335,7 @@ public class LCD20x4BrickletHandler extends BaseThingHandler implements DeviceAd
         BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
         if (brickdBridgeHandler != null) {
             brickdBridgeHandler.unregisterDeviceStatusListener(this);
-
+            brickdBridgeHandler.unregisterCallbackListener(this, uid);
         }
         if (device != null) {
             device.disable();
