@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="multitouch">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletMultiTouch</label>
+		<description>Tinkerforge BrickletMultiTouch</description>
+
+		<channels>
+		
+		<channel id="electrode0" typeId="system.rawbutton">
+		<label>Electrode 0</label></channel>
+		
+		<channel id="electrode1" typeId="system.rawbutton">
+		<label>Electrode 1</label></channel>
+		
+		<channel id="electrode2" typeId="system.rawbutton">
+		<label>Electrode 2</label></channel>
+		
+		<channel id="electrode3" typeId="system.rawbutton">
+		<label>Electrode 3</label></channel>
+		
+		<channel id="electrode4" typeId="system.rawbutton">
+		<label>Electrode 4</label></channel>
+		
+		<channel id="electrode5" typeId="system.rawbutton">
+		<label>Electrode 5</label></channel>
+		
+		<channel id="electrode6" typeId="system.rawbutton">
+		<label>Electrode 6</label></channel>
+		
+		<channel id="electrode7" typeId="system.rawbutton">
+		<label>Electrode 7</label></channel>
+		
+		<channel id="electrode8" typeId="system.rawbutton">
+		<label>Electrode 8</label></channel>
+		
+		<channel id="electrode9" typeId="system.rawbutton">
+		<label>Electrode 9</label></channel>
+		
+		<channel id="electrode10" typeId="system.rawbutton">
+		<label>Electrode 10</label></channel>
+		
+		<channel id="electrode11" typeId="system.rawbutton">
+		<label>Electrode 11</label></channel>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="electrodeSensitivity" type="integer" min="5" max="201" multiple="false" required="false">
+				<label>electrodeSensitivity</label>
+				
+				<default>181</default>
+				
+				<description>electrodeSensitivity.</description>
+			</parameter>
+
+			<parameter name="disableProximity" type="boolean"   multiple="false" required="false">
+				<label>disableProximity</label>
+				
+				<default>false</default>
+				
+				<description>disable proximity sensing.</description>
+			</parameter>
+
+			<parameter name="disabledElectrodes" type="integer" min="0" max="11" multiple="true" required="false">
+				<label>disabledElectrodes</label>
+				
+				<description>list of disabled electrodes.</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

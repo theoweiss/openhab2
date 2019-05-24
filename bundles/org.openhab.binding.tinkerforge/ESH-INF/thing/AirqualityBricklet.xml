@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="airquality">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletAirQuality</label>
+		<description>Tinkerforge BrickletAirQuality</description>
+
+		<channels>
+		
+		<channel id="iaqIndex" typeId="iaqindex"/>
+		
+		<channel id="iaqAccuracy" typeId="iaqaccuracy"/>
+		
+		<channel id="airpressure" typeId="airpressure"/>
+		
+		<channel id="temperature" typeId="temperature"/>
+		
+		<channel id="humidity" typeId="humidity"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="temperatureOffset" type="integer" min="0"  multiple="false" required="false">
+				<label>temperatureOffset</label>
+				
+				<default>0</default>
+				
+				<description>Temperature offset with resolution 1/100°C..</description>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>STATUS; default is 3=>STATUS..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

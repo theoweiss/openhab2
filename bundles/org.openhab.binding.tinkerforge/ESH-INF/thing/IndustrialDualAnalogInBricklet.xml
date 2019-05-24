@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="industrialdualanalogIn">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletIndustrialDualAnalogIn</label>
+		<description>Tinkerforge BrickletIndustrialDualAnalogIn</description>
+
+		<channels>
+		
+		<channel id="voltage0" typeId="voltage"/>
+		
+		<channel id="voltage1" typeId="voltage"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="sampleRate" type="integer" min="0" max="7" multiple="false" required="false">
+				<label>sampleRate</label>
+				
+				<default>6</default>
+				
+				<description>samples per second<![CDATA[<br>]]>Between 976 SPS (0), 488 SPS (1), 244 SPS (2), 122 SPS (3), 61 SPS (4), 4 SPS (5), 2 SPS (6), 1 SPS (0).</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

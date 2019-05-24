@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="io4v2">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletIO4V2</label>
+		<description>Tinkerforge BrickletIO4V2</description>
+
+		<channels>
+		
+		<channel id="gpio0" typeId="gpiov2">
+		<label>GPIO 0</label></channel>
+		
+		<channel id="gpio1" typeId="gpiov2">
+		<label>GPIO 1</label></channel>
+		
+		<channel id="gpio2" typeId="gpiov2">
+		<label>GPIO 2</label></channel>
+		
+		<channel id="gpio3" typeId="gpiov2">
+		<label>GPIO 3</label></channel>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>STATUS; default is 3=>STATUS..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

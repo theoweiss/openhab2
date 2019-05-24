@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+
+	<channel-type id="temperature">
+		<item-type>Number:Temperature</item-type>
+		<label>Temperature</label>
+		<description>Current Temperature</description>
+		<category>Temperature</category>
+		<state readOnly="true" pattern="%.2f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="weight">
+		<item-type>Number:Mass</item-type>
+		<label>Weight</label>
+		<description>Weight</description>
+		<category>Pressure</category>
+		<state readOnly="true" pattern="%.2f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="intensity">
+		<item-type>Number</item-type>
+		<label>Intensity</label>
+		<description>The current sound intensity. The value has a range of 0 to 4095</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="decibel">
+		<item-type>Number:Dimensionless</item-type>
+		<label>Decibel</label>
+		<description>The measured sound pressure in decibels.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="illuminance">
+		<item-type>Number:Illuminance</item-type>
+		<label>Illuminance</label>
+		<description>The current illuminance in lux.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="airpressure">
+		<item-type>Number:Pressure</item-type>
+		<label>Airpressure</label>
+		<description>Barometric pressure</description>
+		<category>Pressure</category>
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="altitude">
+		<item-type>Number:Length</item-type>
+		<label>Altitude</label>
+		<description>The current altitude.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="distance">
+		<item-type>Number:Length</item-type>
+		<label>Distance</label>
+		<description>The current distance.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="humidity">
+		<item-type>Number:Dimensionless</item-type>
+		<label>Humidity</label>
+		<description>Humidity in percent.</description>
+		<category>Humidity</category>
+		<state readOnly="true" pattern="%.2f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="datetime">
+		<item-type>DateTime</item-type>
+		<label>DateTime</label>
+		<description>Current Time and Date</description>
+		<category>Time</category>
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="count">
+		<item-type>Number</item-type>
+		<label>Count</label>
+		<description>The current value of a counter.</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="voltage">
+		<item-type>Number:ElectricPotential</item-type>
+		<label>Voltage</label>
+		<description>The current voltage in milli Volt.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="current">
+		<item-type>Number:ElectricCurrent</item-type>
+		<label>Current</label>
+		<description>The current in milli Ampere.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="power">
+		<item-type>Number:Power</item-type>
+		<label>Power</label>
+		<description>The power in Watt.</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="speed">
+		<item-type>Number</item-type>
+		<label>Speed</label>
+		<description>The speed.</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="direction">
+		<item-type>null</item-type>
+		<label>Direction</label>
+		<description>Die Himmelsrichtung.</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="rain">
+		<item-type>Number</item-type>
+		<label>Rain</label>
+		<description>Der Regen.</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="led">
+		<item-type>Switch</item-type>
+		<label>LED</label>
+		<description>LED status.</description>
+		
+		<state readOnly="false" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="heater">
+		<item-type>Switch</item-type>
+		<label>Heater</label>
+		<description>Heater status.</description>
+		
+		<state readOnly="false" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="resistance">
+		<item-type>Number</item-type>
+		<label>Resistance</label>
+		<description>Resistance in Ohm.</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="distanceus">
+		<item-type>Number</item-type>
+		<label>Distance</label>
+		<description>Distance value.</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="rfidtagid">
+		<item-type>String</item-type>
+		<label>TagId</label>
+		<description>RFID tag ID</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="iaqindex">
+		<item-type>Number</item-type>
+		<label>IAQIndex</label>
+		<description>IAQIndex value.</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="iaqaccuracy">
+		<item-type>Number</item-type>
+		<label>IAQIndex Accuracy</label>
+		<description>IAQIndex accurance value.</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="uvindex">
+		<item-type>Number</item-type>
+		<label>UV Index</label>
+		<description>UV Index</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="uvaintensity">
+		<item-type>Number:Intensity</item-type>
+		<label>UVA Intensity</label>
+		<description>UVA  Intensity</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="uvbintensity">
+		<item-type>Number:Intensity</item-type>
+		<label>UVB Intensity</label>
+		<description>UVB  Intensity</description>
+		
+		<state readOnly="true" pattern="%.1f %unit%"/>
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="textcommand">
+		<item-type>String</item-type>
+		<label>Text</label>
+		<description>Text command for displays.</description>
+		
+		<state readOnly="false" />
+
+
+
+
+	</channel-type>
+
+	<channel-type id="gpio">
+		<item-type>Switch</item-type>
+		<label>GPIO Pin</label>
+		<description>GPIO Pin</description>
+		
+		<state readOnly="true" />
+		<config-description>
+			<parameter name="mode" type="text">
+				<label>Mode</label>
+				<options>
+					<option value="input">Input</option>
+					<option value="output">Output</option>
+				</options>
+				<default>input</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="defaultState" type="text">
+				<label>default state</label>
+				<options>
+					<option value="HIGH">HIGH</option>
+					<option value="LOW">LOW</option>
+					<option value="keep">keep</option>
+				</options>
+				<default>LOW</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="pullUpResistorEnabled" type="boolean">
+				<label>pullup resistor</label>
+				<default>true</default>
+			</parameter>
+			<parameter name="keepOnReconnect" type="boolean">
+				<label>keep state on reconnect</label>
+				<default>true</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="gpiov2">
+		<item-type>Switch</item-type>
+		<label>GPIO Pin</label>
+		<description>GPIO Pin</description>
+		
+		<state readOnly="true" />
+		<config-description>
+			<parameter name="mode" type="text">
+				<label>Mode</label>
+				<options>
+					<option value="input">Input</option>
+					<option value="output">Output</option>
+				</options>
+				<default>input</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="defaultState" type="text">
+				<label>default state</label>
+				<options>
+					<option value="HIGH">HIGH</option>
+					<option value="LOW">LOW</option>
+					<option value="keep">keep</option>
+				</options>
+				<default>LOW</default>
+				<limitToOptions>true</limitToOptions>
+			</parameter>
+			<parameter name="pullUpResistorEnabled" type="boolean">
+				<label>pullup resistor</label>
+				<default>true</default>
+			</parameter>
+			<parameter name="keepOnReconnect" type="boolean">
+				<label>keep state on reconnect</label>
+				<default>true</default>
+			</parameter>
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>500</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="slider">
+		<item-type>Number</item-type>
+		<label>Slider Value</label>
+		<description>Slider Position.</description>
+		
+		<state readOnly="true" />
+
+
+
+
+	</channel-type>
+
+</thing:thing-descriptions>

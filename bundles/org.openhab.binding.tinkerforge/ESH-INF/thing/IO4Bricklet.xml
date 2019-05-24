@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="io4">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletIO4</label>
+		<description>Tinkerforge BrickletIO4</description>
+
+		<channels>
+		
+		<channel id="gpio0" typeId="gpio">
+		<label>GPIO 0</label></channel>
+		
+		<channel id="gpio1" typeId="gpio">
+		<label>GPIO 1</label></channel>
+		
+		<channel id="gpio2" typeId="gpio">
+		<label>GPIO 2</label></channel>
+		
+		<channel id="gpio3" typeId="gpio">
+		<label>GPIO 3</label></channel>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="debouncePeriod" type="integer" min="1"  multiple="false" required="false">
+				<label>debouncePeriod</label>
+				
+				<default>100</default>
+				
+				<description>Debounce period in ms, if something that bounces is connected to the Bricklet..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

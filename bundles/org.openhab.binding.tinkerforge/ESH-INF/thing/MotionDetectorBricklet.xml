@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="motiondetector">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletMotionDetector</label>
+		<description>Tinkerforge BrickletMotionDetector</description>
+
+		<channels>
+		
+		<channel id="motiondetected" typeId="system.motion"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="2" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>2</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>STATUS; default is 2=>STATUS..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="ambientlightV3">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletAmbientLightV3</label>
+		<description>Tinkerforge BrickletAmbientLightV3</description>
+
+		<channels>
+		
+		<channel id="illuminance" typeId="illuminance"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+			<parameter name="illuminanceRange" type="integer" min="0" max="6" multiple="false" required="false">
+				<label>illuminanceRange</label>
+				
+				<default>3</default>
+				
+				<description>Illuminance range<![CDATA[<br>]]>Between 600 (5), 1300 (4), 8000 (3), 16000 (2), 32000 (1), 64000 (0) and umlimited (6)..</description>
+			</parameter>
+
+			<parameter name="integrationTime" type="integer" min="0" max="7" multiple="false" required="false">
+				<label>integrationTime</label>
+				
+				<default>3</default>
+				
+				<description>Integration time <![CDATA[<br>]]>Between 50ms and 400ms (+ 50ms/step) default 2 => 200ms.</description>
+			</parameter>
+
+			<parameter name="statusLEDConfig" type="integer" min="0" max="3" multiple="false" required="false">
+				<label>statusLEDConfig</label>
+				
+				<default>3</default>
+				
+				<description>Status LED<![CDATA[<br>]]>Between 0=>OFF), 1=>ON, 2=>HEARTBEAT, 3=>STATUS; default is 3=>STATUS..</description>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>
