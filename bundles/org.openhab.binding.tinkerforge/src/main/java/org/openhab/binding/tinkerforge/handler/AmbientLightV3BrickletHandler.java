@@ -44,8 +44,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link AmbientLightV3BrickletHandler} is responsible for handling commands, which are
- * sent to one of the channels.
+ * The {@link AmbientLightV3BrickletHandler} is responsible for handling
+ * commands, which are sent to one of the channels.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
@@ -53,208 +53,208 @@ import org.slf4j.LoggerFactory;
 
 public class AmbientLightV3BrickletHandler extends BaseThingHandler implements CallbackListener, DeviceAdminListener {
 
-    private final Logger logger = LoggerFactory.getLogger(AmbientLightV3BrickletHandler.class);
-    private @Nullable AmbientLightV3DeviceConfig config;
-    private @Nullable BrickdBridgeHandler bridgeHandler;
-    private @Nullable AmbientLightV3Bricklet device;
-    private @Nullable String uid;
-    private boolean enabled = false;
+	private final Logger logger = LoggerFactory.getLogger(AmbientLightV3BrickletHandler.class);
+	private @Nullable AmbientLightV3DeviceConfig config;
+	private @Nullable BrickdBridgeHandler bridgeHandler;
+	private @Nullable AmbientLightV3Bricklet device;
+	private @Nullable String uid;
+	private boolean enabled = false;
 
-    public AmbientLightV3BrickletHandler(Thing thing) {
-        super(thing);
-    }
+	public AmbientLightV3BrickletHandler(Thing thing) {
+		super(thing);
+	}
 
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+	@Override
+	public void handleCommand(ChannelUID channelUID, Command command) {
 
-    }
+	}
 
-    @Override
-    public void initialize() {
-        config = getConfigAs(AmbientLightV3DeviceConfig.class);
-        String uid = config.getUid();
-        if (uid != null) {
-            this.uid = uid;
-            BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-            if (brickdBridgeHandler != null) {
-                brickdBridgeHandler.registerDeviceStatusListener(this);
-                enable();
-            } else {
-                updateStatus(ThingStatus.OFFLINE);
-            }
-        } else {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
-        }
-    }
+	@Override
+	public void initialize() {
+		config = getConfigAs(AmbientLightV3DeviceConfig.class);
+		String uid = config.getUid();
+		if (uid != null) {
+			this.uid = uid;
+			BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+			if (brickdBridgeHandler != null) {
+				brickdBridgeHandler.registerDeviceStatusListener(this);
+				enable();
+			} else {
+				updateStatus(ThingStatus.OFFLINE);
+			}
+		} else {
+			updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
+		}
+	}
 
-    private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
-        if (bridgeHandler == null) {
-            Bridge bridge = getBridge();
-            if (bridge == null) {
-                return null;
-            }
-            ThingHandler handler = bridge.getHandler();
-            if (handler instanceof BrickdBridgeHandler) {
-                bridgeHandler = (BrickdBridgeHandler) handler;
-            }
-        }
-        return bridgeHandler;
-    }
+	private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
+		if (bridgeHandler == null) {
+			Bridge bridge = getBridge();
+			if (bridge == null) {
+				return null;
+			}
+			ThingHandler handler = bridge.getHandler();
+			if (handler instanceof BrickdBridgeHandler) {
+				bridgeHandler = (BrickdBridgeHandler) handler;
+			}
+		}
+		return bridgeHandler;
+	}
 
-    private void enable() {
-        logger.debug("executing enable");
-        Bridge bridge = getBridge();
-        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
-            brickdBridgeHandler.registerCallbackListener(this, uid);
-            if (bridgeStatus == ThingStatus.ONLINE) {
-                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-                if (deviceIn != null) {
-                    if (deviceIn.getDeviceType() == DeviceType.ambientlightV3) {
-                        AmbientLightV3Bricklet device = (AmbientLightV3Bricklet) deviceIn;
-                        device.setDeviceConfig(config);
+	private void enable() {
+		logger.debug("executing enable");
+		Bridge bridge = getBridge();
+		ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+		if (brickdBridgeHandler != null) {
+			brickdBridgeHandler.registerCallbackListener(this, uid);
+			if (bridgeStatus == ThingStatus.ONLINE) {
+				Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+				if (deviceIn != null) {
+					if (deviceIn.getDeviceType() == DeviceType.ambientlightV3) {
+						AmbientLightV3Bricklet device = (AmbientLightV3Bricklet) deviceIn;
+						device.setDeviceConfig(config);
 
-                        Channel illuminanceChannel = thing.getChannel("illuminance");
-                        if (illuminanceChannel != null) {
-                            Channel currChannel = illuminanceChannel;
+						Channel illuminanceChannel = thing.getChannel("illuminance");
+						if (illuminanceChannel != null) {
+							Channel currChannel = illuminanceChannel;
 
-                            IlluminanceChannelConfig channelConfig = currChannel.getConfiguration()
-                                    .as(IlluminanceChannelConfig.class);
-                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
-                                    .getChannel(ChannelId.illuminance.name());
-                            if (tfChannel instanceof IlluminanceChannel) {
-                                ((IlluminanceChannel) tfChannel).setConfig(channelConfig);
-                            }
+							IlluminanceChannelConfig channelConfig = currChannel.getConfiguration()
+									.as(IlluminanceChannelConfig.class);
+							org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+									.getChannel(ChannelId.illuminance.name());
+							if (tfChannel instanceof IlluminanceChannel) {
+								((IlluminanceChannel) tfChannel).setConfig(channelConfig);
+							}
 
-                        }
+						}
 
-                        device.enable();
-                        this.device = device;
-                        enabled = true;
-                        updateStatus(ThingStatus.ONLINE);
-                        updateChannelStates();
+						device.enable();
+						this.device = device;
+						enabled = true;
+						updateStatus(ThingStatus.ONLINE);
+						updateChannelStates();
 
-                    } else {
-                        logger.error("configuration error");
-                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-                    }
-                } else {
-                    logger.error("deviceIn is null");
-                    updateStatus(ThingStatus.OFFLINE);
-                }
-            } else {
-                logger.error("bridge is offline");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-            }
-        } else {
-            logger.error("brickdBridgeHandler is null");
-            updateStatus(ThingStatus.OFFLINE);
-        }
-    }
+					} else {
+						logger.error("configuration error");
+						updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+					}
+				} else {
+					logger.error("deviceIn is null");
+					updateStatus(ThingStatus.OFFLINE);
+				}
+			} else {
+				logger.error("bridge is offline");
+				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+			}
+		} else {
+			logger.error("brickdBridgeHandler is null");
+			updateStatus(ThingStatus.OFFLINE);
+		}
+	}
 
-    @Override
-    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
-            @Nullable TinkerforgeValue newValue) {
-        if (notifier == null) {
-            return;
-        }
-        if (!notifier.getDeviceId().equals(uid)) {
-            return;
-        }
-        if (notifier.getExternalDeviceId() != null) {
-            // TODO
-        } else {
+	@Override
+	public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+			@Nullable TinkerforgeValue newValue) {
+		if (notifier == null) {
+			return;
+		}
+		if (!notifier.getDeviceId().equals(uid)) {
+			return;
+		}
+		if (notifier.getExternalDeviceId() != null) {
+			// TODO
+		} else {
 
-            if (notifier.getChannelId().equals(ChannelId.illuminance.name())) {
+			if (notifier.getChannelId().equals(ChannelId.illuminance.name())) {
 
-                if (newValue instanceof DecimalValue) {
-                    logger.debug("new value {}", newValue);
-                    updateState(notifier.getChannelId(), new QuantityType<>(
-                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.LUX));
+				if (newValue instanceof DecimalValue) {
+					logger.debug("new value {}", newValue);
+					updateState(notifier.getChannelId(), new QuantityType<>(
+							new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.LUX));
 
-                    return;
-                }
+					return;
+				}
 
-            }
+			}
 
-        }
-    }
+		}
+	}
 
-    @Override
-    public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
-        if (changeType == null || info == null) {
-            logger.debug("device changed but devicechangtype or deviceinfo are null");
-            return;
-        }
+	@Override
+	public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
+		if (changeType == null || info == null) {
+			logger.debug("device changed but devicechangtype or deviceinfo are null");
+			return;
+		}
 
-        if (info.getUid().equals(uid)) {
-            if (changeType == DeviceChangeType.ADD) {
-                logger.debug("{} added", uid);
-                enable();
-            } else {
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
-            }
-        }
-    }
+		if (info.getUid().equals(uid)) {
+			if (changeType == DeviceChangeType.ADD) {
+				logger.debug("{} added", uid);
+				enable();
+			} else {
+				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
+			}
+		}
+	}
 
-    @Override
-    public void channelLinked(ChannelUID channelUID) {
-        if (enabled) {
-            switch (channelUID.getId()) {
+	@Override
+	public void channelLinked(ChannelUID channelUID) {
+		if (enabled) {
+			switch (channelUID.getId()) {
 
-                case "illuminance":
-                    getilluminance();
-                    break;
+			case "illuminance":
+				getilluminance();
+				break;
 
-                default:
-                    break;
-            }
-        }
-    }
+			default:
+				break;
+			}
+		}
+	}
 
-    private void updateChannelStates() {
+	private void updateChannelStates() {
 
-        if (isLinked("illuminance")) {
-            getilluminance();
-        }
+		if (isLinked("illuminance")) {
+			getilluminance();
+		}
 
-    }
+	}
 
-    private void getilluminance() {
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
-            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (device != null) {
-                AmbientLightV3Bricklet device2 = (AmbientLightV3Bricklet) device;
-                IlluminanceChannel channel = (IlluminanceChannel) device2.getChannel("illuminance");
-                Object newValue = channel.getValue();
+	private void getilluminance() {
+		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+		if (brickdBridgeHandler != null) {
+			Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+			if (device != null) {
+				AmbientLightV3Bricklet device2 = (AmbientLightV3Bricklet) device;
+				IlluminanceChannel channel = (IlluminanceChannel) device2.getChannel("illuminance");
+				Object newValue = channel.getValue();
 
-                if (newValue instanceof DecimalValue) {
-                    logger.debug("new value {}", newValue);
-                    updateState(ChannelId.illuminance.name(), new QuantityType<>(
-                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.LUX));
+				if (newValue instanceof DecimalValue) {
+					logger.debug("new value {}", newValue);
+					updateState(ChannelId.illuminance.name(), new QuantityType<>(
+							new DecimalType(((DecimalValue) newValue).bigDecimalValue()), SmartHomeUnits.LUX));
 
-                    return;
-                }
+					return;
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    @Override
-    public void dispose() {
+	@Override
+	public void dispose() {
 
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
-            brickdBridgeHandler.unregisterDeviceStatusListener(this);
-            brickdBridgeHandler.unregisterCallbackListener(this, uid);
-        }
-        if (device != null) {
-            device.disable();
-        }
+		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+		if (brickdBridgeHandler != null) {
+			brickdBridgeHandler.unregisterDeviceStatusListener(this);
+			brickdBridgeHandler.unregisterCallbackListener(this, uid);
+		}
+		if (device != null) {
+			device.disable();
+		}
 
-        enabled = false;
-    }
+		enabled = false;
+	}
 
 }

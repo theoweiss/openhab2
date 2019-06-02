@@ -13,14 +13,15 @@
 package org.openhab.binding.tinkerforge.internal;
 
 /**
- * The {@link TinkerforgeConfiguration} class contains fields mapping thing configuration paramters.
+ * The {@link TinkerforgeConfiguration} class contains fields mapping thing
+ * configuration paramters.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
 public class TinkerforgeConfiguration {
 
-    /**
-     * Sample configuration parameter. Replace with you own.
-     */
-    public String config1;
+	/**
+	 * Sample configuration parameter. Replace with you own.
+	 */
+	public String config1;
 }

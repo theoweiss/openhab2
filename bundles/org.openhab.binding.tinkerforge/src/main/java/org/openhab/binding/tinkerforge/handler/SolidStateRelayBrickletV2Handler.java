@@ -39,8 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link SolidStateRelayBrickletV2Handler} is responsible for handling commands, which are
- * sent to one of the channels.
+ * The {@link SolidStateRelayBrickletV2Handler} is responsible for handling
+ * commands, which are sent to one of the channels.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
@@ -48,182 +48,182 @@ import org.slf4j.LoggerFactory;
 
 public class SolidStateRelayBrickletV2Handler extends BaseThingHandler implements DeviceAdminListener {
 
-    private final Logger logger = LoggerFactory.getLogger(SolidStateRelayBrickletV2Handler.class);
-    private @Nullable RelayConfig config;
-    private @Nullable BrickdBridgeHandler bridgeHandler;
-    private @Nullable SolidStateRelayBrickletV2 device;
-    private @Nullable String uid;
-    private boolean enabled = false;
+	private final Logger logger = LoggerFactory.getLogger(SolidStateRelayBrickletV2Handler.class);
+	private @Nullable RelayConfig config;
+	private @Nullable BrickdBridgeHandler bridgeHandler;
+	private @Nullable SolidStateRelayBrickletV2 device;
+	private @Nullable String uid;
+	private boolean enabled = false;
 
-    public SolidStateRelayBrickletV2Handler(Thing thing) {
-        super(thing);
-    }
+	public SolidStateRelayBrickletV2Handler(Thing thing) {
+		super(thing);
+	}
 
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
+	@Override
+	public void handleCommand(ChannelUID channelUID, Command command) {
 
-        switch (channelUID.getId()) {
+		switch (channelUID.getId()) {
 
-            case "relay":
+		case "relay":
 
-                if (command instanceof OnOffType) {
-                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
-                            channelUID.getId());
-                    channel.setValue(CommandConverter.convert(command));
-                }
+			if (command instanceof OnOffType) {
+				ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+						channelUID.getId());
+				channel.setValue(CommandConverter.convert(command));
+			}
 
-                // TODO do something
-                break;
+			// TODO do something
+			break;
 
-            default:
-                break;
-        }
+		default:
+			break;
+		}
 
-    }
+	}
 
-    @Override
-    public void initialize() {
-        config = getConfigAs(RelayConfig.class);
-        String uid = config.getUid();
-        if (uid != null) {
-            this.uid = uid;
-            BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-            if (brickdBridgeHandler != null) {
-                brickdBridgeHandler.registerDeviceStatusListener(this);
-                enable();
-            } else {
-                updateStatus(ThingStatus.OFFLINE);
-            }
-        } else {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
-        }
-    }
+	@Override
+	public void initialize() {
+		config = getConfigAs(RelayConfig.class);
+		String uid = config.getUid();
+		if (uid != null) {
+			this.uid = uid;
+			BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+			if (brickdBridgeHandler != null) {
+				brickdBridgeHandler.registerDeviceStatusListener(this);
+				enable();
+			} else {
+				updateStatus(ThingStatus.OFFLINE);
+			}
+		} else {
+			updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
+		}
+	}
 
-    private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
-        if (bridgeHandler == null) {
-            Bridge bridge = getBridge();
-            if (bridge == null) {
-                return null;
-            }
-            ThingHandler handler = bridge.getHandler();
-            if (handler instanceof BrickdBridgeHandler) {
-                bridgeHandler = (BrickdBridgeHandler) handler;
-            }
-        }
-        return bridgeHandler;
-    }
+	private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
+		if (bridgeHandler == null) {
+			Bridge bridge = getBridge();
+			if (bridge == null) {
+				return null;
+			}
+			ThingHandler handler = bridge.getHandler();
+			if (handler instanceof BrickdBridgeHandler) {
+				bridgeHandler = (BrickdBridgeHandler) handler;
+			}
+		}
+		return bridgeHandler;
+	}
 
-    private void enable() {
-        logger.debug("executing enable");
-        Bridge bridge = getBridge();
-        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
+	private void enable() {
+		logger.debug("executing enable");
+		Bridge bridge = getBridge();
+		ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+		if (brickdBridgeHandler != null) {
 
-            if (bridgeStatus == ThingStatus.ONLINE) {
-                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-                if (deviceIn != null) {
-                    if (deviceIn.getDeviceType() == DeviceType.solidstaterelayV2) {
-                        SolidStateRelayBrickletV2 device = (SolidStateRelayBrickletV2) deviceIn;
-                        device.setDeviceConfig(config);
+			if (bridgeStatus == ThingStatus.ONLINE) {
+				Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+				if (deviceIn != null) {
+					if (deviceIn.getDeviceType() == DeviceType.solidstaterelayV2) {
+						SolidStateRelayBrickletV2 device = (SolidStateRelayBrickletV2) deviceIn;
+						device.setDeviceConfig(config);
 
-                        device.enable();
-                        this.device = device;
-                        enabled = true;
-                        updateStatus(ThingStatus.ONLINE);
-                        updateChannelStates();
+						device.enable();
+						this.device = device;
+						enabled = true;
+						updateStatus(ThingStatus.ONLINE);
+						updateChannelStates();
 
-                    } else {
-                        logger.error("configuration error");
-                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-                    }
-                } else {
-                    logger.error("deviceIn is null");
-                    updateStatus(ThingStatus.OFFLINE);
-                }
-            } else {
-                logger.error("bridge is offline");
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-            }
-        } else {
-            logger.error("brickdBridgeHandler is null");
-            updateStatus(ThingStatus.OFFLINE);
-        }
-    }
+					} else {
+						logger.error("configuration error");
+						updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+					}
+				} else {
+					logger.error("deviceIn is null");
+					updateStatus(ThingStatus.OFFLINE);
+				}
+			} else {
+				logger.error("bridge is offline");
+				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+			}
+		} else {
+			logger.error("brickdBridgeHandler is null");
+			updateStatus(ThingStatus.OFFLINE);
+		}
+	}
 
-    @Override
-    public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
-        if (changeType == null || info == null) {
-            logger.debug("device changed but devicechangtype or deviceinfo are null");
-            return;
-        }
+	@Override
+	public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
+		if (changeType == null || info == null) {
+			logger.debug("device changed but devicechangtype or deviceinfo are null");
+			return;
+		}
 
-        if (info.getUid().equals(uid)) {
-            if (changeType == DeviceChangeType.ADD) {
-                logger.debug("{} added", uid);
-                enable();
-            } else {
-                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
-            }
-        }
-    }
+		if (info.getUid().equals(uid)) {
+			if (changeType == DeviceChangeType.ADD) {
+				logger.debug("{} added", uid);
+				enable();
+			} else {
+				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
+			}
+		}
+	}
 
-    @Override
-    public void channelLinked(ChannelUID channelUID) {
-        if (enabled) {
-            switch (channelUID.getId()) {
+	@Override
+	public void channelLinked(ChannelUID channelUID) {
+		if (enabled) {
+			switch (channelUID.getId()) {
 
-                case "relay":
-                    getrelay();
-                    break;
+			case "relay":
+				getrelay();
+				break;
 
-                default:
-                    break;
-            }
-        }
-    }
+			default:
+				break;
+			}
+		}
+	}
 
-    private void updateChannelStates() {
+	private void updateChannelStates() {
 
-        if (isLinked("relay")) {
-            getrelay();
-        }
+		if (isLinked("relay")) {
+			getrelay();
+		}
 
-    }
+	}
 
-    private void getrelay() {
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
-            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-            if (device != null) {
-                SolidStateRelayBrickletV2 device2 = (SolidStateRelayBrickletV2) device;
-                RelayChannel channel = (RelayChannel) device2.getChannel("relay");
-                Object newValue = channel.getValue();
+	private void getrelay() {
+		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+		if (brickdBridgeHandler != null) {
+			Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+			if (device != null) {
+				SolidStateRelayBrickletV2 device2 = (SolidStateRelayBrickletV2) device;
+				RelayChannel channel = (RelayChannel) device2.getChannel("relay");
+				Object newValue = channel.getValue();
 
-                if (newValue instanceof OnOffValue) {
-                    logger.debug("new value {}", newValue);
-                    OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
-                    updateState(ChannelId.relay.name(), value);
-                    return;
-                }
+				if (newValue instanceof OnOffValue) {
+					logger.debug("new value {}", newValue);
+					OnOffType value = newValue == OnOffValue.ON ? OnOffType.ON : OnOffType.OFF;
+					updateState(ChannelId.relay.name(), value);
+					return;
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 
-    @Override
-    public void dispose() {
+	@Override
+	public void dispose() {
 
-        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-        if (brickdBridgeHandler != null) {
-            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+		if (brickdBridgeHandler != null) {
+			brickdBridgeHandler.unregisterDeviceStatusListener(this);
 
-        }
-        if (device != null) {
-            device.disable();
-        }
+		}
+		if (device != null) {
+			device.disable();
+		}
 
-        enabled = false;
-    }
+		enabled = false;
+	}
 
 }

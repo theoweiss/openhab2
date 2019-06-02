@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0" immediate="true" name="org.openhab.binding.tinkerforge.internal.TinkerforgeHandlerFactory" configuration-pid="binding.tinkerforge">
-    <service servicefactory="false">
-        <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>
-    </service>
-    <reference name="DynamicStateDescriptionProvider" interface="org.openhab.binding.tinkerforge.internal.TFDynamicStateDescriptionProvider" cardinality="1..1" policy="static" bind="setDynamicStateDescriptionProvider" unbind="unsetDynamicStateDescriptionProvider"/>
-    <implementation class="org.openhab.binding.tinkerforge.internal.TinkerforgeHandlerFactory"/>
-</scr:component>

@@ -36,91 +36,92 @@ import org.slf4j.LoggerFactory;
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
 public class BrickdBridgeHandler extends BaseBridgeHandler implements BrickdStatusListener {
-    private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
-    private Brickd brickd;
-    private AtomicBoolean isConnected = new AtomicBoolean(false);
+	private final Logger logger = LoggerFactory.getLogger(BrickdBridgeHandler.class);
+	private Brickd brickd;
+	private AtomicBoolean isConnected = new AtomicBoolean(false);
 
-    private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
-    // private final List<CallbackListener> callbackListeners = new CopyOnWriteArrayList<>();
+	private final List<DeviceAdminListener> deviceAdminListeners = new CopyOnWriteArrayList<>();
+	// private final List<CallbackListener> callbackListeners = new
+	// CopyOnWriteArrayList<>();
 
-    public BrickdBridgeHandler(Bridge bridge) {
-        super(bridge);
-    }
+	public BrickdBridgeHandler(Bridge bridge) {
+		super(bridge);
+	}
 
-    @Override
-    public void handleCommand(ChannelUID channelUID, Command command) {
-        // not needed
-    }
+	@Override
+	public void handleCommand(ChannelUID channelUID, Command command) {
+		// not needed
+	}
 
-    @Override
-    public void initialize() {
-        Host config = getConfigAs(Host.class);
-        logger.debug("Initializing brickd bridge handler.");
-        if (config.getHost() != null) {
-            brickd = Brickd.createInstance(config, false);
-            brickd.addBrickdStatusListener(this);
-            for (DeviceAdminListener listener : deviceAdminListeners) {
-                logger.debug("register deviceadminlistener");
-                brickd.addDeviceAdminListener(listener);
-            }
-            updateStatus(ThingStatus.OFFLINE);
-            brickd.connect();
-        } else {
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.CONFIGURATION_ERROR, "ip address is missing");
-        }
-    }
+	@Override
+	public void initialize() {
+		Host config = getConfigAs(Host.class);
+		logger.debug("Initializing brickd bridge handler.");
+		if (config.getHost() != null) {
+			brickd = Brickd.createInstance(config, false);
+			brickd.addBrickdStatusListener(this);
+			for (DeviceAdminListener listener : deviceAdminListeners) {
+				logger.debug("register deviceadminlistener");
+				brickd.addDeviceAdminListener(listener);
+			}
+			updateStatus(ThingStatus.OFFLINE);
+			brickd.connect();
+		} else {
+			updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.CONFIGURATION_ERROR, "ip address is missing");
+		}
+	}
 
-    public Brickd getBrickd() {
-        return brickd;
-    }
+	public Brickd getBrickd() {
+		return brickd;
+	}
 
-    public void registerDeviceStatusListener(DeviceAdminListener deviceAdmin) {
-        deviceAdminListeners.add(deviceAdmin);
-        if (brickd != null) {
-            brickd.addDeviceAdminListener(deviceAdmin);
-        }
-    }
+	public void registerDeviceStatusListener(DeviceAdminListener deviceAdmin) {
+		deviceAdminListeners.add(deviceAdmin);
+		if (brickd != null) {
+			brickd.addDeviceAdminListener(deviceAdmin);
+		}
+	}
 
-    public void unregisterDeviceStatusListener(DeviceAdminListener deviceAdmin) {
-        deviceAdminListeners.remove(deviceAdmin);
-        if (brickd != null) {
-            brickd.removeDeviceAdminListener(deviceAdmin);
-        }
-    }
+	public void unregisterDeviceStatusListener(DeviceAdminListener deviceAdmin) {
+		deviceAdminListeners.remove(deviceAdmin);
+		if (brickd != null) {
+			brickd.removeDeviceAdminListener(deviceAdmin);
+		}
+	}
 
-    public void registerCallbackListener(CallbackListener listener, String uid) {
-        if (brickd != null) {
-            brickd.addCallbackListener(listener, uid);
-        } else {
-            logger.error("listener registration failed, brickd is null. uid {}", uid);
-        }
-    }
+	public void registerCallbackListener(CallbackListener listener, String uid) {
+		if (brickd != null) {
+			brickd.addCallbackListener(listener, uid);
+		} else {
+			logger.error("listener registration failed, brickd is null. uid {}", uid);
+		}
+	}
 
-    public void unregisterCallbackListener(CallbackListener listener, String uid) {
-        if (brickd != null) {
-            brickd.removeCallbackListener(listener, uid);
-        } else {
-            logger.error("listener removal failed, brickd is null. uid {}", uid);
-        }
-    }
+	public void unregisterCallbackListener(CallbackListener listener, String uid) {
+		if (brickd != null) {
+			brickd.removeCallbackListener(listener, uid);
+		} else {
+			logger.error("listener removal failed, brickd is null. uid {}", uid);
+		}
+	}
 
-    @Override
-    public void connected(boolean connected) {
-        if (connected) {
-            isConnected.compareAndSet(false, true);
-            updateStatus(ThingStatus.ONLINE);
-        } else {
-            isConnected.compareAndSet(true, false);
-            updateStatus(ThingStatus.OFFLINE);
-        }
-    }
+	@Override
+	public void connected(boolean connected) {
+		if (connected) {
+			isConnected.compareAndSet(false, true);
+			updateStatus(ThingStatus.ONLINE);
+		} else {
+			isConnected.compareAndSet(true, false);
+			updateStatus(ThingStatus.OFFLINE);
+		}
+	}
 
-    @Override
-    public void dispose() {
-        if (isConnected.get()) {
-            brickd.disconnect();
-        }
-        brickd.removeBrickdStatusListener(this);
-    }
+	@Override
+	public void dispose() {
+		if (isConnected.get()) {
+			brickd.disconnect();
+		}
+		brickd.removeBrickdStatusListener(this);
+	}
 
 }
