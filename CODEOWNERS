@@ -159,6 +159,7 @@
 /bundles/org.openhab.binding.tankerkoenig/ @dolic @JueBag
 /bundles/org.openhab.binding.tellstick/ @jarlebh
 /bundles/org.openhab.binding.tesla/ @kgoderis
+/bundles/org.openhab.binding.tinkerforge/ @theoweiss
 /bundles/org.openhab.binding.toon/ @jongj
 /bundles/org.openhab.binding.tplinksmarthome/ @Hilbrand
 /bundles/org.openhab.binding.tradfri/ @cweitkamp @kaikreuzer
