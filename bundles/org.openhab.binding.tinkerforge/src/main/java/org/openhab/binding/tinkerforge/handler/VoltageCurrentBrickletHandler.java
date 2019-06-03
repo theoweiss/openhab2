@@ -58,324 +58,324 @@ import org.slf4j.LoggerFactory;
 
 public class VoltageCurrentBrickletHandler extends BaseThingHandler implements CallbackListener, DeviceAdminListener {
 
-	private final Logger logger = LoggerFactory.getLogger(VoltageCurrentBrickletHandler.class);
-	private @Nullable VoltageCurrentConfig config;
-	private @Nullable BrickdBridgeHandler bridgeHandler;
-	private @Nullable VoltageCurrentBricklet device;
-	private @Nullable String uid;
-	private boolean enabled = false;
+    private final Logger logger = LoggerFactory.getLogger(VoltageCurrentBrickletHandler.class);
+    private @Nullable VoltageCurrentConfig config;
+    private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable VoltageCurrentBricklet device;
+    private @Nullable String uid;
+    private boolean enabled = false;
 
-	public VoltageCurrentBrickletHandler(Thing thing) {
-		super(thing);
-	}
+    public VoltageCurrentBrickletHandler(Thing thing) {
+        super(thing);
+    }
 
-	@Override
-	public void handleCommand(ChannelUID channelUID, Command command) {
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
 
-	}
+    }
 
-	@Override
-	public void initialize() {
-		config = getConfigAs(VoltageCurrentConfig.class);
-		String uid = config.getUid();
-		if (uid != null) {
-			this.uid = uid;
-			BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-			if (brickdBridgeHandler != null) {
-				brickdBridgeHandler.registerDeviceStatusListener(this);
-				enable();
-			} else {
-				updateStatus(ThingStatus.OFFLINE);
-			}
-		} else {
-			updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
-		}
-	}
+    @Override
+    public void initialize() {
+        config = getConfigAs(VoltageCurrentConfig.class);
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
+            BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+            if (brickdBridgeHandler != null) {
+                brickdBridgeHandler.registerDeviceStatusListener(this);
+                enable();
+            } else {
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
+        }
+    }
 
-	private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
-		if (bridgeHandler == null) {
-			Bridge bridge = getBridge();
-			if (bridge == null) {
-				return null;
-			}
-			ThingHandler handler = bridge.getHandler();
-			if (handler instanceof BrickdBridgeHandler) {
-				bridgeHandler = (BrickdBridgeHandler) handler;
-			}
-		}
-		return bridgeHandler;
-	}
+    private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
+        if (bridgeHandler == null) {
+            Bridge bridge = getBridge();
+            if (bridge == null) {
+                return null;
+            }
+            ThingHandler handler = bridge.getHandler();
+            if (handler instanceof BrickdBridgeHandler) {
+                bridgeHandler = (BrickdBridgeHandler) handler;
+            }
+        }
+        return bridgeHandler;
+    }
 
-	private void enable() {
-		logger.debug("executing enable");
-		Bridge bridge = getBridge();
-		ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			brickdBridgeHandler.registerCallbackListener(this, uid);
-			if (bridgeStatus == ThingStatus.ONLINE) {
-				Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-				if (deviceIn != null) {
-					if (deviceIn.getDeviceType() == DeviceType.voltagecurrent) {
-						VoltageCurrentBricklet device = (VoltageCurrentBricklet) deviceIn;
-						device.setDeviceConfig(config);
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.registerCallbackListener(this, uid);
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.voltagecurrent) {
+                        VoltageCurrentBricklet device = (VoltageCurrentBricklet) deviceIn;
+                        device.setDeviceConfig(config);
 
-						Channel voltageChannel = thing.getChannel("voltage");
-						if (voltageChannel != null) {
-							Channel currChannel = voltageChannel;
+                        Channel voltageChannel = thing.getChannel("voltage");
+                        if (voltageChannel != null) {
+                            Channel currChannel = voltageChannel;
 
-							VoltageChannelConfig channelConfig = currChannel.getConfiguration()
-									.as(VoltageChannelConfig.class);
-							org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
-									.getChannel(ChannelId.voltage.name());
-							if (tfChannel instanceof VoltageChannel) {
-								((VoltageChannel) tfChannel).setConfig(channelConfig);
-							}
+                            VoltageChannelConfig channelConfig = currChannel.getConfiguration()
+                                    .as(VoltageChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.voltage.name());
+                            if (tfChannel instanceof VoltageChannel) {
+                                ((VoltageChannel) tfChannel).setConfig(channelConfig);
+                            }
 
-						}
+                        }
 
-						Channel currentChannel = thing.getChannel("current");
-						if (currentChannel != null) {
-							Channel currChannel = currentChannel;
+                        Channel currentChannel = thing.getChannel("current");
+                        if (currentChannel != null) {
+                            Channel currChannel = currentChannel;
 
-							CurrentChannelConfig channelConfig = currChannel.getConfiguration()
-									.as(CurrentChannelConfig.class);
-							org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
-									.getChannel(ChannelId.current.name());
-							if (tfChannel instanceof CurrentChannel) {
-								((CurrentChannel) tfChannel).setConfig(channelConfig);
-							}
+                            CurrentChannelConfig channelConfig = currChannel.getConfiguration()
+                                    .as(CurrentChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.current.name());
+                            if (tfChannel instanceof CurrentChannel) {
+                                ((CurrentChannel) tfChannel).setConfig(channelConfig);
+                            }
 
-						}
+                        }
 
-						Channel powerChannel = thing.getChannel("power");
-						if (powerChannel != null) {
-							Channel currChannel = powerChannel;
+                        Channel powerChannel = thing.getChannel("power");
+                        if (powerChannel != null) {
+                            Channel currChannel = powerChannel;
 
-							PowerChannelConfig channelConfig = currChannel.getConfiguration()
-									.as(PowerChannelConfig.class);
-							org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
-									.getChannel(ChannelId.power.name());
-							if (tfChannel instanceof PowerChannel) {
-								((PowerChannel) tfChannel).setConfig(channelConfig);
-							}
+                            PowerChannelConfig channelConfig = currChannel.getConfiguration()
+                                    .as(PowerChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.power.name());
+                            if (tfChannel instanceof PowerChannel) {
+                                ((PowerChannel) tfChannel).setConfig(channelConfig);
+                            }
 
-						}
+                        }
 
-						device.enable();
-						this.device = device;
-						enabled = true;
-						updateStatus(ThingStatus.ONLINE);
-						updateChannelStates();
+                        device.enable();
+                        this.device = device;
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
+                        updateChannelStates();
 
-					} else {
-						logger.error("configuration error");
-						updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-					}
-				} else {
-					logger.error("deviceIn is null");
-					updateStatus(ThingStatus.OFFLINE);
-				}
-			} else {
-				logger.error("bridge is offline");
-				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-			}
-		} else {
-			logger.error("brickdBridgeHandler is null");
-			updateStatus(ThingStatus.OFFLINE);
-		}
-	}
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
+            } else {
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            }
+        } else {
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
+        }
+    }
 
-	@Override
-	public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
-			@Nullable TinkerforgeValue newValue) {
-		if (notifier == null) {
-			return;
-		}
-		if (!notifier.getDeviceId().equals(uid)) {
-			return;
-		}
-		if (notifier.getExternalDeviceId() != null) {
-			// TODO
-		} else {
+    @Override
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
+        if (notifier == null) {
+            return;
+        }
+        if (!notifier.getDeviceId().equals(uid)) {
+            return;
+        }
+        if (notifier.getExternalDeviceId() != null) {
+            // TODO
+        } else {
 
-			if (notifier.getChannelId().equals(ChannelId.voltage.name())) {
+            if (notifier.getChannelId().equals(ChannelId.voltage.name())) {
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(notifier.getChannelId(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
+            }
 
-			if (notifier.getChannelId().equals(ChannelId.current.name())) {
+            if (notifier.getChannelId().equals(ChannelId.current.name())) {
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(notifier.getChannelId(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SmartHomeUnits.AMPERE)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SmartHomeUnits.AMPERE)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
+            }
 
-			if (notifier.getChannelId().equals(ChannelId.power.name())) {
+            if (notifier.getChannelId().equals(ChannelId.power.name())) {
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(notifier.getChannelId(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SmartHomeUnits.WATT)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SmartHomeUnits.WATT)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
+            }
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
-		if (changeType == null || info == null) {
-			logger.debug("device changed but devicechangtype or deviceinfo are null");
-			return;
-		}
+    @Override
+    public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
+        if (changeType == null || info == null) {
+            logger.debug("device changed but devicechangtype or deviceinfo are null");
+            return;
+        }
 
-		if (info.getUid().equals(uid)) {
-			if (changeType == DeviceChangeType.ADD) {
-				logger.debug("{} added", uid);
-				enable();
-			} else {
-				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
-			}
-		}
-	}
+        if (info.getUid().equals(uid)) {
+            if (changeType == DeviceChangeType.ADD) {
+                logger.debug("{} added", uid);
+                enable();
+            } else {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
+            }
+        }
+    }
 
-	@Override
-	public void channelLinked(ChannelUID channelUID) {
-		if (enabled) {
-			switch (channelUID.getId()) {
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        if (enabled) {
+            switch (channelUID.getId()) {
 
-			case "voltage":
-				getvoltage();
-				break;
+                case "voltage":
+                    getvoltage();
+                    break;
 
-			case "current":
-				getcurrent();
-				break;
+                case "current":
+                    getcurrent();
+                    break;
 
-			case "power":
-				getpower();
-				break;
+                case "power":
+                    getpower();
+                    break;
 
-			default:
-				break;
-			}
-		}
-	}
+                default:
+                    break;
+            }
+        }
+    }
 
-	private void updateChannelStates() {
+    private void updateChannelStates() {
 
-		if (isLinked("voltage")) {
-			getvoltage();
-		}
+        if (isLinked("voltage")) {
+            getvoltage();
+        }
 
-		if (isLinked("current")) {
-			getcurrent();
-		}
+        if (isLinked("current")) {
+            getcurrent();
+        }
 
-		if (isLinked("power")) {
-			getpower();
-		}
+        if (isLinked("power")) {
+            getpower();
+        }
 
-	}
+    }
 
-	private void getvoltage() {
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-			if (device != null) {
-				VoltageCurrentBricklet device2 = (VoltageCurrentBricklet) device;
-				VoltageChannel channel = (VoltageChannel) device2.getChannel("voltage");
-				Object newValue = channel.getValue();
+    private void getvoltage() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                VoltageCurrentBricklet device2 = (VoltageCurrentBricklet) device;
+                VoltageChannel channel = (VoltageChannel) device2.getChannel("voltage");
+                Object newValue = channel.getValue();
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(ChannelId.voltage.name(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.voltage.name(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SmartHomeUnits.VOLT)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	private void getcurrent() {
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-			if (device != null) {
-				VoltageCurrentBricklet device2 = (VoltageCurrentBricklet) device;
-				CurrentChannel channel = (CurrentChannel) device2.getChannel("current");
-				Object newValue = channel.getValue();
+    private void getcurrent() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                VoltageCurrentBricklet device2 = (VoltageCurrentBricklet) device;
+                CurrentChannel channel = (CurrentChannel) device2.getChannel("current");
+                Object newValue = channel.getValue();
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(ChannelId.current.name(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SmartHomeUnits.AMPERE)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.current.name(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SmartHomeUnits.AMPERE)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	private void getpower() {
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-			if (device != null) {
-				VoltageCurrentBricklet device2 = (VoltageCurrentBricklet) device;
-				PowerChannel channel = (PowerChannel) device2.getChannel("power");
-				Object newValue = channel.getValue();
+    private void getpower() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                VoltageCurrentBricklet device2 = (VoltageCurrentBricklet) device;
+                PowerChannel channel = (PowerChannel) device2.getChannel("power");
+                Object newValue = channel.getValue();
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(ChannelId.power.name(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SmartHomeUnits.WATT)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.power.name(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SmartHomeUnits.WATT)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	@Override
-	public void dispose() {
+    @Override
+    public void dispose() {
 
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			brickdBridgeHandler.unregisterDeviceStatusListener(this);
-			brickdBridgeHandler.unregisterCallbackListener(this, uid);
-		}
-		if (device != null) {
-			device.disable();
-		}
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this, uid);
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-		enabled = false;
-	}
+        enabled = false;
+    }
 
 }

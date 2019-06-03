@@ -20,8 +20,8 @@ package org.openhab.binding.tinkerforge.internal;
  */
 public class TinkerforgeConfiguration {
 
-	/**
-	 * Sample configuration parameter. Replace with you own.
-	 */
-	public String config1;
+    /**
+     * Sample configuration parameter. Replace with you own.
+     */
+    public String config1;
 }

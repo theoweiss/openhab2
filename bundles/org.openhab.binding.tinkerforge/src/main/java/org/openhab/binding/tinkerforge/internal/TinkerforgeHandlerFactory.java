@@ -151,297 +151,297 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
-	private final Logger logger = LoggerFactory.getLogger(TinkerforgeHandlerFactory.class);
-	private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
-
-	@NonNullByDefault({})
-	private TFDynamicStateDescriptionProvider dynamicStateDescriptionProvider;
-
-	@Override
-	public boolean supportsThingType(ThingTypeUID thingTypeUID) {
-		return SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
-	}
-
-	@Override
-	public @Nullable Thing createThing(ThingTypeUID thingTypeUID, Configuration configuration,
-			@Nullable ThingUID thingUID, @Nullable ThingUID bridgeUID) {
-		if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
-			return super.createThing(thingTypeUID, configuration, thingUID, null);
-		} else {
-			ThingUID deviceUID = getDeviceUID(thingTypeUID, thingUID, configuration, bridgeUID);
-			return super.createThing(thingTypeUID, configuration, deviceUID, bridgeUID);
-		}
-	}
-
-	private ThingUID getDeviceUID(ThingTypeUID thingTypeUID, @Nullable ThingUID thingUID, Configuration configuration,
-			@Nullable ThingUID bridgeUID) {
-		if (thingUID != null) {
-			return thingUID;
-		} else {
-			String uid = (String) configuration.get(DEVICE_UID_PARAM);
-			if (bridgeUID != null) {
-				return new ThingUID(thingTypeUID, uid, bridgeUID.getId());
-			} else {
-				return new ThingUID(thingTypeUID, uid, (String[]) null);
-			}
-		}
-	}
-
-	@Override
-	protected @Nullable ThingHandler createHandler(Thing thing) {
-		ThingTypeUID thingTypeUID = thing.getThingTypeUID();
-		if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
-			BrickdBridgeHandler handler = new BrickdBridgeHandler((Bridge) thing);
-			registerDeviceDiscoveryService(handler);
-			return handler;
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_OUTDOORWEATHER)) {
-			return new OutdoorWeatherBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_TEMPERATURE)) {
-			return new TemperatureBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_TEMPERATUREV2)) {
-			return new TemperatureV2BrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_TEMPERATUREIR)) {
-			return new TemperatureIRBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_TEMPERATUREIRV2)) {
-			return new TemperatureIRV2BrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_LOADCELL)) {
-			return new LoadCellBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_LOADCELLV2)) {
-			return new LoadCellV2BrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_SOUNDINTENSITY)) {
-			return new SoundIntensityBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_SOUNDPRESSURELEVEL)) {
-			return new SoundPressureLevelBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHT)) {
-			return new AmbientLightBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV2)) {
-			return new AmbientLightV2BrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV3)) {
-			return new AmbientLightV3BrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALANALOGIN)) {
-			return new IndustrialDualAnalogInBrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALANALOGINV2)) {
-			return new IndustrialDualAnalogInV2BrickletHandler(thing);
-		}
-
-		if (thingTypeUID.equals(THING_TYPE_PTC)) {
-			return new PTCBrickletHandler(thing);
-		}
+    private final Logger logger = LoggerFactory.getLogger(TinkerforgeHandlerFactory.class);
+    private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
+
+    @NonNullByDefault({})
+    private TFDynamicStateDescriptionProvider dynamicStateDescriptionProvider;
+
+    @Override
+    public boolean supportsThingType(ThingTypeUID thingTypeUID) {
+        return SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
+    }
+
+    @Override
+    public @Nullable Thing createThing(ThingTypeUID thingTypeUID, Configuration configuration,
+            @Nullable ThingUID thingUID, @Nullable ThingUID bridgeUID) {
+        if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
+            return super.createThing(thingTypeUID, configuration, thingUID, null);
+        } else {
+            ThingUID deviceUID = getDeviceUID(thingTypeUID, thingUID, configuration, bridgeUID);
+            return super.createThing(thingTypeUID, configuration, deviceUID, bridgeUID);
+        }
+    }
+
+    private ThingUID getDeviceUID(ThingTypeUID thingTypeUID, @Nullable ThingUID thingUID, Configuration configuration,
+            @Nullable ThingUID bridgeUID) {
+        if (thingUID != null) {
+            return thingUID;
+        } else {
+            String uid = (String) configuration.get(DEVICE_UID_PARAM);
+            if (bridgeUID != null) {
+                return new ThingUID(thingTypeUID, uid, bridgeUID.getId());
+            } else {
+                return new ThingUID(thingTypeUID, uid, (String[]) null);
+            }
+        }
+    }
+
+    @Override
+    protected @Nullable ThingHandler createHandler(Thing thing) {
+        ThingTypeUID thingTypeUID = thing.getThingTypeUID();
+        if (thingTypeUID.equals(THING_TYPE_BRICKD)) {
+            BrickdBridgeHandler handler = new BrickdBridgeHandler((Bridge) thing);
+            registerDeviceDiscoveryService(handler);
+            return handler;
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_OUTDOORWEATHER)) {
+            return new OutdoorWeatherBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATURE)) {
+            return new TemperatureBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATUREV2)) {
+            return new TemperatureV2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATUREIR)) {
+            return new TemperatureIRBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_TEMPERATUREIRV2)) {
+            return new TemperatureIRV2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_LOADCELL)) {
+            return new LoadCellBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_LOADCELLV2)) {
+            return new LoadCellV2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_SOUNDINTENSITY)) {
+            return new SoundIntensityBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_SOUNDPRESSURELEVEL)) {
+            return new SoundPressureLevelBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHT)) {
+            return new AmbientLightBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV2)) {
+            return new AmbientLightV2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_AMBIENTLIGHTV3)) {
+            return new AmbientLightV3BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALANALOGIN)) {
+            return new IndustrialDualAnalogInBrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALANALOGINV2)) {
+            return new IndustrialDualAnalogInV2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_PTC)) {
+            return new PTCBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_PTCV2)) {
-			return new PTCV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_PTCV2)) {
+            return new PTCV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_BAROMETER)) {
-			return new BarometerBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_BAROMETER)) {
+            return new BarometerBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_BAROMETERV2)) {
-			return new BarometerV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_BAROMETERV2)) {
+            return new BarometerV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_DISTANCEIR)) {
-			return new DistanceIRBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_DISTANCEIR)) {
+            return new DistanceIRBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_DISTANCEIRV2)) {
-			return new DistanceIRV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_DISTANCEIRV2)) {
+            return new DistanceIRV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_UVLIGHT)) {
-			return new UVLightBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_UVLIGHT)) {
+            return new UVLightBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_UVLIGHTV2)) {
-			return new UVLightV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_UVLIGHTV2)) {
+            return new UVLightV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_HUMIDITY)) {
-			return new HumidityBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_HUMIDITY)) {
+            return new HumidityBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_HUMIDITYV2)) {
-			return new HumidityV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_HUMIDITYV2)) {
+            return new HumidityV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_MOTIONDETECTOR)) {
-			return new MotionDetectorBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_MOTIONDETECTOR)) {
+            return new MotionDetectorBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_MOTIONDETECTORV2)) {
-			return new MotionDetectorV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_MOTIONDETECTORV2)) {
+            return new MotionDetectorV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_AIRQUALITY)) {
-			return new AirQualityBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_AIRQUALITY)) {
+            return new AirQualityBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCK)) {
-			return new RealTimeClockBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCK)) {
+            return new RealTimeClockBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCKV2)) {
-			return new RealTimeClockV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_REALTIMECLOCKV2)) {
+            return new RealTimeClockV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_ROTARYENCODER)) {
-			return new RotaryEncoderBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_ROTARYENCODER)) {
+            return new RotaryEncoderBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_MULTITOUCH)) {
-			return new MultiTouchBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_MULTITOUCH)) {
+            return new MultiTouchBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENT)) {
-			return new VoltageCurrentBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENT)) {
+            return new VoltageCurrentBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENTV2)) {
-			return new VoltageCurrentV2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_VOLTAGECURRENTV2)) {
+            return new VoltageCurrentV2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_DISTANCEUS)) {
-			return new DistanceUSBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_DISTANCEUS)) {
+            return new DistanceUSBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_DUALRELAY)) {
-			return new DualRelayBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_DUALRELAY)) {
+            return new DualRelayBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALRELAY)) {
-			return new IndustrialDualRelayBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALDUALRELAY)) {
+            return new IndustrialDualRelayBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_INDUSTRIALQUADRELAYV2)) {
-			return new IndustrialQuadRelayBrickletV2Handler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALQUADRELAYV2)) {
+            return new IndustrialQuadRelayBrickletV2Handler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_INDUSTRIALQUADRELAY)) {
-			return new IndustrialQuadRelayBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_INDUSTRIALQUADRELAY)) {
+            return new IndustrialQuadRelayBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAY)) {
-			return new SolidStateRelayBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAY)) {
+            return new SolidStateRelayBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAYV2)) {
-			return new SolidStateRelayBrickletV2Handler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_SOLIDSTATERELAYV2)) {
+            return new SolidStateRelayBrickletV2Handler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_NFCRFID)) {
-			return new NFCRFIDBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_NFCRFID)) {
+            return new NFCRFIDBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_NFC)) {
-			return new NFCBrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_NFC)) {
+            return new NFCBrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_IO16)) {
+        if (thingTypeUID.equals(THING_TYPE_IO16)) {
 
-			return new IO16BrickletHandler(thing, dynamicStateDescriptionProvider);
+            return new IO16BrickletHandler(thing, dynamicStateDescriptionProvider);
 
-		}
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_IO4)) {
+        if (thingTypeUID.equals(THING_TYPE_IO4)) {
 
-			return new IO4BrickletHandler(thing, dynamicStateDescriptionProvider);
+            return new IO4BrickletHandler(thing, dynamicStateDescriptionProvider);
 
-		}
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_IO16V2)) {
+        if (thingTypeUID.equals(THING_TYPE_IO16V2)) {
 
-			return new IO16V2BrickletHandler(thing, dynamicStateDescriptionProvider);
+            return new IO16V2BrickletHandler(thing, dynamicStateDescriptionProvider);
 
-		}
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_IO4V2)) {
+        if (thingTypeUID.equals(THING_TYPE_IO4V2)) {
 
-			return new IO4V2BrickletHandler(thing, dynamicStateDescriptionProvider);
+            return new IO4V2BrickletHandler(thing, dynamicStateDescriptionProvider);
 
-		}
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_LCD128X64)) {
-			return new LCD128x64BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_LCD128X64)) {
+            return new LCD128x64BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_LCD20X4)) {
-			return new LCD20x4BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_LCD20X4)) {
+            return new LCD20x4BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_OLED128X64V2)) {
-			return new OLED128x64V2BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_OLED128X64V2)) {
+            return new OLED128x64V2BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_OLED128X64)) {
-			return new OLED128x64BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_OLED128X64)) {
+            return new OLED128x64BrickletHandler(thing);
+        }
 
-		if (thingTypeUID.equals(THING_TYPE_OLED64X48)) {
-			return new OLED64x48BrickletHandler(thing);
-		}
+        if (thingTypeUID.equals(THING_TYPE_OLED64X48)) {
+            return new OLED64x48BrickletHandler(thing);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	private synchronized void registerDeviceDiscoveryService(BrickdBridgeHandler bridgeHandler) {
-		logger.debug("registering tinkerforge discovery");
-		TinkerforgeDiscoveryService discoveryService = new TinkerforgeDiscoveryService(bridgeHandler);
-		discoveryService.activate();
-		this.discoveryServiceRegs.put(bridgeHandler.getThing().getUID(), bundleContext
-				.registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
-	}
+    private synchronized void registerDeviceDiscoveryService(BrickdBridgeHandler bridgeHandler) {
+        logger.debug("registering tinkerforge discovery");
+        TinkerforgeDiscoveryService discoveryService = new TinkerforgeDiscoveryService(bridgeHandler);
+        discoveryService.activate();
+        this.discoveryServiceRegs.put(bridgeHandler.getThing().getUID(), bundleContext
+                .registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
+    }
 
-	@Override
-	protected synchronized void removeHandler(ThingHandler thingHandler) {
-		if (thingHandler instanceof BrickdBridgeHandler) {
-			ServiceRegistration<?> serviceReg = this.discoveryServiceRegs.get(thingHandler.getThing().getUID());
-			if (serviceReg != null) {
-				// remove discovery service, if bridge handler is removed
-				TinkerforgeDiscoveryService service = (TinkerforgeDiscoveryService) bundleContext
-						.getService(serviceReg.getReference());
-				if (service != null) {
-					service.deactivate();
-				}
-				serviceReg.unregister();
-				discoveryServiceRegs.remove(thingHandler.getThing().getUID());
-			}
-		}
-	}
+    @Override
+    protected synchronized void removeHandler(ThingHandler thingHandler) {
+        if (thingHandler instanceof BrickdBridgeHandler) {
+            ServiceRegistration<?> serviceReg = this.discoveryServiceRegs.get(thingHandler.getThing().getUID());
+            if (serviceReg != null) {
+                // remove discovery service, if bridge handler is removed
+                TinkerforgeDiscoveryService service = (TinkerforgeDiscoveryService) bundleContext
+                        .getService(serviceReg.getReference());
+                if (service != null) {
+                    service.deactivate();
+                }
+                serviceReg.unregister();
+                discoveryServiceRegs.remove(thingHandler.getThing().getUID());
+            }
+        }
+    }
 
-	@Reference
-	protected void setDynamicStateDescriptionProvider(TFDynamicStateDescriptionProvider provider) {
-		this.dynamicStateDescriptionProvider = provider;
-	}
+    @Reference
+    protected void setDynamicStateDescriptionProvider(TFDynamicStateDescriptionProvider provider) {
+        this.dynamicStateDescriptionProvider = provider;
+    }
 
-	protected void unsetDynamicStateDescriptionProvider(TFDynamicStateDescriptionProvider provider) {
-		this.dynamicStateDescriptionProvider = null;
-	}
+    protected void unsetDynamicStateDescriptionProvider(TFDynamicStateDescriptionProvider provider) {
+        this.dynamicStateDescriptionProvider = null;
+    }
 }

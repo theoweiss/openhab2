@@ -54,210 +54,210 @@ import org.slf4j.LoggerFactory;
 
 public class DistanceIRV2BrickletHandler extends BaseThingHandler implements CallbackListener, DeviceAdminListener {
 
-	private final Logger logger = LoggerFactory.getLogger(DistanceIRV2BrickletHandler.class);
-	private @Nullable DistanceIRV2DeviceConfig config;
-	private @Nullable BrickdBridgeHandler bridgeHandler;
-	private @Nullable DistanceIRV2Bricklet device;
-	private @Nullable String uid;
-	private boolean enabled = false;
+    private final Logger logger = LoggerFactory.getLogger(DistanceIRV2BrickletHandler.class);
+    private @Nullable DistanceIRV2DeviceConfig config;
+    private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable DistanceIRV2Bricklet device;
+    private @Nullable String uid;
+    private boolean enabled = false;
 
-	public DistanceIRV2BrickletHandler(Thing thing) {
-		super(thing);
-	}
+    public DistanceIRV2BrickletHandler(Thing thing) {
+        super(thing);
+    }
 
-	@Override
-	public void handleCommand(ChannelUID channelUID, Command command) {
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
 
-	}
+    }
 
-	@Override
-	public void initialize() {
-		config = getConfigAs(DistanceIRV2DeviceConfig.class);
-		String uid = config.getUid();
-		if (uid != null) {
-			this.uid = uid;
-			BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-			if (brickdBridgeHandler != null) {
-				brickdBridgeHandler.registerDeviceStatusListener(this);
-				enable();
-			} else {
-				updateStatus(ThingStatus.OFFLINE);
-			}
-		} else {
-			updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
-		}
-	}
+    @Override
+    public void initialize() {
+        config = getConfigAs(DistanceIRV2DeviceConfig.class);
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
+            BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+            if (brickdBridgeHandler != null) {
+                brickdBridgeHandler.registerDeviceStatusListener(this);
+                enable();
+            } else {
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
+        }
+    }
 
-	private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
-		if (bridgeHandler == null) {
-			Bridge bridge = getBridge();
-			if (bridge == null) {
-				return null;
-			}
-			ThingHandler handler = bridge.getHandler();
-			if (handler instanceof BrickdBridgeHandler) {
-				bridgeHandler = (BrickdBridgeHandler) handler;
-			}
-		}
-		return bridgeHandler;
-	}
+    private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
+        if (bridgeHandler == null) {
+            Bridge bridge = getBridge();
+            if (bridge == null) {
+                return null;
+            }
+            ThingHandler handler = bridge.getHandler();
+            if (handler instanceof BrickdBridgeHandler) {
+                bridgeHandler = (BrickdBridgeHandler) handler;
+            }
+        }
+        return bridgeHandler;
+    }
 
-	private void enable() {
-		logger.debug("executing enable");
-		Bridge bridge = getBridge();
-		ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			brickdBridgeHandler.registerCallbackListener(this, uid);
-			if (bridgeStatus == ThingStatus.ONLINE) {
-				Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-				if (deviceIn != null) {
-					if (deviceIn.getDeviceType() == DeviceType.distanceIRV2) {
-						DistanceIRV2Bricklet device = (DistanceIRV2Bricklet) deviceIn;
-						device.setDeviceConfig(config);
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.registerCallbackListener(this, uid);
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.distanceIRV2) {
+                        DistanceIRV2Bricklet device = (DistanceIRV2Bricklet) deviceIn;
+                        device.setDeviceConfig(config);
 
-						Channel distanceChannel = thing.getChannel("distance");
-						if (distanceChannel != null) {
-							Channel currChannel = distanceChannel;
+                        Channel distanceChannel = thing.getChannel("distance");
+                        if (distanceChannel != null) {
+                            Channel currChannel = distanceChannel;
 
-							DistanceChannelConfig channelConfig = currChannel.getConfiguration()
-									.as(DistanceChannelConfig.class);
-							org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
-									.getChannel(ChannelId.distance.name());
-							if (tfChannel instanceof DistanceChannel) {
-								((DistanceChannel) tfChannel).setConfig(channelConfig);
-							}
+                            DistanceChannelConfig channelConfig = currChannel.getConfiguration()
+                                    .as(DistanceChannelConfig.class);
+                            org.m1theo.tinkerforge.client.Channel<?, ?, ?> tfChannel = device
+                                    .getChannel(ChannelId.distance.name());
+                            if (tfChannel instanceof DistanceChannel) {
+                                ((DistanceChannel) tfChannel).setConfig(channelConfig);
+                            }
 
-						}
+                        }
 
-						device.enable();
-						this.device = device;
-						enabled = true;
-						updateStatus(ThingStatus.ONLINE);
-						updateChannelStates();
+                        device.enable();
+                        this.device = device;
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
+                        updateChannelStates();
 
-					} else {
-						logger.error("configuration error");
-						updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-					}
-				} else {
-					logger.error("deviceIn is null");
-					updateStatus(ThingStatus.OFFLINE);
-				}
-			} else {
-				logger.error("bridge is offline");
-				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-			}
-		} else {
-			logger.error("brickdBridgeHandler is null");
-			updateStatus(ThingStatus.OFFLINE);
-		}
-	}
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
+            } else {
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            }
+        } else {
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
+        }
+    }
 
-	@Override
-	public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
-			@Nullable TinkerforgeValue newValue) {
-		if (notifier == null) {
-			return;
-		}
-		if (!notifier.getDeviceId().equals(uid)) {
-			return;
-		}
-		if (notifier.getExternalDeviceId() != null) {
-			// TODO
-		} else {
+    @Override
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
+        if (notifier == null) {
+            return;
+        }
+        if (!notifier.getDeviceId().equals(uid)) {
+            return;
+        }
+        if (notifier.getExternalDeviceId() != null) {
+            // TODO
+        } else {
 
-			if (notifier.getChannelId().equals(ChannelId.distance.name())) {
+            if (notifier.getChannelId().equals(ChannelId.distance.name())) {
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(notifier.getChannelId(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SIUnits.METRE)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SIUnits.METRE)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
+            }
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
-		if (changeType == null || info == null) {
-			logger.debug("device changed but devicechangtype or deviceinfo are null");
-			return;
-		}
+    @Override
+    public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
+        if (changeType == null || info == null) {
+            logger.debug("device changed but devicechangtype or deviceinfo are null");
+            return;
+        }
 
-		if (info.getUid().equals(uid)) {
-			if (changeType == DeviceChangeType.ADD) {
-				logger.debug("{} added", uid);
-				enable();
-			} else {
-				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
-			}
-		}
-	}
+        if (info.getUid().equals(uid)) {
+            if (changeType == DeviceChangeType.ADD) {
+                logger.debug("{} added", uid);
+                enable();
+            } else {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
+            }
+        }
+    }
 
-	@Override
-	public void channelLinked(ChannelUID channelUID) {
-		if (enabled) {
-			switch (channelUID.getId()) {
+    @Override
+    public void channelLinked(ChannelUID channelUID) {
+        if (enabled) {
+            switch (channelUID.getId()) {
 
-			case "distance":
-				getdistance();
-				break;
+                case "distance":
+                    getdistance();
+                    break;
 
-			default:
-				break;
-			}
-		}
-	}
+                default:
+                    break;
+            }
+        }
+    }
 
-	private void updateChannelStates() {
+    private void updateChannelStates() {
 
-		if (isLinked("distance")) {
-			getdistance();
-		}
+        if (isLinked("distance")) {
+            getdistance();
+        }
 
-	}
+    }
 
-	private void getdistance() {
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
-			if (device != null) {
-				DistanceIRV2Bricklet device2 = (DistanceIRV2Bricklet) device;
-				DistanceChannel channel = (DistanceChannel) device2.getChannel("distance");
-				Object newValue = channel.getValue();
+    private void getdistance() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                DistanceIRV2Bricklet device2 = (DistanceIRV2Bricklet) device;
+                DistanceChannel channel = (DistanceChannel) device2.getChannel("distance");
+                Object newValue = channel.getValue();
 
-				if (newValue instanceof DecimalValue) {
-					logger.debug("new value {}", newValue);
-					updateState(ChannelId.distance.name(),
-							new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
-									MetricPrefix.MILLI(SIUnits.METRE)));
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.distance.name(),
+                            new QuantityType<>(new DecimalType(((DecimalValue) newValue).bigDecimalValue()),
+                                    MetricPrefix.MILLI(SIUnits.METRE)));
 
-					return;
-				}
+                    return;
+                }
 
-			}
-		}
-	}
+            }
+        }
+    }
 
-	@Override
-	public void dispose() {
+    @Override
+    public void dispose() {
 
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			brickdBridgeHandler.unregisterDeviceStatusListener(this);
-			brickdBridgeHandler.unregisterCallbackListener(this, uid);
-		}
-		if (device != null) {
-			device.disable();
-		}
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this, uid);
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-		enabled = false;
-	}
+        enabled = false;
+    }
 
 }

@@ -48,147 +48,147 @@ import org.slf4j.LoggerFactory;
 
 public class NFCRFIDBrickletHandler extends BaseThingHandler implements CallbackListener, DeviceAdminListener {
 
-	private final Logger logger = LoggerFactory.getLogger(NFCRFIDBrickletHandler.class);
-	private @Nullable NFCRFIDConfig config;
-	private @Nullable BrickdBridgeHandler bridgeHandler;
-	private @Nullable NFCRFIDBricklet device;
-	private @Nullable String uid;
-	private boolean enabled = false;
+    private final Logger logger = LoggerFactory.getLogger(NFCRFIDBrickletHandler.class);
+    private @Nullable NFCRFIDConfig config;
+    private @Nullable BrickdBridgeHandler bridgeHandler;
+    private @Nullable NFCRFIDBricklet device;
+    private @Nullable String uid;
+    private boolean enabled = false;
 
-	public NFCRFIDBrickletHandler(Thing thing) {
-		super(thing);
-	}
+    public NFCRFIDBrickletHandler(Thing thing) {
+        super(thing);
+    }
 
-	@Override
-	public void handleCommand(ChannelUID channelUID, Command command) {
+    @Override
+    public void handleCommand(ChannelUID channelUID, Command command) {
 
-	}
+    }
 
-	@Override
-	public void initialize() {
-		config = getConfigAs(NFCRFIDConfig.class);
-		String uid = config.getUid();
-		if (uid != null) {
-			this.uid = uid;
-			BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-			if (brickdBridgeHandler != null) {
-				brickdBridgeHandler.registerDeviceStatusListener(this);
-				enable();
-			} else {
-				updateStatus(ThingStatus.OFFLINE);
-			}
-		} else {
-			updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
-		}
-	}
+    @Override
+    public void initialize() {
+        config = getConfigAs(NFCRFIDConfig.class);
+        String uid = config.getUid();
+        if (uid != null) {
+            this.uid = uid;
+            BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+            if (brickdBridgeHandler != null) {
+                brickdBridgeHandler.registerDeviceStatusListener(this);
+                enable();
+            } else {
+                updateStatus(ThingStatus.OFFLINE);
+            }
+        } else {
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR, "uid is missing in configuration");
+        }
+    }
 
-	private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
-		if (bridgeHandler == null) {
-			Bridge bridge = getBridge();
-			if (bridge == null) {
-				return null;
-			}
-			ThingHandler handler = bridge.getHandler();
-			if (handler instanceof BrickdBridgeHandler) {
-				bridgeHandler = (BrickdBridgeHandler) handler;
-			}
-		}
-		return bridgeHandler;
-	}
+    private synchronized @Nullable BrickdBridgeHandler getBrickdBridgeHandler() {
+        if (bridgeHandler == null) {
+            Bridge bridge = getBridge();
+            if (bridge == null) {
+                return null;
+            }
+            ThingHandler handler = bridge.getHandler();
+            if (handler instanceof BrickdBridgeHandler) {
+                bridgeHandler = (BrickdBridgeHandler) handler;
+            }
+        }
+        return bridgeHandler;
+    }
 
-	private void enable() {
-		logger.debug("executing enable");
-		Bridge bridge = getBridge();
-		ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			brickdBridgeHandler.registerCallbackListener(this, uid);
-			if (bridgeStatus == ThingStatus.ONLINE) {
-				Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
-				if (deviceIn != null) {
-					if (deviceIn.getDeviceType() == DeviceType.nfcrfid) {
-						NFCRFIDBricklet device = (NFCRFIDBricklet) deviceIn;
-						device.setDeviceConfig(config);
+    private void enable() {
+        logger.debug("executing enable");
+        Bridge bridge = getBridge();
+        ThingStatus bridgeStatus = (bridge == null) ? null : bridge.getStatus();
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.registerCallbackListener(this, uid);
+            if (bridgeStatus == ThingStatus.ONLINE) {
+                Device<?, ?> deviceIn = brickdBridgeHandler.getBrickd().getDevice(uid);
+                if (deviceIn != null) {
+                    if (deviceIn.getDeviceType() == DeviceType.nfcrfid) {
+                        NFCRFIDBricklet device = (NFCRFIDBricklet) deviceIn;
+                        device.setDeviceConfig(config);
 
-						device.enable();
-						this.device = device;
-						enabled = true;
-						updateStatus(ThingStatus.ONLINE);
+                        device.enable();
+                        this.device = device;
+                        enabled = true;
+                        updateStatus(ThingStatus.ONLINE);
 
-					} else {
-						logger.error("configuration error");
-						updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
-					}
-				} else {
-					logger.error("deviceIn is null");
-					updateStatus(ThingStatus.OFFLINE);
-				}
-			} else {
-				logger.error("bridge is offline");
-				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
-			}
-		} else {
-			logger.error("brickdBridgeHandler is null");
-			updateStatus(ThingStatus.OFFLINE);
-		}
-	}
+                    } else {
+                        logger.error("configuration error");
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR);
+                    }
+                } else {
+                    logger.error("deviceIn is null");
+                    updateStatus(ThingStatus.OFFLINE);
+                }
+            } else {
+                logger.error("bridge is offline");
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
+            }
+        } else {
+            logger.error("brickdBridgeHandler is null");
+            updateStatus(ThingStatus.OFFLINE);
+        }
+    }
 
-	@Override
-	public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
-			@Nullable TinkerforgeValue newValue) {
-		if (notifier == null) {
-			return;
-		}
-		if (!notifier.getDeviceId().equals(uid)) {
-			return;
-		}
-		if (notifier.getExternalDeviceId() != null) {
-			// TODO
-		} else {
+    @Override
+    public void notify(@Nullable Notifier notifier, @Nullable TinkerforgeValue lastValue,
+            @Nullable TinkerforgeValue newValue) {
+        if (notifier == null) {
+            return;
+        }
+        if (!notifier.getDeviceId().equals(uid)) {
+            return;
+        }
+        if (notifier.getExternalDeviceId() != null) {
+            // TODO
+        } else {
 
-			if (notifier.getChannelId().equals(ChannelId.tagID.name())) {
+            if (notifier.getChannelId().equals(ChannelId.tagID.name())) {
 
-				if (newValue instanceof StringValue) {
-					logger.debug("new value {}", newValue);
-					updateState(notifier.getChannelId(), new StringType(newValue.toString()));
-					return;
-				}
+                if (newValue instanceof StringValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(notifier.getChannelId(), new StringType(newValue.toString()));
+                    return;
+                }
 
-			}
+            }
 
-		}
-	}
+        }
+    }
 
-	@Override
-	public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
-		if (changeType == null || info == null) {
-			logger.debug("device changed but devicechangtype or deviceinfo are null");
-			return;
-		}
+    @Override
+    public void deviceChanged(@Nullable DeviceChangeType changeType, @Nullable DeviceInfo info) {
+        if (changeType == null || info == null) {
+            logger.debug("device changed but devicechangtype or deviceinfo are null");
+            return;
+        }
 
-		if (info.getUid().equals(uid)) {
-			if (changeType == DeviceChangeType.ADD) {
-				logger.debug("{} added", uid);
-				enable();
-			} else {
-				updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
-			}
-		}
-	}
+        if (info.getUid().equals(uid)) {
+            if (changeType == DeviceChangeType.ADD) {
+                logger.debug("{} added", uid);
+                enable();
+            } else {
+                updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.GONE);
+            }
+        }
+    }
 
-	@Override
-	public void dispose() {
+    @Override
+    public void dispose() {
 
-		BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
-		if (brickdBridgeHandler != null) {
-			brickdBridgeHandler.unregisterDeviceStatusListener(this);
-			brickdBridgeHandler.unregisterCallbackListener(this, uid);
-		}
-		if (device != null) {
-			device.disable();
-		}
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            brickdBridgeHandler.unregisterDeviceStatusListener(this);
+            brickdBridgeHandler.unregisterCallbackListener(this, uid);
+        }
+        if (device != null) {
+            device.disable();
+        }
 
-		enabled = false;
-	}
+        enabled = false;
+    }
 
 }
