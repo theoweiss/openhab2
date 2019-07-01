@@ -142,8 +142,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link TinkerforgeHandlerFactory} is responsible for creating things and
- * thing handlers.
+ * The {@link TinkerforgeHandlerFactory} is responsible for creating things and thing
+ * handlers.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */

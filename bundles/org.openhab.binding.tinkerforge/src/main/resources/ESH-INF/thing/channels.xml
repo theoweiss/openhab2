@@ -414,6 +414,18 @@
 
 	</channel-type>
 
+	<channel-type id="backlight_lcd_128_64">
+		<item-type>Dimmer</item-type>
+		<label>Backlight lcd_128_64</label>
+		<description>LCD Backlight</description>
+		
+		<state readOnly="false" />
+
+
+
+
+	</channel-type>
+
 	<channel-type id="resistance">
 		<item-type>Number</item-type>
 		<label>Resistance</label>

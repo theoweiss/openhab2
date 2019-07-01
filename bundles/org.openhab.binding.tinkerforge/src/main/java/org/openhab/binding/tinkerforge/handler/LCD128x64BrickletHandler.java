@@ -19,6 +19,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Channel;
@@ -74,6 +75,7 @@ import org.m1theo.tinkerforge.client.devices.lcd128x64.Tab7Channel;
 import org.m1theo.tinkerforge.client.devices.lcd128x64.Tab8Channel;
 import org.m1theo.tinkerforge.client.devices.lcd128x64.Tab9Channel;
 import org.m1theo.tinkerforge.client.devices.lcd128x64.TabChannelConfig;
+import org.m1theo.tinkerforge.client.devices.lcd20x4.BacklightChannel;
 import org.m1theo.tinkerforge.client.types.DecimalValue;
 import org.m1theo.tinkerforge.client.types.HighLowValue;
 import org.m1theo.tinkerforge.client.types.StringValue;
@@ -84,8 +86,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link LCD128x64BrickletHandler} is responsible for handling commands,
- * which are sent to one of the channels.
+ * The {@link LCD128x64BrickletHandler} is responsible for handling commands, which are
+ * sent to one of the channels.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
@@ -112,6 +114,17 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
             case "display":
 
                 if (command instanceof StringType) {
+                    ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
+                            channelUID.getId());
+                    channel.setValue(CommandConverter.convert(command));
+                }
+
+                // TODO do something
+                break;
+
+            case "backlight":
+
+                if (command instanceof OnOffType) {
                     ActuatorChannel channel = (ActuatorChannel) bridgeHandler.getBrickd().getChannel(uid,
                             channelUID.getId());
                     channel.setValue(CommandConverter.convert(command));
@@ -1006,6 +1019,10 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
                     getdisplay();
                     break;
 
+                case "backlight":
+                    getbacklight();
+                    break;
+
                 case "slider0":
                     getslider0();
                     break;
@@ -1040,6 +1057,10 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
 
         if (isLinked("display")) {
             getdisplay();
+        }
+
+        if (isLinked("backlight")) {
+            getbacklight();
         }
 
         if (isLinked("slider0")) {
@@ -1080,6 +1101,26 @@ public class LCD128x64BrickletHandler extends BaseThingHandler implements Callba
                 if (newValue instanceof StringValue) {
                     logger.debug("new value {}", newValue);
                     updateState(ChannelId.display.name(), new StringType(newValue.toString()));
+                    return;
+                }
+
+            }
+        }
+    }
+
+    private void getbacklight() {
+        BrickdBridgeHandler brickdBridgeHandler = getBrickdBridgeHandler();
+        if (brickdBridgeHandler != null) {
+            Device<?, ?> device = brickdBridgeHandler.getBrickd().getDevice(uid);
+            if (device != null) {
+                LCD128x64Bricklet device2 = (LCD128x64Bricklet) device;
+                BacklightChannel channel = (BacklightChannel) device2.getChannel("backlight");
+                Object newValue = channel.getValue();
+
+                if (newValue instanceof DecimalValue) {
+                    logger.debug("new value {}", newValue);
+                    updateState(ChannelId.backlight.name(),
+                            new DecimalType(((DecimalValue) newValue).bigDecimalValue()));
                     return;
                 }
 

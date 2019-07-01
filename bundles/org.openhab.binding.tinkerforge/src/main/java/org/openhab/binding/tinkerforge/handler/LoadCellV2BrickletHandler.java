@@ -44,8 +44,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link LoadCellV2BrickletHandler} is responsible for handling commands,
- * which are sent to one of the channels.
+ * The {@link LoadCellV2BrickletHandler} is responsible for handling commands, which are
+ * sent to one of the channels.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */

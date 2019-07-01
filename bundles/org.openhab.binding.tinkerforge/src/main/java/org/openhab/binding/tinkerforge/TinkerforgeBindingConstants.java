@@ -20,8 +20,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
 /**
- * The {@link TinkerforgeBindingConstants} class defines common constants, which
- * are used across the whole binding.
+ * The {@link TinkerforgeBindingConstants} class defines common constants, which are
+ * used across the whole binding.
  *
  * @author Theo Weiss <theo@m1theo.org> - Initial contribution
  */
