@@ -49,6 +49,7 @@ import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_OLED128X64V2;
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_OLED64X48;
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_OUTDOORWEATHER;
+import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_PARTICULATEMATTER;
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_PTC;
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_PTCV2;
 import static org.openhab.binding.tinkerforge.TinkerforgeBindingConstants.THING_TYPE_REALTIMECLOCK;
@@ -119,6 +120,7 @@ import org.openhab.binding.tinkerforge.handler.OLED64x48BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.OutdoorWeatherBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.PTCBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.PTCV2BrickletHandler;
+import org.openhab.binding.tinkerforge.handler.ParticulateMatterBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.RealTimeClockBrickletHandler;
 import org.openhab.binding.tinkerforge.handler.RealTimeClockV2BrickletHandler;
 import org.openhab.binding.tinkerforge.handler.RotaryEncoderBrickletHandler;
@@ -282,6 +284,10 @@ public class TinkerforgeHandlerFactory extends BaseThingHandlerFactory {
 
         if (thingTypeUID.equals(THING_TYPE_UVLIGHTV2)) {
             return new UVLightV2BrickletHandler(thing);
+        }
+
+        if (thingTypeUID.equals(THING_TYPE_PARTICULATEMATTER)) {
+            return new ParticulateMatterBrickletHandler(thing);
         }
 
         if (thingTypeUID.equals(THING_TYPE_HUMIDITY)) {

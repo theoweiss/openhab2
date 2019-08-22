@@ -80,6 +80,8 @@ public class TinkerforgeBindingConstants {
 
     public static final ThingTypeUID THING_TYPE_UVLIGHTV2 = new ThingTypeUID(BINDING_ID, "uvlightv2");
 
+    public static final ThingTypeUID THING_TYPE_PARTICULATEMATTER = new ThingTypeUID(BINDING_ID, "particulatematter");
+
     public static final ThingTypeUID THING_TYPE_HUMIDITY = new ThingTypeUID(BINDING_ID, "humidity");
 
     public static final ThingTypeUID THING_TYPE_HUMIDITYV2 = new ThingTypeUID(BINDING_ID, "humidityV2");
@@ -186,6 +188,8 @@ public class TinkerforgeBindingConstants {
             THING_TYPE_UVLIGHT,
 
             THING_TYPE_UVLIGHTV2,
+
+            THING_TYPE_PARTICULATEMATTER,
 
             THING_TYPE_HUMIDITY,
 

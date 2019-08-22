@@ -706,4 +706,241 @@
 
 	</channel-type>
 
+	<channel-type id="pm10">
+		<item-type>Number</item-type>
+		<label>PM 10</label>
+		<description>PM 10</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm25">
+		<item-type>Number</item-type>
+		<label>PM 25</label>
+		<description>PM 25</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm100">
+		<item-type>Number</item-type>
+		<label>PM 100</label>
+		<description>PM 100</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm03count">
+		<item-type>Number</item-type>
+		<label>PM 03 count</label>
+		<description>PM 03 count</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm05count">
+		<item-type>Number</item-type>
+		<label>PM 05 count</label>
+		<description>PM 05 count</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm10count">
+		<item-type>Number</item-type>
+		<label>PM 10 count</label>
+		<description>PM 10 count</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm25count">
+		<item-type>Number</item-type>
+		<label>PM 25 count</label>
+		<description>PM 25 count</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm50count">
+		<item-type>Number</item-type>
+		<label>PM 50 count</label>
+		<description>PM 50 count</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pm100count">
+		<item-type>Number</item-type>
+		<label>PM 100 count</label>
+		<description>PM 100 count</description>
+		
+		<state readOnly="true" />
+		<config-description>
+
+
+			<parameter name="callbackPeriod" type="integer">
+				<label>Callback period</label>
+				<description>Callback period in ms</description>
+				<required>false</required>
+				<default>1000</default>
+			</parameter>
+			<parameter name="threshold" type="decimal">
+				<label>Threshold</label>
+				<description>Threshold</description>
+				<required>false</required>
+				<default>0</default>
+			</parameter>
+
+		</config-description>
+	</channel-type>
+
+	<channel-type id="pmlaser">
+		<item-type>Switch</item-type>
+		<label>Sensor</label>
+		<description>Enable sensor.</description>
+		
+		<state readOnly="false" />
+
+
+
+
+	</channel-type>
+
 </thing:thing-descriptions>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tinkerforge" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="particulatematter">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="brickd" />
+		</supported-bridge-type-refs>
+
+		<label>BrickletParticulateMatter</label>
+		<description>Tinkerforge BrickletParticulateMatter</description>
+
+		<channels>
+		
+		<channel id="pm10Concentration" typeId="pm10"/>
+		
+		<channel id="pm25Concentration" typeId="pm25"/>
+		
+		<channel id="pm100Concentration" typeId="pm100"/>
+		
+		<channel id="pm03Count" typeId="pm03count"/>
+		
+		<channel id="pm05Count" typeId="pm05count"/>
+		
+		<channel id="pm10Count" typeId="pm10count"/>
+		
+		<channel id="pm25Count" typeId="pm25count"/>
+		
+		<channel id="pm50Count" typeId="pm50count"/>
+		
+		<channel id="pm100Count" typeId="pm100count"/>
+		
+		<channel id="laser" typeId="pmlaser"/>
+		
+		</channels>
+
+		<config-description>
+			<parameter name="uid" type="text">
+				<label>Bricklet uid</label>
+				<description>The uid identifies the bricklet.</description>
+				<required>true</required>
+			</parameter>
+
+		</config-description>
+	</thing-type>
+
+</thing:thing-descriptions>
